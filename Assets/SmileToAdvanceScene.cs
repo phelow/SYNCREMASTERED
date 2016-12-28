@@ -329,7 +329,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			SetInstructionSprite.StopWaitingForEmotion ();
 			DialogueManager.Main.FadeOut();
 			yield return new WaitForSeconds(3.0f);
-			FadeInFadeOut.FadeOut (26);
+			FadeInFadeOut.FadeOut (30);
 
 		} else {
 			StartCoroutine (SpeedUpTime ());

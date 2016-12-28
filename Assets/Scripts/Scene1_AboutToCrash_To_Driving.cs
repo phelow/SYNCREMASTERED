@@ -6,14 +6,17 @@ public class Scene1_AboutToCrash_To_Driving : MonoBehaviour {
     public Animation Animation_For_Jump;
 	// Use this for initialization
 	void Start () {
-	    
+        StartCoroutine(JumpOverTime());
 	}
 	
-	// Update is called once per frame
-	void Update () {
-        if (!Animation_For_Jump.isPlaying)
+    private IEnumerator JumpOverTime()
+    {
+        while (Animation_For_Jump.isPlaying)
         {
-            Application.LoadLevel(6);
+            yield return new WaitForEndOfFrame();
         }
-	}
+        FadeInFadeOut.FadeOut();
+
+    }
+    
 }

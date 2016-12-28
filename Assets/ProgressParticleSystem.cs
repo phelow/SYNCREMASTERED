@@ -70,14 +70,5 @@ public class ProgressParticleSystem : MonoBehaviour {
 
 		SetEmotions (0, 0, 0, 0);*/
 	}
-	
-	public static void SetEmotions(float anger, float joy, float sadness, float surpise){
-		/*
-		ms_instance.m_angerParticleSystem.emissionRate = c_modifier * anger/100.0f;
-		ms_instance.m_joyParticleSystem.emissionRate = c_modifier*joy/100.0f;
-		ms_instance.m_sadnessParticleSystem.emissionRate = c_modifier* c_sadnessModifier*sadness/1000.0f;
-		ms_instance.m_surpriseParticleSystem.emissionRate = c_modifier* surpise/100.0f;*/
-
-	}
 
 }

@@ -15,7 +15,7 @@ namespace Affdex
         private const float c_sadnessModifier = 10.0f;
 
         private float m_joyThreshold = 2.0f;
-        private float m_angerThreshold = 2.0f;
+        private float m_angerThreshold = 0-.02f;
         private float m_surpriseThreshold = 2.0f;
 
         private static int m_samples = 0;
@@ -26,7 +26,7 @@ namespace Affdex
         private static float m_totalSurprise = 0.0f;
 
         private static float ms_surpriseMultiplier = 1.0f;
-        private static float ms_angerMultiplier = 1.0f;
+        private static float ms_angerMultiplier = 10.0f;
         private static float ms_joyMultiplier = 1.0f;
 
         /// <summary>
@@ -95,7 +95,6 @@ namespace Affdex
                 {
                     Debug.Log("Sampling");
                     t += Time.deltaTime;
-                    ProgressParticleSystem.SetEmotions(m_totalAnger / m_samples, m_totalJoy / m_samples, m_totalSadness / m_samples, m_totalSurprise / m_samples);
                     DialogueChoiceTracker.AddIntensityBoost(m_totalAnger / m_samples, m_totalJoy / m_samples, m_totalSurprise / m_samples);
                     yield return new WaitForEndOfFrame();
                 }
@@ -105,37 +104,30 @@ namespace Affdex
                 if (m_samples > 0)
                 {
                     m_totalJoy *= 1.0f / m_samples;
-                    m_totalDisgust *= 1.0f / m_samples;
                     m_totalAnger *= 1.0f / m_samples;
-                    m_totalSadness *= 1.0f / m_samples;
                     m_totalSurprise *= 1.0f / m_samples;
 
-                    m_totalSadness *= c_sadnessModifier;
-
-                    if (m_totalJoy > m_joyThreshold && m_totalJoy * ms_joyMultiplier > m_totalAnger * ms_angerMultiplier && ms_joyMultiplier * m_totalJoy > ms_surpriseMultiplier * m_totalSurprise)
+                    if (m_totalJoy * ms_joyMultiplier > m_totalAnger * ms_angerMultiplier && ms_joyMultiplier * m_totalJoy > ms_surpriseMultiplier * m_totalSurprise)
                     {
                         Debug.Log("Joy");
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
-                        ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
                         yield break;
                     }
-                    else if (m_totalAnger > m_angerThreshold && ms_angerMultiplier * m_totalAnger > ms_surpriseMultiplier * m_totalSurprise)
+                    else if (ms_angerMultiplier * m_totalAnger > ms_surpriseMultiplier * m_totalSurprise)
                     {
                         Debug.Log("Anger");
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
-                        ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
                         yield break;
                     }
-                    else if (m_totalSurprise > m_surpriseThreshold)
+                    else
                     {
                         Debug.Log("Surprise");
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
-                        ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
                         yield break;
                     }
@@ -166,7 +158,6 @@ namespace Affdex
                 {
                     t += Time.deltaTime * (1 / Time.timeScale);
                     Debug.Log("t:" + t + "c_sampleTime:" + c_sampleTime);
-                    ProgressParticleSystem.SetEmotions(m_totalAnger / m_samples, m_totalJoy / m_samples, m_totalSadness / m_samples, m_totalSurprise / m_samples);
                     DialogueChoiceTracker.AddIntensityBoost(m_totalAnger / m_samples, m_totalJoy / m_samples, m_totalSurprise / m_samples);
                     yield return new WaitForEndOfFrame();
                 }
@@ -190,7 +181,6 @@ namespace Affdex
                     {
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
-                        ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
                         yield break;
                     }
@@ -198,7 +188,6 @@ namespace Affdex
                     {
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
-                        ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
                         yield break;
                     }
@@ -206,7 +195,6 @@ namespace Affdex
                     {
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
-                        ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
                         yield break;
 
@@ -217,12 +205,10 @@ namespace Affdex
                 {
                     sampleTaken = true;
                     DialogueManager.SetCurrentEmotion(DialogueManager.GetLastEmotion());
-                    ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
-                    yield break;
+                    yield break;        
                 }
             }
             SetInstructionSprite.SetOutOfUse();
-            ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
         }
 
         //This needs to be tossed into every child listener class
@@ -260,7 +246,6 @@ namespace Affdex
             {
             }
             Debug.Log(m_instance);
-            ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
             m_instance.samplerRoutine = m_instance.FacialSampler(idle);
             m_instance.StartCoroutine(m_instance.samplerRoutine);
 

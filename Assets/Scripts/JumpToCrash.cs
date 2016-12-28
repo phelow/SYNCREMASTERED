@@ -17,41 +17,50 @@ public class JumpToCrash : MonoBehaviour {
 	void Start () {
 		m_instance = this;
 		StartCoroutine(ShowDialogue());
+        StartCoroutine(GameLoop());
 	}
 
-	// Update is called once per frame
-	void Update () {
-		if (VaryPositionByAttention.IsFocusing ()) {
-			SetInstructionSprite.GrowIcon (Time.deltaTime);
-		} else {
+    private IEnumerator GameLoop()
+    {
+        while (tCrash < c_timeSwervingBeforeCrash) {
+            if (VaryPositionByAttention.IsFocusing())
+            {
+                SetInstructionSprite.GrowIcon(Time.deltaTime);
+            }
+            else {
 
-			SetInstructionSprite.ShrinkIcon (Time.deltaTime);
-		}
+                SetInstructionSprite.ShrinkIcon(Time.deltaTime);
+            }
 
-		tSinceFadeOut += Time.deltaTime;
+            tSinceFadeOut += Time.deltaTime;
 
-		if (m_enabled) {
-			if (VaryPositionByAttention.IsSwerving () && m_showingCommand == false && tSinceFadeOut > 4.0f) {
-				m_showingCommand = true;
-				//SetInstructionSprite.SetWaitingForFaceIndicator (SetInstructionSprite.FaceState.FOCUS);
+            if (m_enabled)
+            {
+                if (VaryPositionByAttention.IsSwerving() && m_showingCommand == false && tSinceFadeOut > 4.0f)
+                {
+                    m_showingCommand = true;
 
-			} else if (m_showingCommand && !VaryPositionByAttention.IsSwerving ()) {
-				tSinceFadeOut = 0.0f;
-			}
+                }
+                else if (m_showingCommand && !VaryPositionByAttention.IsSwerving())
+                {
+                    tSinceFadeOut = 0.0f;
+                }
 
-			if (VaryPositionByAttention.IsSwerving ()) {
-				tCrash += Time.deltaTime;
-				if (tCrash > c_timeSwervingBeforeCrash) {
-					Application.LoadLevel (7);
-				}
-			} 
-		} else {
-			if (VaryPositionByAttention.IsFocusing () && m_lock) {
-				PlayerHasStartedFocusing ();
-			} 
-		}
-	}
-
+                if (VaryPositionByAttention.IsSwerving())
+                {
+                    tCrash += Time.deltaTime;
+                }
+            }
+            else {
+                if (VaryPositionByAttention.IsFocusing() && m_lock)
+                {
+                    PlayerHasStartedFocusing();
+                }
+            }
+            yield return new WaitForEndOfFrame();
+        }
+        FadeInFadeOut.FadeOut();
+    }
 	private IEnumerator ShowDialogue()
     {
 		yield return new WaitForEndOfFrame ();

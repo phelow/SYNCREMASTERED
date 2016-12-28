@@ -437,12 +437,12 @@ public class SetInstructionSprite : MonoBehaviour {
 	}
 
 	public static void SetFaceRatios(float joy, float anger, float surprise){
-		float totalEmotion = joy + anger + surprise + 1.0f;
+		float totalEmotion = joy + anger + surprise;
 
 		ms_instance.m_joyImage.color = Color.Lerp ( ms_instance.c_fadedOutGrey,ms_instance.c_fadedIn, joy / totalEmotion);
 		ms_instance.m_angerImage.color = Color.Lerp ( ms_instance.c_fadedOutGrey,ms_instance.c_fadedIn, anger / totalEmotion);
 		ms_instance.m_surpriseImage.color = Color.Lerp (ms_instance.c_fadedOutGrey,ms_instance.c_fadedIn,  surprise / totalEmotion);
-	}
+  	}
 
 	public static void SetEmotionDeciding(){
 		ms_instance.StartCoroutine (ms_instance.LoseHalfOpacity ());

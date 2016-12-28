@@ -24,7 +24,7 @@ public class FadeInFadeOut : MonoBehaviour
 
     private static bool ms_fading = false;
 
-    private IEnumerator FadeOutCoroutine()
+    private IEnumerator FadeOutCoroutine(int nextScene = -1)
     {
 
         bool fadeOutAudio = PersistantAudioSource.CheckToFadeOutAudio(SceneManager.GetActiveScene().buildIndex);
@@ -53,6 +53,12 @@ public class FadeInFadeOut : MonoBehaviour
 			yield return new WaitForEndOfFrame ();
 		}
 #endif
+        if(nextScene != -1)
+        {
+            SceneManager.LoadScene(nextScene);
+
+            yield break;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         ms_fading = false;
 
@@ -196,27 +202,8 @@ public class FadeInFadeOut : MonoBehaviour
         if (ms_fading == false)
         {
             instance.StopCoroutine(instance.m_fadeInFadeOut);
-            instance.StartCoroutine(instance.FadeOutCoroutine());
+            instance.StartCoroutine(instance.FadeOutCoroutine(nextScene));
         }
-    }
-
-    void Update()
-    {
-        if(Input.GetKey(KeyCode.Space) && Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
-        {
-            FadeInFadeOut.FadeOut();
-        }
-
-        /*
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			FadeOut ();
-		} else if (Input.GetKey (KeyCode.Escape)) {
-			Application.Quit ();
-		} else if (Input.GetKeyDown (KeyCode.R)) {
-			SceneManager.LoadScene (0);
-		}
-		*/
-
     }
 
     void Start()
