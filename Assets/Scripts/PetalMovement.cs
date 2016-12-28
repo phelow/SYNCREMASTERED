@@ -52,7 +52,7 @@ public class PetalMovement : MonoBehaviour {
 		m_rb.AddTorque (Random.Range (.1f, 1.0f)); //add a random tortional force
 		m_bringToLife = BringToLife();
 		StartCoroutine(m_bringToLife);
-
+        StartCoroutine(ContinueToAddWind());
 
 		//Show the beginning dialogue
 		if (m_goodEnding == false) {
@@ -62,6 +62,16 @@ public class PetalMovement : MonoBehaviour {
 		}
 	}
 	static Vector2 vel;
+
+    private IEnumerator ContinueToAddWind()
+    {
+        while (true)
+        {
+            TryToAddWind();
+            yield return new WaitForSeconds(Random.Range(.5f, .4f));
+        }
+    }
+
 	public static void FreezePetal(){
 		try{
 			vel = ms_instance.m_rb.velocity;
@@ -130,9 +140,9 @@ public class PetalMovement : MonoBehaviour {
 
 	private IEnumerator ShowGoodEndingDialogue(){
 
-		DialogueManager.Emotion em = DialogueChoiceTracker.GetMostExpressedEmotion ();
+		DialogueManager.Emotion em = DialogueManager.Emotion.Anger;
 
-		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalBeginningToFall,false,em);
+        DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalBeginningToFall,false,em);
 		yield return new WaitForSeconds (10.0f);
 		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalFalling,false,em);
 		yield return new WaitForSeconds (10.0f);
@@ -269,19 +279,6 @@ public class PetalMovement : MonoBehaviour {
 		}
 	}
 
-	void AddDownDraft(){
-
-		Debug.Log ("Down draft");
-
-		GameObject[] backgroundPetals = GameObject.FindGameObjectsWithTag ("Background Petal");
-		Vector2 wind = (Vector2.down * ms_windForce * ms_downDraftForce);
-		foreach (GameObject bg in backgroundPetals) {
-			bg.GetComponent<Rigidbody2D> ().AddForce(new Vector2(Random.Range(wind.x*.9f,wind.x*1.1f),Random.Range(wind.y*.9f,wind.y*1.1f)));
-		}
-		if (m_rb != null) {
-			m_rb.AddForce (wind);
-		}
-	}
 
 	public static void freezeAnimation (){
 		s_instance.m_animator.speed = 0.0f;
@@ -314,8 +311,6 @@ public class PetalMovement : MonoBehaviour {
 			if(SceneZeroListener.IsEmotionalIntensitySufficient()){
 				Debug.Log ("266: Trying to add wind");
 				s_instance.StartCoroutine (s_instance.AddWind ());
-			} else {
-				s_instance.AddDownDraft ();
 			}
 		}
 	}

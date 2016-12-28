@@ -8,13 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene0_0.unity
   - enabled: 1
+    path: Assets/Scenes/Scene0_0_5.unity
+  - enabled: 1
     path: Assets/Scenes/Scene0_1.unity
-  - enabled: 0
-    path: Assets/Scenes/Scene0_0.unity
   - enabled: 1
     path: Assets/Scenes/Scene1_0.unity
-  - enabled: 0
-    path: Assets/Scenes/BogoScene.unity
   - enabled: 1
     path: Assets/Scenes/Scene1_1.unity
   - enabled: 1
@@ -23,12 +21,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene1_3.unity
   - enabled: 1
     path: Assets/Scenes/Scene1_4.unity
-  - enabled: 0
-    path: Assets/Scenes/Scene1_inside_car_crash_back 1.unity
-  - enabled: 0
-    path: Assets/Scenes/JournalAfterScene1.unity
-  - enabled: 0
-    path: Assets/Scenes/JournalBetweenScene02.unity
   - enabled: 1
     path: Assets/Scenes/Scene1_5.unity
   - enabled: 1
@@ -38,8 +30,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene2_1.unity
   - enabled: 1
-    path: Assets/Scenes/Scene2_2.unity
-  - enabled: 1
     path: Assets/Scenes/Scene2_3.unity
   - enabled: 1
     path: Assets/Scenes/Scene2_4.unity
@@ -47,16 +37,22 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene2_5.unity
   - enabled: 1
     path: Assets/Scenes/Scene2_6.unity
-  - enabled: 0
-    path: Assets/Scenes/Scene3_0.unity
-  - enabled: 1
-    path: Assets/Scenes/Scene4_1.unity
   - enabled: 1
     path: Assets/Scenes/Scene4_0.unity
   - enabled: 1
+    path: Assets/Scenes/Scene4_0_0.unity
+  - enabled: 1
+    path: Assets/Scenes/Scene4_1.unity
+  - enabled: 1
+    path: Assets/Scenes/Scene4_1_0.unity
+  - enabled: 1
     path: Assets/Scenes/Scene4_2.unity
   - enabled: 1
+    path: Assets/Scenes/Scene4_2_0.unity
+  - enabled: 1
     path: Assets/Scenes/Scene4_3.unity
+  - enabled: 1
+    path: Assets/Scenes/Scene4_3_0.unity
   - enabled: 1
     path: Assets/Scenes/Scene5_0.unity
   - enabled: 1
@@ -73,17 +69,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene5_7.unity
   - enabled: 1
     path: Assets/Scenes/Scene5_6.unity
-  - enabled: 0
-    path: Assets/Scenes/Scene2_5.unity
   - enabled: 1
     path: Assets/Scenes/SceneCredits.unity
-  - enabled: 1
-    path: Assets/Scenes/Scene0_0_5.unity
-  - enabled: 1
-    path: Assets/Scenes/Scene4_3_0.unity
-  - enabled: 1
-    path: Assets/Scenes/Scene4_1_0.unity
-  - enabled: 1
-    path: Assets/Scenes/Scene4_0_0.unity
-  - enabled: 1
-    path: Assets/Scenes/Scene4_2_0.unity

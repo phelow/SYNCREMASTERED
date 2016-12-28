@@ -42,69 +42,7 @@ public class DialogueChoiceTracker : MonoBehaviour {
 	[SerializeField]private float m_forwardMax = 20.0f;
 
 	private const float c_newSpawnMinimum = 5.0f;
-
-	public static void reset(){
-		ms_anger = 0;
-		ms_disgust = 0;
-		ms_joy = 0;
-		ms_sadness = 0;
-		ms_surprise = 0;
-	}
-
-	public static int GetAnger(){
-		return ms_anger;
-	}
-
-	public static void AddAnger(){
-		ms_anger++;
-	}
-
-	public static int GetDisgust(){
-		return ms_disgust;
-	}
-
-	public static void AddDisgust(){
-		ms_disgust++;
-	}
-
-	public static int GetJoy(){
-		return ms_joy;
-	}
-
-	public static void AddJoy(){
-		ms_joy++;
-	}
-
-
-
-
-	public static DialogueManager.Emotion GetMostExpressedEmotion(){
-		if (ms_anger > ms_joy && ms_anger > ms_surprise) {
-			return DialogueManager.Emotion.Anger;
-		} else if (ms_joy > ms_surprise) {
-			return DialogueManager.Emotion.Surprise;
-		} else {
-			return DialogueManager.Emotion.Joy;
-		}
-	}
-
-	public static int GetSadness(){
-		return ms_sadness;
-	}
-
-	public static void AddSadness(){
-		ms_sadness++;
-	}
-
-	public static int GetSurprise(){
-		return ms_surprise;
-	}
-
-	public static void AddSurprise(){
-		ms_surprise++;
-	}
-
-
+    
 	private IEnumerator DisplayOnScreenFeedback(){
 		while (true) {
 			//Reset intensity points
@@ -244,12 +182,6 @@ public class DialogueChoiceTracker : MonoBehaviour {
 		ms_angerIntensity = (ms_anger * c_baselineMultiplier + ms_angerIntensityBoost) * c_intensityMultiplier;
 		ms_joyIntensity = (ms_joy * c_baselineMultiplier + ms_joyIntensityBoost) * c_intensityMultiplier;
 		ms_surpriseIntensity = (ms_surprise * c_baselineMultiplier + ms_surpriseIntensityBoost) * c_intensityMultiplier;
-	}
-
-	void OnLevelWasLoaded(int level) {
-		if (level == 0)
-			reset ();
-
 	}
 
 	public void Start(){

@@ -2,29 +2,18 @@
 using System.Collections;
 
 public class JumpTimer : MonoBehaviour {
-	[SerializeField]private float time1 = 7;
-	private bool hasFaded = true;
-
+	[SerializeField]private float waitTime = 7;
+	
 	// Use this for initialization
 	void Start () {
-
-        ShowDialogue();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (time1 > 0) {
-			time1 = time1 - Time.deltaTime;
-		} else {
-			if (hasFaded == true) {
-				hasFaded = false;
-				FadeInFadeOut.FadeOut ();
-			}
-		}
+        StartCoroutine(DialogueForThisScene());
 	}
 
-    void ShowDialogue()
+    private IEnumerator DialogueForThisScene()
     {
         DialogueManager.Main.DisplayScene1Text(Scene1Events.OnCrash);
+        yield return new WaitForSeconds(waitTime);
+        FadeInFadeOut.FadeOut();
     }
+    
 }

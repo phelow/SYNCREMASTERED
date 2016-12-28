@@ -116,7 +116,6 @@ namespace Affdex
                     {
                         Debug.Log("Joy");
                         sampleTaken = true;
-                        DialogueChoiceTracker.AddJoy();
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
                         ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
@@ -126,7 +125,6 @@ namespace Affdex
                     {
                         Debug.Log("Anger");
                         sampleTaken = true;
-                        DialogueChoiceTracker.AddAnger();
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
                         ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
@@ -136,7 +134,6 @@ namespace Affdex
                     {
                         Debug.Log("Surprise");
                         sampleTaken = true;
-                        DialogueChoiceTracker.AddSurprise();
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
                         ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
@@ -192,7 +189,6 @@ namespace Affdex
                     if (m_totalJoy > m_joyThreshold && m_totalJoy * ms_joyMultiplier > m_totalAnger * ms_angerMultiplier && ms_joyMultiplier * m_totalJoy > ms_surpriseMultiplier * m_totalSurprise)
                     {
                         sampleTaken = true;
-                        DialogueChoiceTracker.AddJoy();
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
                         ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
@@ -201,7 +197,6 @@ namespace Affdex
                     else if (m_totalAnger > m_angerThreshold && ms_angerMultiplier * m_totalAnger > ms_surpriseMultiplier * m_totalSurprise)
                     {
                         sampleTaken = true;
-                        DialogueChoiceTracker.AddAnger();
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
                         ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
@@ -210,7 +205,6 @@ namespace Affdex
                     else if (m_totalSurprise > m_surpriseThreshold)
                     {
                         sampleTaken = true;
-                        DialogueChoiceTracker.AddSurprise();
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
                         ProgressParticleSystem.SetEmotions(0, 0, 0, 0);
                         SetDominantEmotion();
@@ -241,7 +235,6 @@ namespace Affdex
                 m_totalJoy += faces[0].Emotions[Affdex.Emotions.Joy] * ms_joyMultiplier;
                 m_totalAnger += faces[0].Emotions[Affdex.Emotions.Anger] * ms_angerMultiplier;
                 m_totalSurprise += faces[0].Emotions[Affdex.Emotions.Surprise] * ms_surpriseMultiplier;
-                Debug.Log("m_totalJoy:" + m_totalJoy + " m:_totalAnger" + m_totalAnger + " m_totalSurprise:" + m_totalSurprise);
                 SetInstructionSprite.SetFaceRatios(m_totalJoy / m_samples, m_totalAnger / m_samples, m_totalSurprise / m_samples);
             }
             else {

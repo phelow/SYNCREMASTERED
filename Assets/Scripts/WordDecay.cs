@@ -60,7 +60,6 @@ public class WordDecay : MonoBehaviour {
 		if (erpo) {
 			SetInstructionSprite.ScaleUpPopInIndicator ();
 		}
-		Debug.LogWarning ("TellToErase, s_eraseInput:" + s_eraseInput);
 	}
 
 	public IEnumerator SpamLetters(){

@@ -55,7 +55,6 @@ public class VaryPositionByAttention : MonoBehaviour {
 	}
 
 	public static bool IsSwerving(){
-		Debug.Log ("IsSwerving:" + (100 - m_attention) + (m_snowflakes / 10));
 		return (100-m_attention) + (m_snowflakes/10) > ms_instance.c_attentionMinimum;
 	}
 
@@ -75,7 +74,6 @@ public class VaryPositionByAttention : MonoBehaviour {
 				attentionSum += CarFaceListener.ms_attention;
 			}
 			m_attention = attentionSum / nSamples;
-			Debug.LogWarning ("CalculateAverageAttention:" + m_attention);
 		}
 	}
 

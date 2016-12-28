@@ -29,12 +29,7 @@ public class JumpToCrash : MonoBehaviour {
 		}
 
 		tSinceFadeOut += Time.deltaTime;
-		if (VaryPositionByAttention.IsFocusing ()) {
-			//SetInstructionSprite.SetFaceState (SetInstructionSprite.FaceState.FOCUS);
-		} else {
-			//SetInstructionSprite.SetFaceState (SetInstructionSprite.FaceState.NEUTRAL);
 
-		}
 		if (m_enabled) {
 			if (VaryPositionByAttention.IsSwerving () && m_showingCommand == false && tSinceFadeOut > 4.0f) {
 				m_showingCommand = true;

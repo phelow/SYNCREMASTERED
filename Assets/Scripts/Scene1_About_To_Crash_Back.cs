@@ -11,14 +11,9 @@ public class Scene1_About_To_Crash_Back : MonoBehaviour {
 
     void Start () {
         //Display text for this scene
-        ShowDialogue();
-	}
-		
-    void ShowDialogue()
-    {
         StartCoroutine(DelayDialogue());
     }
-
+	
     IEnumerator DelayDialogue()
     {
         yield return new WaitForSeconds(1f);
@@ -42,7 +37,7 @@ public class Scene1_About_To_Crash_Back : MonoBehaviour {
         DialogueManager.Main.FadeOut();
         yield return new WaitForSeconds(1f);
 
-        FadeInFadeOut.FadeOut ();//Application.LoadLevel(5);
+        FadeInFadeOut.FadeOut ();
     }
 }
 	

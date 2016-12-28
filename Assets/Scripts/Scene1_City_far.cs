@@ -7,21 +7,9 @@ public class Scene1_City_far : MonoBehaviour {
     //May replace with when a voice acting is over later
 	private const float c_timeBeforeJump  = 10.0f;
     void Start () {
-
-        StartCoroutine (Jump ());
-
         //Display dialogue for this scene
         ShowDialogue();
     }
-	
-	// Update is called once per frame
-	void Update () {
-	}
-
-	private IEnumerator Jump(){
-		yield return new WaitForSeconds (c_timeBeforeJump);
-
-	}
 
     void ShowDialogue()
     {
@@ -50,6 +38,6 @@ public class Scene1_City_far : MonoBehaviour {
 		DialogueManager.Main.DisplayScene1Text(Scene1Events.OnSceneLoad, false, emotion);
 		yield return new WaitForSeconds(4f);
 
-		FadeInFadeOut.FadeOut ();//Application.LoadLevel(5);
+		FadeInFadeOut.FadeOut ();
     }
 }

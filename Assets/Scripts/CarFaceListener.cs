@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using Affdex;
-public class CarFaceListener : ImageResultsListener {
-
+public class CarFaceListener : ImageResultsListener { 
 	private float m_lastEyes;
 	private const float c_faceBuffer = 1.0f;
 	private bool m_blinking = false;
@@ -46,13 +45,10 @@ public class CarFaceListener : ImageResultsListener {
 	}
 
 	public static void SetShouldWipeFalse(){
-
 		ms_instance.m_blinkerAnimator.SetBool ("ShouldWipe", false);
-
 	}
 
 	public static void SetShouldWipe(){
-		
 		ms_instance.m_blinkerAnimator.SetBool ("ShouldWipe", true);
 
 	}

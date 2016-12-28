@@ -84,10 +84,6 @@ public class TutorialEventSystem : MonoBehaviour
         DialogueManager.Main.FadeOut();
         yield return new WaitForSeconds(3.0f);
 
-
-        DialogueManager.Main.DisplayTutorialText(TutorialEvents.BeHappy, true);
-        yield return new WaitForSeconds(.5f);
-
         waiting = true;
 
         DialogueManager.Emotion emotion = DialogueManager.Emotion.Anger;

@@ -77,8 +77,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 	}
 
 	private IEnumerator AddForceAfterTime(){
-		DialogueManager.Emotion em = DialogueChoiceTracker.GetMostExpressedEmotion ();
-		yield return new WaitForSeconds(2.0f);
+		DialogueManager.Emotion em = DialogueManager.Emotion.Anger;
+        yield return new WaitForSeconds(2.0f);
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
 		ImageResultsListener.TakeSample ();

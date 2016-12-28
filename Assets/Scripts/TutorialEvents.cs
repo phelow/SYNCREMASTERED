@@ -3,10 +3,5 @@
 	Calibration,
 	OpenMouthToContinue,
 	PromptEmotions,
-	BeHappy,
-	BeSad,
-	BeAngry,
-	BeSurprised,
-	BeDisgusted,
 	MakeAnyFaceToStart
 }

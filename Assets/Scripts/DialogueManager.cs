@@ -214,10 +214,7 @@ public class DialogueManager : MonoBehaviour {
 		tutorialDictionary.Add (TutorialEvents.Calibration, "SYNC uses the camera on your device to capture your facial expressions.\n\nPlease move yourself or your camera until you are comfortable and the icon in the upper left corner remains solid, indicating it can pick up your face.\n");
 		tutorialDictionary.Add (TutorialEvents.OpenMouthToContinue, "A symbol will appear on your screen when you need to act.\n\nIf you aren’t sure what you’re supposed to do, look to the text for help.\r\n\r\n Please open your mouth to continue.");
         tutorialDictionary.Add(TutorialEvents.PromptEmotions, "When you see the petal icon, you can move the main character to one of three different emotional states to direct the narrative: Happy, Angry, or Surprised.\n\nThe large face in the upper left shows the character's current emotional state, while the small faces show YOUR emotional state.\n\nPlease open your mouth to begin calibration.");
-		tutorialDictionary.Add (TutorialEvents.BeHappy, "Be happy.");
-		tutorialDictionary.Add (TutorialEvents.BeAngry, "Be angry.");
-		tutorialDictionary.Add (TutorialEvents.BeSurprised, "Be surprised.");
-		tutorialDictionary.Add (TutorialEvents.MakeAnyFaceToStart, "Calibration is complete.\n\nYour choices over time will affect your experience, so choose wisely.\n\nMake any face to start the game.\n");
+		tutorialDictionary.Add (TutorialEvents.MakeAnyFaceToStart, "Your choices over time will affect your experience, so choose wisely.\n\nMake any face to start the game.\n");
 
 	}
 
@@ -554,13 +551,13 @@ public class DialogueManager : MonoBehaviour {
 			txtDialogueShadow.text = text;
 			txtDialogueGlow.text = text;
 			//instantiate a random amount of keys
-			Debug.Log(text);
+
 			int nKeys = Random.Range (0, 10);
 
 			for (int i = 0; i < nKeys; i++) {
 				GameObject go_key = GameObject.Instantiate (m_key);
 				go_key.GetComponent<Key> ().setText (key);
-				go_key.transform.parent = txtDialogue.transform.parent;
+				go_key.transform.SetParent(txtDialogue.transform.parent);
 				go_key.transform.localPosition = new Vector3 (txtDialogue.transform.localPosition.x + Random.Range (-1000.0f, 1000.0f), txtDialogue.transform.localPosition.y + Random.Range (-200.0f, 200.0f), txtDialogue.transform.localPosition.z + Random.Range (-100.0f, 100.0f));
 			}
 
@@ -725,7 +722,7 @@ public class DialogueManager : MonoBehaviour {
 				while (t < fadeInTime * Time.timeScale) {
 					t += Time.deltaTime;
 					txtDialogue.color = Color.Lerp (m_startColor, rColor, t / (fadeInTime* Time.timeScale));
-					Debug.Log (txtDialogue.color);
+
 					yield return new WaitForEndOfFrame ();
 				}
 				t = 0.0f;
@@ -1033,8 +1030,6 @@ public class DialogueManager : MonoBehaviour {
 		m_emotion = emotion;
 		m_facePassed = true;
 		m_lastEmotion = emotion;
-
-		Debug.LogError("Changing current emotion to: " + m_emotion);
 	}
 
 	public static void SetLastEmotion(Emotion emotion){

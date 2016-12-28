@@ -13,39 +13,8 @@ public class DropOnSmile : MonoBehaviour {
 	}
 
 	private IEnumerator DialogForScene(){
-		DialogueManager.Emotion em = DialogueChoiceTracker.GetMostExpressedEmotion ();
-
-		/*
-		m_readyToSmile = true;
-		//Wait for a smile
-		bool waiting = true;
-
-
-		SetInstructionSprite.StartWaitingForEmotion ();
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Anger;
-		while (emotion != DialogueManager.Emotion.Joy) {
-			yield return new WaitForEndOfFrame ();
-
-			waiting = true;
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-
-					if (emotion != DialogueManager.Emotion.Joy) {
-						ImageResultsListener.TakeSample (true, true);
-					}
-					DialogueManager.DisableCurrentEmotion ();
-
-					Debug.Log ("emotion:" + emotion);
-					yield return new WaitForEndOfFrame ();
-				}
-				Debug.Log (120);
-				yield return new WaitForEndOfFrame ();
-			}
-			Debug.Log ("emotion:" + emotion);
-		}*/
-
+		DialogueManager.Emotion em = DialogueManager.Emotion.Anger;
+        
 		rb.isKinematic = false;
 		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnTakePicture,false,em);
 		yield return new WaitForSeconds (7.0f);

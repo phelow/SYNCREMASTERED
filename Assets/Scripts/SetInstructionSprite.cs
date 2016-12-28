@@ -90,12 +90,10 @@ public class SetInstructionSprite : MonoBehaviour {
 	}
 
 	public static void FaceUndetected(){
-		Debug.Log ("Face Undetected");
 		ms_instance.m_isFaceVisible = false;
 	}
 
 	public static void FaceDetected(){
-		Debug.Log ("Face Detected");
 		ms_instance.m_isFaceVisible = true;
 	}
 
