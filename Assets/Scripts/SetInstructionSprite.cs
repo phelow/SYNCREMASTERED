@@ -184,10 +184,17 @@ public class SetInstructionSprite : MonoBehaviour
     {
         while (true)
         {
-            for (int i = 0; i < m_waitingForInputPetalSprites.Length; i++)
+
+            if (!m_isFaceVisible)
             {
-                m_popInImage.sprite = m_waitingForInputPetalSprites[i];
-                yield return new WaitForSeconds(.1f);
+                m_popInImage.sprite = m_neutral;
+            }
+            else {
+                for (int i = 0; i < m_waitingForInputPetalSprites.Length; i++)
+                {
+                    m_popInImage.sprite = m_waitingForInputPetalSprites[i];
+                    yield return new WaitForSeconds(.1f);
+                }
             }
         }
     }
@@ -485,7 +492,14 @@ public class SetInstructionSprite : MonoBehaviour
 
         for (int i = 0; i < 999; i = (i + 1) % ms_instance.m_open.Length)
         {
-            ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_open[i];
+            if (!m_isFaceVisible)
+            {
+                ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_neutral;
+            }
+            else
+            {
+                ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_open[i];
+            }
             yield return new WaitForSeconds(c_mouthWaitTime);
         }
     }
@@ -495,7 +509,14 @@ public class SetInstructionSprite : MonoBehaviour
 
         for (int i = 0; i < 999; i = (i + 1) % ms_instance.m_focus.Length)
         {
-            ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_focus[i];
+            if (!m_isFaceVisible)
+            {
+                ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_neutral;
+            }
+            else
+            {
+                ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_focus[i];
+            }
             yield return new WaitForSeconds(.2f);
         }
     }
@@ -505,7 +526,16 @@ public class SetInstructionSprite : MonoBehaviour
 
         for (int i = 0; i < 999; i = (i + 1) % ms_instance.m_blink.Length)
         {
-            ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_blink[i];
+            if (!m_isFaceVisible)
+            {
+                ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_neutral;
+            }
+            else
+            {
+                ms_instance.m_waitingForFaceIndicator.sprite = ms_instance.m_blink[i];
+
+            }
+
             yield return new WaitForSeconds(.2f);
         }
     }
@@ -564,11 +594,20 @@ public class SetInstructionSprite : MonoBehaviour
     {
         while (true)
         {
-            for (int i = 0; i < m_waitingForInputPetalSprites.Length; i++)
+            if (!m_isFaceVisible)
             {
-                m_waitingForFaceIndicator.sprite = m_waitingForInputPetalSprites[i];
-                yield return new WaitForSeconds(.5f * (1 / Time.timeScale));
+                m_waitingForFaceIndicator.sprite = m_neutral;
             }
+            else
+            {
+
+                for (int i = 0; i < m_waitingForInputPetalSprites.Length; i++)
+                {
+                    m_waitingForFaceIndicator.sprite = m_waitingForInputPetalSprites[i];
+                    yield return new WaitForSeconds(.5f * (1 / Time.timeScale));
+                }
+            }
+
         }
     }
 
