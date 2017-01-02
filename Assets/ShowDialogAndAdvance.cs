@@ -12,7 +12,7 @@ public class ShowDialogAndAdvance : MonoBehaviour {
 	private IEnumerator AdvanceScene(){
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();

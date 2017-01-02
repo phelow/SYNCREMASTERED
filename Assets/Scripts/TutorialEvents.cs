@@ -3,5 +3,6 @@
 	Calibration,
 	OpenMouthToContinue,
 	PromptEmotions,
-	MakeAnyFaceToStart
+    PromptTutorial,
+    MakeAnyFaceToStart
 }

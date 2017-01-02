@@ -33,7 +33,7 @@ public class Scene1_Back_to_journal: MonoBehaviour {
 
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();

@@ -1029,7 +1029,6 @@ GameObject:
   - component: {fileID: 1300367447}
   - component: {fileID: 1300367446}
   - component: {fileID: 1300367445}
-  - component: {fileID: 1300367448}
   m_Layer: 0
   m_Name: Particle System
   m_TagString: Untagged
@@ -1063,7 +1062,7 @@ ParticleSystemRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -1142,7 +1141,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: -1167701270
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3737,19 +3736,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1300367448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1300367444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f6aaf25356d6a34593a898c2e64a1d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_systemOne: {fileID: 1300367446}
-  m_systemTwo: {fileID: 1300367446}
 --- !u!1 &1353344335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3968,8 +3954,6 @@ GameObject:
   - component: {fileID: 1436721968}
   - component: {fileID: 1436721973}
   - component: {fileID: 1436721974}
-  - component: {fileID: 1436721976}
-  - component: {fileID: 1436721975}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4191,35 +4175,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &1436721975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1436721967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 427b0f85cf8b8204ca846f481046a70e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_audioBeat: {fileID: 1436721967}
-  m_energyTrigger: 1
-  m_hitHatTrigger: 0
-  m_kickTrigger: 0
-  m_snareTrigger: 0
-  difficulty: 1
---- !u!114 &1436721976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1436721967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa05b32b9fb1346b98c73d65c46c5fd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  beatMode: 0
 --- !u!1 &1467591176
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,9 +14,9 @@ namespace Affdex
 
         private const float c_sadnessModifier = 10.0f;
 
-        private float m_joyThreshold = 2.0f;
-        private float m_angerThreshold = 0-.02f;
-        private float m_surpriseThreshold = 2.0f;
+        private float m_joyThreshold = 50.0f;
+        private float m_angerThreshold = 1.0f;
+        private float m_surpriseThreshold = 50.0f;
 
         private static int m_samples = 0;
         private static float m_totalJoy = 0.0f;
@@ -35,7 +35,7 @@ namespace Affdex
         /// <param name="faces">The faces.</param>
         public abstract void onImageResults(Dictionary<int, Face> faces);
 
-        private static ImageResultsListener m_instance;
+        public static ImageResultsListener ms_instance;
         protected static bool s_faceLocated;
         [SerializeField]
         protected Text m_text;
@@ -46,8 +46,8 @@ namespace Affdex
 
         public void Awake()
         {
-            m_instance = this;
-            samplerRoutine = m_instance.FacialSampler();
+            ms_instance = this;
+            StartCoroutine(ContinuousSampling());
         }
 
         public static void SetEmotionDeciding()
@@ -73,75 +73,93 @@ namespace Affdex
             }
         }
 
-        public static void StartContinousSample()
+        private float GetAveragedJoy()
         {
-            m_instance.StartCoroutine(m_instance.ContinuousSampling());
+            return (m_totalJoy / m_samples) * ms_joyMultiplier;
         }
 
-        public IEnumerator ContinuousSampling()
+        private float GetAveragedAnger()
         {
-            bool sampleTaken = false;
-            int checks = 0;
+            return (m_totalAnger / m_samples) * ms_angerMultiplier;
+        }
+
+        private float GetAveragedSurprise()
+        {
+            return (m_totalSurprise / m_samples) * ms_surpriseMultiplier;
+        }
+
+
+        public float? GetJoyRatio()
+        {
+            if(m_samples == 0)
+            {
+                return null;
+            }
+            return GetAveragedJoy() / Mathf.Max(m_joyThreshold, GetAveragedAnger(), GetAveragedSurprise());
+        }
+
+        public float? GetAngerRatio()
+        {
+            if(m_samples == 0)
+            {
+                return null;
+            }
+
+            return GetAveragedAnger() / Mathf.Max(m_angerThreshold, GetAveragedSurprise());
+        }
+
+        public float? GetSurpriseRatio()
+        {
+            if (m_samples == 0)
+            {
+                return null;
+            }
+
+            return GetAveragedSurprise() / m_surpriseThreshold;
+        }
+
+        public bool IsAngry()
+        {
+            return m_totalAnger > m_angerThreshold;
+        }
+
+        public bool IsHappy()
+        {
+            return m_totalJoy > m_joyThreshold && m_totalJoy * ms_joyMultiplier > m_totalAnger * ms_angerMultiplier && ms_joyMultiplier * m_totalJoy > ms_surpriseMultiplier * m_totalSurprise;
+        }
+
+        public bool IsSurprised()
+        {
+            return m_totalSurprise > m_surpriseThreshold && m_totalSurprise * ms_surpriseMultiplier > m_totalAnger * ms_angerMultiplier;
+        }
+
+
+        private IEnumerator ContinuousSampler;
+
+        private IEnumerator ContinuousSampling()
+        {
             while (true)
             {
-                m_totalJoy = 0.0f;
-                m_totalDisgust = 0.0f;
-                m_totalAnger = 0.0f;
-                m_totalSadness = 0.0f;
-                m_totalSurprise = 0.0f;
-
-                float t = 0;
-                while (t < c_sampleTime * Time.timeScale)
+                if (FacialSamplerRunning == false)
                 {
-                    Debug.Log("Sampling");
-                    t += Time.deltaTime;
-                    DialogueChoiceTracker.AddIntensityBoost(m_totalAnger / m_samples, m_totalJoy / m_samples, m_totalSurprise / m_samples);
-                    yield return new WaitForEndOfFrame();
+                    StartCoroutine(FacialSampler());
                 }
-
-                //yield return new WaitForSeconds (c_sampleTime * Time.timeScale);
-                checks++;
-                if (m_samples > 0)
-                {
-                    m_totalJoy *= 1.0f / m_samples;
-                    m_totalAnger *= 1.0f / m_samples;
-                    m_totalSurprise *= 1.0f / m_samples;
-
-                    if (m_totalJoy * ms_joyMultiplier > m_totalAnger * ms_angerMultiplier && ms_joyMultiplier * m_totalJoy > ms_surpriseMultiplier * m_totalSurprise)
-                    {
-                        Debug.Log("Joy");
-                        sampleTaken = true;
-                        DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
-                        SetDominantEmotion();
-                        yield break;
-                    }
-                    else if (ms_angerMultiplier * m_totalAnger > ms_surpriseMultiplier * m_totalSurprise)
-                    {
-                        Debug.Log("Anger");
-                        sampleTaken = true;
-                        DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
-                        SetDominantEmotion();
-                        yield break;
-                    }
-                    else
-                    {
-                        Debug.Log("Surprise");
-                        sampleTaken = true;
-                        DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
-                        SetDominantEmotion();
-                        yield break;
-                    }
-                }
+                yield return new WaitForEndOfFrame();
             }
         }
 
+        public static bool FacialSamplerRunning = false;
         public IEnumerator FacialSampler(bool idle = false)
         {
+            FacialSamplerRunning = true;
             SetInstructionSprite.SetInUse();
             SetEmotionDeciding();
             Debug.Log("--STarting Facial Sampler--");
             bool sampleTaken = false;
             int checks = 0;
+
+            DialogueManager.Main.FadeOutIconOnly();
+
             while (sampleTaken == false)
             {
                 m_samples = 0;
@@ -153,14 +171,6 @@ namespace Affdex
                 m_totalSurprise = 0.0f;
                 Debug.Log("51 m_totalJoy:" + m_totalJoy + "m_totalAnger:" + m_totalAnger + "m_totalSurprise:" + m_totalSurprise);
 
-                float t = 0;
-                while (t < c_sampleTime)
-                {
-                    t += Time.deltaTime * (1 / Time.timeScale);
-                    Debug.Log("t:" + t + "c_sampleTime:" + c_sampleTime);
-                    DialogueChoiceTracker.AddIntensityBoost(m_totalAnger / m_samples, m_totalJoy / m_samples, m_totalSurprise / m_samples);
-                    yield return new WaitForEndOfFrame();
-                }
 
                 //yield return new WaitForSeconds (c_sampleTime * Time.timeScale);
                 checks++;
@@ -177,25 +187,28 @@ namespace Affdex
 
                     Debug.Log("idle: " + idle + " m_totalJoy:" + m_totalJoy + " m_totalDisgust:" + m_totalDisgust + " m_totalAnger:" + m_totalAnger + " m_totalSadness:" + m_totalSadness + " m_totalSurprise:" + m_totalSurprise);
 
-                    if (m_totalJoy > m_joyThreshold && m_totalJoy * ms_joyMultiplier > m_totalAnger * ms_angerMultiplier && ms_joyMultiplier * m_totalJoy > ms_surpriseMultiplier * m_totalSurprise)
+                    if (IsHappy())
                     {
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
                         SetDominantEmotion();
+                        FacialSamplerRunning = false;
                         yield break;
                     }
-                    else if (m_totalAnger > m_angerThreshold && ms_angerMultiplier * m_totalAnger > ms_surpriseMultiplier * m_totalSurprise)
+                    else if (IsAngry())
                     {
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
                         SetDominantEmotion();
+                        FacialSamplerRunning = false;
                         yield break;
                     }
-                    else if (m_totalSurprise > m_surpriseThreshold)
+                    else if (IsSurprised())
                     {
                         sampleTaken = true;
                         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
                         SetDominantEmotion();
+                        FacialSamplerRunning = false;
                         yield break;
 
                     }
@@ -205,10 +218,12 @@ namespace Affdex
                 {
                     sampleTaken = true;
                     DialogueManager.SetCurrentEmotion(DialogueManager.GetLastEmotion());
-                    yield break;        
+                    FacialSamplerRunning = false;
+                    yield break;
                 }
             }
             SetInstructionSprite.SetOutOfUse();
+            FacialSamplerRunning = false;
         }
 
         //This needs to be tossed into every child listener class
@@ -226,29 +241,6 @@ namespace Affdex
             else {
                 Debug.Log("No faces");
             }
-        }
-
-        public static void TakeSample(bool idle = false, bool keepOldIcon = false)
-        {
-
-            if (keepOldIcon == false)
-            {
-                SetInstructionSprite.StartWaitingForEmotion();
-            }
-            else {
-                Debug.Log("TAking another sample with keepOldIcon:" + keepOldIcon);
-            }
-            try
-            {
-                m_instance.StopCoroutine(m_instance.samplerRoutine);
-            }
-            catch
-            {
-            }
-            Debug.Log(m_instance);
-            m_instance.samplerRoutine = m_instance.FacialSampler(idle);
-            m_instance.StartCoroutine(m_instance.samplerRoutine);
-
         }
 
         /// <summary>

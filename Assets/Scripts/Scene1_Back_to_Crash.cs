@@ -22,7 +22,6 @@ public class Scene1_Back_to_Crash : MonoBehaviour {
         
         bool waiting = true;
         DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-        ImageResultsListener.TakeSample();
         while (waiting)
         {
             if (DialogueManager.CanGetCurrentEmotion())

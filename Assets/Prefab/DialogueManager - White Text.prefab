@@ -5,11 +5,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22474834}
-  - 222: {fileID: 22203480}
-  - 114: {fileID: 11486988}
+  - component: {fileID: 22474834}
+  - component: {fileID: 22203480}
+  - component: {fileID: 11486988}
   m_Layer: 5
   m_Name: imgDialogueBackground
   m_TagString: Untagged
@@ -22,10 +22,10 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22457856}
-  - 225: {fileID: 22528638}
+  - component: {fileID: 22457856}
+  - component: {fileID: 22528638}
   m_Layer: 5
   m_Name: Dialogue Pop-Up
   m_TagString: Untagged
@@ -38,11 +38,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22424390}
-  - 222: {fileID: 22204378}
-  - 114: {fileID: 11455854}
+  - component: {fileID: 22424390}
+  - component: {fileID: 22204378}
+  - component: {fileID: 11455854}
   m_Layer: 5
   m_Name: txtDialogueGlow
   m_TagString: Untagged
@@ -55,11 +55,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22455090}
-  - 222: {fileID: 22214188}
-  - 114: {fileID: 11449186}
+  - component: {fileID: 22455090}
+  - component: {fileID: 22214188}
+  - component: {fileID: 11449186}
   m_Layer: 5
   m_Name: txtDialogueShadow
   m_TagString: Untagged
@@ -72,10 +72,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 456756}
-  - 114: {fileID: 11417268}
+  - component: {fileID: 456756}
+  - component: {fileID: 11417268}
   m_Layer: 0
   m_Name: DialogueManager - White Text
   m_TagString: Untagged
@@ -88,12 +88,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22410266}
-  - 223: {fileID: 22313514}
-  - 114: {fileID: 11488700}
-  - 114: {fileID: 11471188}
+  - component: {fileID: 22410266}
+  - component: {fileID: 22313514}
+  - component: {fileID: 11488700}
+  - component: {fileID: 11471188}
   m_Layer: 5
   m_Name: Canvas - Dialogue
   m_TagString: Untagged
@@ -106,11 +106,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22489096}
-  - 222: {fileID: 22297620}
-  - 114: {fileID: 11409440}
+  - component: {fileID: 22489096}
+  - component: {fileID: 22297620}
+  - component: {fileID: 11409440}
   m_Layer: 5
   m_Name: txtDialogue
   m_TagString: Untagged
@@ -131,6 +131,7 @@ Transform:
   - {fileID: 22410266}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &11409440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -181,6 +182,7 @@ MonoBehaviour:
   txtDialogueGlow: {fileID: 11455854}
   textContainer: {fileID: 143788}
   isBlack: 0
+  m_currentDialogImage: {fileID: 0}
 --- !u!114 &11449186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -367,6 +369,7 @@ RectTransform:
   - {fileID: 22457856}
   m_Father: {fileID: 456756}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -384,6 +387,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22457856}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 58.41}
@@ -401,6 +405,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22457856}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0.7500057, y: 55.34}
@@ -422,6 +427,7 @@ RectTransform:
   - {fileID: 22489096}
   m_Father: {fileID: 22410266}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.09, y: 0.8757785}
   m_AnchorMax: {x: 0.94600004, y: 1}
   m_AnchoredPosition: {x: 118, y: -233}
@@ -439,6 +445,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22457856}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 41.999996}
@@ -456,6 +463,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22457856}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 56.5}

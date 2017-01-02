@@ -112,10 +112,6 @@ public class PetalMovement : MonoBehaviour {
 
 			}
 
-			while (DialogueManager.IsInUse ()) {
-				yield return new WaitForEndOfFrame ();
-			}
-
 			DialogueManager.Main.DisplayScene0Text (Scene0Events.OnCommandToSmile, true);
 
 			while (SceneZeroListener.IsEmotionalIntensitySufficient () == false) {
@@ -161,7 +157,7 @@ public class PetalMovement : MonoBehaviour {
 	IEnumerator ShowBeginningDialogue()
 	{
 		yield return new WaitForSeconds (c_startingWaitTime);
-		ImageResultsListener.TakeSample ();
+		
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
 		while (waiting) {
@@ -180,7 +176,7 @@ public class PetalMovement : MonoBehaviour {
 		yield return new WaitForSeconds (3.0f);
 		DialogueManager.Main.FadeOut();
 		yield return new WaitForSeconds(2.0f);
-		ImageResultsListener.TakeSample ();
+		
 		Debug.Log (150);
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
@@ -399,7 +395,7 @@ public class PetalMovement : MonoBehaviour {
 	private IEnumerator SampleEmotionAndPlayDialog(Scene0Events dialog){
 
 		PetalMovement.FreezePetal ();
-		ImageResultsListener.TakeSample ();
+		
 		yield return new WaitForSeconds (3.0f);
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
@@ -438,7 +434,7 @@ public class PetalMovement : MonoBehaviour {
 		yield return new WaitForSeconds (3f);
 
 		PetalMovement.FreezePetal ();
-		ImageResultsListener.TakeSample ();
+		
 		yield return new WaitForSeconds (3.0f);
 		waiting = true;
 		while (waiting) {

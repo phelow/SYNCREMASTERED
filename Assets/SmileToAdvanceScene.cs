@@ -81,7 +81,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
         yield return new WaitForSeconds(2.0f);
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -104,7 +104,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 
     
         /*Debug.Log (80);
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -124,7 +124,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 		emotion = DialogueManager.Emotion.Joy;
 
 		yield return new WaitForSeconds(1.0f);
-		ImageResultsListener.TakeSample ();*/
+		*/
 
 
 
@@ -169,7 +169,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 
-		ImageResultsListener.TakeSample ();
+		
 		t = 0.0f;
 		while (t < 7.0f ) {
 			t += Time.deltaTime * (1/Time.timeScale);
@@ -220,7 +220,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -239,7 +239,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 		m_waitingForSmile = true;
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		t = 0.0f;
 		while (t < 7.0f) {
 			t += Time.deltaTime * (1/Time.timeScale);
@@ -268,7 +268,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRefuseToSmile,true,em,true);
 			waiting = true;
 			emotion = DialogueManager.Emotion.Joy;
-			ImageResultsListener.TakeSample ();
+			
 			while (waiting) {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();
@@ -294,7 +294,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			}
 			waiting = true;
 			emotion = DialogueManager.Emotion.Joy;
-			ImageResultsListener.TakeSample ();
+			
 			while (waiting) {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();
@@ -317,7 +317,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			}
 			waiting = true;
 			emotion = DialogueManager.Emotion.Joy;
-			ImageResultsListener.TakeSample ();
+			
 			while (waiting) {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();
@@ -329,7 +329,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			SetInstructionSprite.StopWaitingForEmotion ();
 			DialogueManager.Main.FadeOut();
 			yield return new WaitForSeconds(3.0f);
-			FadeInFadeOut.FadeOut (31);
+			FadeInFadeOut.FadeOut (30);
 
 		} else {
 			StartCoroutine (SpeedUpTime ());
@@ -342,7 +342,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			}
 			waiting = true;
 			emotion = DialogueManager.Emotion.Joy;
-			ImageResultsListener.TakeSample ();
+			
 			while (waiting) {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();
@@ -366,7 +366,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			}
 			waiting = true;
 			emotion = DialogueManager.Emotion.Joy;
-			ImageResultsListener.TakeSample ();
+			
 			while (waiting) {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();
@@ -388,7 +388,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			}
 			waiting = true;
 			emotion = DialogueManager.Emotion.Joy;
-			ImageResultsListener.TakeSample ();
+			
 			while (waiting) {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();
@@ -410,7 +410,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			}
 			waiting = true;
 			emotion = DialogueManager.Emotion.Joy;
-			ImageResultsListener.TakeSample ();
+			
 			while (waiting) {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();

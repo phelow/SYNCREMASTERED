@@ -24,11 +24,7 @@ public class DialogueChoiceTracker : MonoBehaviour {
 	private static List<Indicator> ms_joyIndicators;
 	private static List<Indicator> ms_surpriseIndicators;
 
-	[SerializeField]private GameObject m_angerIndicator;
-	[SerializeField]private GameObject m_joyIndicator;
-	[SerializeField]private GameObject m_surpriseIndicator;
-
-	private const float c_baselineMultiplier = 5.0f;
+    private const float c_baselineMultiplier = 5.0f;
 	private const float c_emissionMultiplier = 1.0f;
 	private const float c_intensityMultiplier = 1.0f;
 	private const float c_boostMultiplier = 10.0f;
@@ -76,32 +72,7 @@ public class DialogueChoiceTracker : MonoBehaviour {
 				surprisePoints -= nextPoints;
 				ms_surpriseIndicators [i].GiveIntensity (nextPoints * c_emissionMultiplier);
 			}
-
-
-			// Spawn feedback with additional intensity
-			if (ms_angerIntensity > c_newSpawnMinimum * ms_angerIndicators.Count) {
-				GameObject angerIndicator = GameObject.Instantiate (m_angerIndicator);
-				angerIndicator.transform.parent = Camera.main.transform;
-				angerIndicator.transform.localPosition = new Vector3 (Random.Range (m_leftBound, m_rightBound),Random.Range (m_bottom, m_top),  Random.Range (m_forwardMin, m_forwardMax));
-				ms_angerIndicators.Add (angerIndicator.GetComponent<Indicator>());
-				angerIndicator.GetComponent<Indicator> ().GiveIntensity (angerPoints * c_emissionMultiplier);
-			}
-
-			if (ms_surpriseIntensity > c_newSpawnMinimum * ms_surpriseIndicators.Count) {
-				GameObject surpriseIndicator = GameObject.Instantiate (m_surpriseIndicator);
-				surpriseIndicator.transform.parent = Camera.main.transform;
-				surpriseIndicator.transform.localPosition = new Vector3 (Random.Range (m_leftBound, m_rightBound),Random.Range (m_bottom, m_top),  Random.Range (m_forwardMin, m_forwardMax));
-				ms_surpriseIndicators.Add (surpriseIndicator.GetComponent<Indicator>());
-				surpriseIndicator.GetComponent<Indicator> ().GiveIntensity (surprisePoints * c_emissionMultiplier);
-			}
-
-			if (ms_joyIntensity > c_newSpawnMinimum * ms_joyIndicators.Count) {
-				GameObject joyIndicator = GameObject.Instantiate (m_joyIndicator);
-				joyIndicator.transform.parent = Camera.main.transform;
-				joyIndicator.transform.localPosition = new Vector3 (Random.Range (m_leftBound, m_rightBound),Random.Range (m_bottom, m_top),  Random.Range (m_forwardMin, m_forwardMax));
-				ms_joyIndicators.Add (joyIndicator.GetComponent<Indicator>());
-				joyIndicator.GetComponent<Indicator> ().GiveIntensity (joyPoints * c_emissionMultiplier);
-			}
+            
 			yield return new WaitForEndOfFrame ();
 		}
 	}
@@ -139,26 +110,7 @@ public class DialogueChoiceTracker : MonoBehaviour {
 			break;
 		}
 	}
-
-	public static void AddIntensityBoost(float anger, float joy, float surprise){
-		for (int i = 0; i < ms_angerIndicators.Count; i++) {
-			float nextPoints = Random.Range (0.0f,anger / ms_angerIndicators.Count);
-			anger -= nextPoints;
-			ms_angerIndicators [i].GiveIntensity (nextPoints * c_boostMultiplier);
-		}
-		// Randomly distribute joy
-		for (int i = 0; i < ms_joyIndicators.Count; i++) {
-			float nextPoints = Random.Range (0.0f,joy / ms_joyIndicators.Count);
-			joy -= nextPoints;
-			ms_joyIndicators [i].GiveIntensity (nextPoints * c_boostMultiplier);
-		}
-		for (int i = 0; i < ms_surpriseIndicators.Count; i++) {
-			float nextPoints = Random.Range (0.0f,surprise / ms_surpriseIndicators.Count);
-			surprise -= nextPoints;
-			ms_surpriseIndicators [i].GiveIntensity (nextPoints * c_boostMultiplier);
-		}
-	}
-
+    
 
 	private IEnumerator DecayIntensityBoost ()
 	{

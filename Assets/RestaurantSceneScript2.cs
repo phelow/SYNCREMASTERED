@@ -29,7 +29,7 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 		yield return new WaitForSeconds(3.0f);
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -54,7 +54,7 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -94,7 +94,7 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -114,7 +114,7 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 		/*yield return new WaitForSeconds(1.0f);
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -156,7 +156,7 @@ public class RestaurantSceneScript2 : MonoBehaviour {
         
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -187,7 +187,7 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 		/*yield return new WaitForSeconds(1.0f);
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -210,7 +210,7 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 		yield return new WaitForSeconds(1.0f);
 		waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();

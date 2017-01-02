@@ -3,17 +3,19 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class DialogueManager : MonoBehaviour {
+public class DialogueManager : MonoBehaviour
+{
 
     //Used to access the display functions
     public static DialogueManager Main;
 
-	private const bool c_typeWriterEffect = true;
-	private const float c_typewriterSpeed = 1.0f;
+    private const bool c_typeWriterEffect = true;
+    private const float c_typewriterSpeed = 1.0f;
 
-	[SerializeField]private GameObject m_key;
+    [SerializeField]
+    private GameObject m_key;
 
-	private IEnumerator m_revealSegment;
+    private IEnumerator m_revealSegment;
 
     //Reference to the Text object in the scene where the dialogue is displayed
     [SerializeField]
@@ -28,110 +30,117 @@ public class DialogueManager : MonoBehaviour {
     GameObject textContainer;
     CanvasGroup dialoguePopup;
 
-    //Handle fade in and fade out sequences
-    bool performFadeIn = false;
-	bool performFadeOut = false;
-
-	private static DialogueManager.Emotion m_emotion;
-	private static bool inUse = false;
-	private static bool m_facePassed = false;
+    private static DialogueManager.Emotion m_emotion;
+    private static bool inUse = false;
+    private static bool m_facePassed = false;
 
     float fadeTime = 1f;
 
-	private Color m_startColor;
+    private Color m_startColor;
 
-	private const float c_timeMin = 0.3f;
+    private const float c_timeMin = 0.3f;
 
-	TextType m_dialog = TextType.Default;
-	Color m_halfColor;
-	private bool c_gameFestBuild = true;
-	public enum TextType{
-		Default,
-		Command,
-		Dialog
-	}
-	public enum Emotion{
-		Joy,
-		Disgust,
-		Anger,
-		Sadness,
-		Surprise
-	}
+    TextType m_dialog = TextType.Default;
+    Color m_halfColor;
+    private bool c_gameFestBuild = true;
 
-	public enum CreditsEvent
-	{
-		ConceptByYihao,
-		ManagedByEric,
-		HackedByWill,
-		ArtByLuc,
-		MusicByRob,
-		ArtByEnrico,
-		DevelopedAtRPI,
-		ThanksToAffectiva,
-		SpecialThanksToRuiz,
-		SpecialThanksToChang,
-		ThanksToOurFriendsAndFamily
-	}
+    private bool m_dialogIconEnabled = false;
+
+    public enum TextType
+    {
+        Default,
+        Command,
+        Dialog
+    }
+    public enum Emotion
+    {
+        Joy,
+        Disgust,
+        Anger,
+        Sadness,
+        Surprise
+    }
+
+    public enum CreditsEvent
+    {
+        ConceptByYihao,
+        ManagedByEric,
+        HackedByWill,
+        ArtByLuc,
+        MusicByRob,
+        ArtByEnrico,
+        DevelopedAtRPI,
+        ThanksToAffectiva,
+        SpecialThanksToRuiz,
+        SpecialThanksToChang,
+        ThanksToOurFriendsAndFamily
+    }
 
     //Dictionaries containing dialogue lines, accessed via unique enums - one per scene
-	Dictionary<TutorialEvents,string> tutorialDictionary;
+    Dictionary<TutorialEvents, string> tutorialDictionary;
 
     //Joy
-	Dictionary<Scene0Events, string> scene0DictionaryJoy;
-	Dictionary<Scene1Events, string> scene1DictionaryJoy;
-	Dictionary<Scene2Events, string> scene2DictionaryJoy;
-	Dictionary<Scene4Events, string> scene4DictionaryJoy;
-	Dictionary<Scene5Events, string> scene5DictionaryJoy;
+    Dictionary<Scene0Events, string> scene0DictionaryJoy;
+    Dictionary<Scene1Events, string> scene1DictionaryJoy;
+    Dictionary<Scene2Events, string> scene2DictionaryJoy;
+    Dictionary<Scene4Events, string> scene4DictionaryJoy;
+    Dictionary<Scene5Events, string> scene5DictionaryJoy;
     Dictionary<GoodEndingEvents, string> goodEndingDictionaryJoy;
     Dictionary<BadEndingEvents, string> badEndingDictionaryJoy;
 
     //Anger
     Dictionary<Scene0Events, string> scene0DictionaryAnger;
-	Dictionary<Scene1Events, string> scene1DictionaryAnger;
-	Dictionary<Scene2Events, string> scene2DictionaryAnger;
-	Dictionary<Scene4Events, string> scene4DictionaryAnger;
-	Dictionary<Scene5Events, string> scene5DictionaryAnger;
+    Dictionary<Scene1Events, string> scene1DictionaryAnger;
+    Dictionary<Scene2Events, string> scene2DictionaryAnger;
+    Dictionary<Scene4Events, string> scene4DictionaryAnger;
+    Dictionary<Scene5Events, string> scene5DictionaryAnger;
     Dictionary<GoodEndingEvents, string> goodEndingDictionaryAnger;
     Dictionary<BadEndingEvents, string> badEndingDictionaryAnger;
 
     //Surprise
     Dictionary<Scene0Events, string> scene0DictionarySurprise;
-	Dictionary<Scene1Events, string> scene1DictionarySurprise;
-	Dictionary<Scene2Events, string> scene2DictionarySurprise;
-	Dictionary<Scene4Events, string> scene4DictionarySurprise;
-	Dictionary<Scene5Events, string> scene5DictionarySurprise;
+    Dictionary<Scene1Events, string> scene1DictionarySurprise;
+    Dictionary<Scene2Events, string> scene2DictionarySurprise;
+    Dictionary<Scene4Events, string> scene4DictionarySurprise;
+    Dictionary<Scene5Events, string> scene5DictionarySurprise;
     Dictionary<GoodEndingEvents, string> goodEndingDictionarySurprise;
     Dictionary<BadEndingEvents, string> badEndingDictionarySurprise;
 
-	Dictionary<CreditsEvent,string> creditsDictionary;
+    Dictionary<CreditsEvent, string> creditsDictionary;
 
-	bool m_fadeMutex = false;
+    bool m_fadeMutex = false;
 
-	[SerializeField]bool isBlack = true;
+    private float m_fadeInTime = 1.0f;
 
-	void Start(){
-		if (isBlack) {
-			m_startColor = Color.black;
+    [SerializeField]
+    bool isBlack = true;
 
-		} else {
-			m_startColor = Color.white;
-		}
-	}
+    void Start()
+    {
+        if (isBlack)
+        {
+            m_startColor = Color.black;
+
+        }
+        else {
+            m_startColor = Color.white;
+        }
+    }
 
     //Instantiate needed assets
     void Awake()
     {
-		//Hide the cursor
-		UnityEngine.Cursor.visible = false;
+        //Hide the cursor
+        UnityEngine.Cursor.visible = false;
 
-		StartCoroutine (InterpolateDialog ());
-		m_revealSegment = RevealTextOneSegmentAtATime ("");
+        StartCoroutine(InterpolateDialog());
+        m_revealSegment = RevealTextOneSegmentAtATime("");
         Main = GetComponent<DialogueManager>();
 
         dialoguePopup = textContainer.GetComponent<CanvasGroup>();
         dialoguePopup.alpha = 0f;
 
-		tutorialDictionary = new Dictionary<TutorialEvents, string> ();
+        tutorialDictionary = new Dictionary<TutorialEvents, string>();
 
         scene0DictionaryJoy = new Dictionary<Scene0Events, string>();
         scene1DictionaryJoy = new Dictionary<Scene1Events, string>();
@@ -142,24 +151,24 @@ public class DialogueManager : MonoBehaviour {
         badEndingDictionaryJoy = new Dictionary<BadEndingEvents, string>();
 
         scene0DictionaryAnger = new Dictionary<Scene0Events, string>();
-		scene1DictionaryAnger = new Dictionary<Scene1Events, string>();
-		scene2DictionaryAnger = new Dictionary<Scene2Events, string>();
-		scene4DictionaryAnger = new Dictionary<Scene4Events, string>();
-		scene5DictionaryAnger = new Dictionary<Scene5Events, string>();
+        scene1DictionaryAnger = new Dictionary<Scene1Events, string>();
+        scene2DictionaryAnger = new Dictionary<Scene2Events, string>();
+        scene4DictionaryAnger = new Dictionary<Scene4Events, string>();
+        scene5DictionaryAnger = new Dictionary<Scene5Events, string>();
         goodEndingDictionaryAnger = new Dictionary<GoodEndingEvents, string>();
         badEndingDictionaryAnger = new Dictionary<BadEndingEvents, string>();
 
         scene0DictionarySurprise = new Dictionary<Scene0Events, string>();
-		scene1DictionarySurprise = new Dictionary<Scene1Events, string>();
-		scene2DictionarySurprise = new Dictionary<Scene2Events, string>();
-		scene4DictionarySurprise = new Dictionary<Scene4Events, string>();
-		scene5DictionarySurprise = new Dictionary<Scene5Events, string>();
+        scene1DictionarySurprise = new Dictionary<Scene1Events, string>();
+        scene2DictionarySurprise = new Dictionary<Scene2Events, string>();
+        scene4DictionarySurprise = new Dictionary<Scene4Events, string>();
+        scene5DictionarySurprise = new Dictionary<Scene5Events, string>();
         goodEndingDictionarySurprise = new Dictionary<GoodEndingEvents, string>();
         badEndingDictionarySurprise = new Dictionary<BadEndingEvents, string>();
 
-		creditsDictionary = new Dictionary<CreditsEvent, string> ();
+        creditsDictionary = new Dictionary<CreditsEvent, string>();
 
-		BuildTutorialDictionary ();
+        BuildTutorialDictionary();
         BuildScene0Dictionary();
         BuildScene1Dictionary();
         BuildScene2Dictionary();
@@ -167,113 +176,103 @@ public class DialogueManager : MonoBehaviour {
         BuildScene5Dictionary();
         BuildGoodEndingDictionary();
         BuildBadEndingDictionary();
-		BuildCreditsDictionary ();
+        BuildCreditsDictionary();
     }
 
-	public void CenterDialog(){
+    public void CenterDialog()
+    {
 
-		txtDialogue.alignment = TextAnchor.MiddleLeft;
-		txtDialogueShadow.alignment = TextAnchor.MiddleLeft;
-		txtDialogueGlow.alignment = TextAnchor.MiddleLeft;
-	}
+        txtDialogue.alignment = TextAnchor.MiddleLeft;
+        txtDialogueShadow.alignment = TextAnchor.MiddleLeft;
+        txtDialogueGlow.alignment = TextAnchor.MiddleLeft;
+    }
 
-	public static bool IsInUse(){
-		return Main.m_fadeMutex && Main.performFadeOut == false && Main.performFadeIn == false;
-	}
+    void BuildCreditsDictionary()
+    {
+        creditsDictionary.Add(CreditsEvent.ConceptByYihao, "Designed by Yihao Zhu");
+        creditsDictionary.Add(CreditsEvent.ManagedByEric, "Written and produced by Eric Walsh");
+        creditsDictionary.Add(CreditsEvent.HackedByWill, "Coded by William Pheloung");
+        creditsDictionary.Add(CreditsEvent.ArtByLuc, "Art drawn by Luc Wong");
+        creditsDictionary.Add(CreditsEvent.MusicByRob, "Music composed by Robert D. Bishop");
+        if (c_gameFestBuild == false)
+        {
+            creditsDictionary.Add(CreditsEvent.ArtByEnrico, "Additional support from Enrico");
+        }
 
-	/*
-	 * 
-		ConceptByYihao,
-		ManagedByEric,
-		HackedByWill,
-		ArtByLuc,
-		DevelopedAtRPI,
-		SpecialThanksToRuiz,
-		SpecialThanksToChang,
-		ThanksToOurFriendsAndFamily
-	 * */
-	void BuildCreditsDictionary(){
-		creditsDictionary.Add (CreditsEvent.ConceptByYihao, "Designed by Yihao Zhu");
-		creditsDictionary.Add (CreditsEvent.ManagedByEric, "Written and produced by Eric Walsh");
-		creditsDictionary.Add (CreditsEvent.HackedByWill, "Coded by William Pheloung");
-		creditsDictionary.Add (CreditsEvent.ArtByLuc, "Art drawn by Luc Wong");
-		creditsDictionary.Add (CreditsEvent.MusicByRob, "Music composed by Robert D. Bishop");
-		if (c_gameFestBuild == false) {
-			creditsDictionary.Add(CreditsEvent.ArtByEnrico, "Additional support from Enrico");
-		}
+        creditsDictionary.Add(CreditsEvent.ThanksToAffectiva, "Powered by Affectiva");
+        creditsDictionary.Add(CreditsEvent.DevelopedAtRPI, "A game made at Rensselaer Polytechnic Institute");
+        creditsDictionary.Add(CreditsEvent.SpecialThanksToRuiz, "With help from Professor Ruiz");
+        creditsDictionary.Add(CreditsEvent.SpecialThanksToChang, "And help from Professor Chang");
+        creditsDictionary.Add(CreditsEvent.ThanksToOurFriendsAndFamily, "Thanks to all our friends, family, and fraternity brothers at Alpha Sigma Phi and Sigma Chi who believed in us.");
+    }
 
-		creditsDictionary.Add (CreditsEvent.ThanksToAffectiva, "Powered by Affectiva");
-		creditsDictionary.Add (CreditsEvent.DevelopedAtRPI, "A game made at Rensselaer Polytechnic Institute");
-		creditsDictionary.Add (CreditsEvent.SpecialThanksToRuiz, "With help from Professor Ruiz");
-		creditsDictionary.Add (CreditsEvent.SpecialThanksToChang, "And help from Professor Chang");
-		creditsDictionary.Add (CreditsEvent.ThanksToOurFriendsAndFamily, "Thanks to all our friends, family, and fraternity brothers at Alpha Sigma Phi and Sigma Chi who believed in us.");
-	}
+    void BuildTutorialDictionary()
+    {
 
-	void BuildTutorialDictionary(){
-		tutorialDictionary.Add (TutorialEvents.SmileToSkip, "Be angry to skip the tutorial and calibration.\n\nWARNING: Skipping calibration may adversely affect your play experience.");
-		tutorialDictionary.Add (TutorialEvents.Calibration, "SYNC uses the camera on your device to capture your facial expressions.\n\nPlease move yourself or your camera until you are comfortable and the icon in the upper left corner remains solid, indicating it can pick up your face.\n");
-		tutorialDictionary.Add (TutorialEvents.OpenMouthToContinue, "A symbol will appear on your screen when you need to act.\n\nIf you aren’t sure what you’re supposed to do, look to the text for help.\r\n\r\n Please open your mouth to continue.");
-        tutorialDictionary.Add(TutorialEvents.PromptEmotions, "When you see the petal icon, you can move the main character to one of three different emotional states to direct the narrative: Happy, Angry, or Surprised.\n\nThe large face in the upper left shows the character's current emotional state, while the small faces show YOUR emotional state.\n\nPlease open your mouth to begin calibration.");
-		tutorialDictionary.Add (TutorialEvents.MakeAnyFaceToStart, "Your choices over time will affect your experience, so choose wisely.\n\nMake any face to start the game.\n");
+        tutorialDictionary.Add(TutorialEvents.Calibration, "SYNC uses the camera on your device to capture your facial expressions.\n\nPlease move yourself or your camera until you are comfortable and the icons remains solid, indicating it can pick up your face.\n");
+        tutorialDictionary.Add(TutorialEvents.OpenMouthToContinue, "A symbol will appear on your screen when you need to act.\n\nIf you aren’t sure what you’re supposed to do, look to the text for help.\r\n\r\n Please open your mouth to continue.");
+        tutorialDictionary.Add(TutorialEvents.PromptEmotions, "When you see the petal icon, you can move the main character to one of three different emotional states to direct the narrative: Happy, Angry, or Surprised.\n\nThe large face in the upper left shows the character's current emotional state, while the small faces show YOUR emotional state.\n\nPlease open your mouth to proceed.");
+        tutorialDictionary.Add(TutorialEvents.PromptTutorial, "Make each of these faces to continue.");
+        tutorialDictionary.Add(TutorialEvents.MakeAnyFaceToStart, "Your choices over time will affect your experience, so choose wisely.\n\nMake any face to start the game.\n");
 
-	}
+    }
 
     //Populate all dialogue text needed for Scene 0
     void BuildScene0Dictionary()
     {
         scene0DictionaryJoy.Add(Scene0Events.OnSceneLoad, "Time is an eternal river, gradually carving out memories like eroded stone.");
         scene0DictionaryJoy.Add(Scene0Events.OnCommandToSmile, "I want to remember her as she was: her smile, her kiss, her touch.");
-		scene0DictionaryJoy.Add(Scene0Events.OnDeadPetal, "Like a dying petal restored to life…");
-		scene0DictionaryJoy.Add(Scene0Events.OnPetalRising, "Ascending on the wings of a divine breeze...");
-		scene0DictionaryJoy.Add(Scene0Events.OnPetalInTree, "Until it rests once more in the boughs of its home…");
-		scene0DictionaryJoy.Add(Scene0Events.PromptOnSceneEnd1, "What if I too could invert the world…");   //Prompt - the same for all emotions
+        scene0DictionaryJoy.Add(Scene0Events.OnDeadPetal, "Like a dying petal restored to life…");
+        scene0DictionaryJoy.Add(Scene0Events.OnPetalRising, "Ascending on the wings of a divine breeze...");
+        scene0DictionaryJoy.Add(Scene0Events.OnPetalInTree, "Until it rests once more in the boughs of its home…");
+        scene0DictionaryJoy.Add(Scene0Events.PromptOnSceneEnd1, "What if I too could invert the world…");   //Prompt - the same for all emotions
         scene0DictionaryJoy.Add(Scene0Events.OnSceneEnd2, "...And return once more to her?");
 
-		scene0DictionaryAnger.Add(Scene0Events.OnSceneLoad, "Time is a surging river, dragging me chained in its torrential wake.");
-		scene0DictionaryAnger.Add(Scene0Events.OnCommandToSmile, "It’s not fair, none of this is fair! She should be sitting here, not me!");
-		scene0DictionaryAnger.Add(Scene0Events.OnDeadPetal, "Like a dying petal denied its rest...");
-		scene0DictionaryAnger.Add(Scene0Events.OnPetalRising, "Forced ever higher by an merciless breeze...");
-		scene0DictionaryAnger.Add(Scene0Events.OnPetalInTree, "Until it trembles once more in its verdant cage...");
-		scene0DictionaryAnger.Add(Scene0Events.PromptOnSceneEnd1, "What if I too could invert the world…"); //Prompt - the same for all emotions
+        scene0DictionaryAnger.Add(Scene0Events.OnSceneLoad, "Time is a surging river, dragging me chained in its torrential wake.");
+        scene0DictionaryAnger.Add(Scene0Events.OnCommandToSmile, "It’s not fair, none of this is fair! She should be sitting here, not me!");
+        scene0DictionaryAnger.Add(Scene0Events.OnDeadPetal, "Like a dying petal denied its rest...");
+        scene0DictionaryAnger.Add(Scene0Events.OnPetalRising, "Forced ever higher by an merciless breeze...");
+        scene0DictionaryAnger.Add(Scene0Events.OnPetalInTree, "Until it trembles once more in its verdant cage...");
+        scene0DictionaryAnger.Add(Scene0Events.PromptOnSceneEnd1, "What if I too could invert the world…"); //Prompt - the same for all emotions
         scene0DictionaryAnger.Add(Scene0Events.OnSceneEnd2, "...And redeem myself once more for her?");
 
-		scene0DictionarySurprise.Add(Scene0Events.OnSceneLoad, "Time is a meandering river, a new revelation hidden beyond every serpentine bend.");
-		scene0DictionarySurprise.Add(Scene0Events.OnCommandToSmile, "I can’t believe this is happening; I don’t want to imagine a world without her.");
-		scene0DictionarySurprise.Add(Scene0Events.OnDeadPetal, "Like a dying petal mysteriously awoken…");
-		scene0DictionarySurprise.Add(Scene0Events.OnPetalRising, "Tossed at random in a meaningless breeze...");
-		scene0DictionarySurprise.Add(Scene0Events.OnPetalInTree, "Until it waits once more on the whim of fate...");
-		scene0DictionarySurprise.Add(Scene0Events.PromptOnSceneEnd1, "What if I too could invert the world…");  //Prompt - the same for all emotions
+        scene0DictionarySurprise.Add(Scene0Events.OnSceneLoad, "Time is a meandering river, a new revelation hidden beyond every serpentine bend.");
+        scene0DictionarySurprise.Add(Scene0Events.OnCommandToSmile, "I can’t believe this is happening; I don’t want to imagine a world without her.");
+        scene0DictionarySurprise.Add(Scene0Events.OnDeadPetal, "Like a dying petal mysteriously awoken…");
+        scene0DictionarySurprise.Add(Scene0Events.OnPetalRising, "Tossed at random in a meaningless breeze...");
+        scene0DictionarySurprise.Add(Scene0Events.OnPetalInTree, "Until it waits once more on the whim of fate...");
+        scene0DictionarySurprise.Add(Scene0Events.PromptOnSceneEnd1, "What if I too could invert the world…");  //Prompt - the same for all emotions
         scene0DictionarySurprise.Add(Scene0Events.OnSceneEnd2, "...And find myself once more through her?");
     }
 
     //Populate all dialogue text needed for Scene 1
     void BuildScene1Dictionary()
     {
-		scene1DictionaryJoy.Add(Scene1Events.OnSceneLoad, "What if I could go back to that peaceful city resting beneath its white pall?");
-		scene1DictionaryJoy.Add(Scene1Events.OnShowCrashBeginning, "To a time when my dreams of a future still lived on through her.");
-		scene1DictionaryJoy.Add(Scene1Events.OnReverseCar, "What if I could do it over? What if I could try again?");
-		scene1DictionaryJoy.Add(Scene1Events.OnTimeTransition, "What if I...what if I could still save her?");
-		scene1DictionaryJoy.Add(Scene1Events.OnCommandToPayAttention, "If my attention never wavers, then she will never die. I try my best not to blink.");
-		scene1DictionaryJoy.Add(Scene1Events.OnCrash, "But of course, I have already done as much for her as I ever could.");
-		scene1DictionaryJoy.Add(Scene1Events.OnShowCrashEnd, "There is no way to turn back the clock, yet still I can't help but wonder…"); //Prompt - the same for all emotions
-		scene1DictionaryJoy.Add(Scene1Events.OnSceneEnd, "Did I at least make you happy?");
+        scene1DictionaryJoy.Add(Scene1Events.OnSceneLoad, "What if I could go back to that peaceful city resting beneath its white pall?");
+        scene1DictionaryJoy.Add(Scene1Events.OnShowCrashBeginning, "To a time when my dreams of a future still lived on through her.");
+        scene1DictionaryJoy.Add(Scene1Events.OnReverseCar, "What if I could do it over? What if I could try again?");
+        scene1DictionaryJoy.Add(Scene1Events.OnTimeTransition, "What if I...what if I could still save her?");
+        scene1DictionaryJoy.Add(Scene1Events.OnCommandToPayAttention, "If my attention never wavers, then she will never die. I try my best not to blink.");
+        scene1DictionaryJoy.Add(Scene1Events.OnCrash, "But of course, I have already done as much for her as I ever could.");
+        scene1DictionaryJoy.Add(Scene1Events.OnShowCrashEnd, "There is no way to turn back the clock, yet still I can't help but wonder…"); //Prompt - the same for all emotions
+        scene1DictionaryJoy.Add(Scene1Events.OnSceneEnd, "Did I at least make you happy?");
 
-		scene1DictionaryAnger.Add(Scene1Events.OnSceneLoad, "What if I could go back to that wretched city rotting beneath its white pall?");
-		scene1DictionaryAnger.Add(Scene1Events.OnShowCrashBeginning, "To the moment when my future with her was stolen in a flash of furious light.");
-		scene1DictionaryAnger.Add(Scene1Events.OnReverseCar, "What if I could do it over? What if I could erase all my mistakes?");
-		scene1DictionaryAnger.Add(Scene1Events.OnTimeTransition, "What if I...what if I could still fight for her?");
-		scene1DictionaryAnger.Add(Scene1Events.OnCommandToPayAttention, "If my attention never wavers, then I will never fail her. I resist the urge to blink.");
-		scene1DictionaryAnger.Add(Scene1Events.OnCrash, "But of course, I have already failed her as much as I ever could.");
-		scene1DictionaryAnger.Add(Scene1Events.OnShowCrashEnd, "There is no way to turn back the clock, yet still I can't help but wonder…");  //Prompt - the same for all emotions
+        scene1DictionaryAnger.Add(Scene1Events.OnSceneLoad, "What if I could go back to that wretched city rotting beneath its white pall?");
+        scene1DictionaryAnger.Add(Scene1Events.OnShowCrashBeginning, "To the moment when my future with her was stolen in a flash of furious light.");
+        scene1DictionaryAnger.Add(Scene1Events.OnReverseCar, "What if I could do it over? What if I could erase all my mistakes?");
+        scene1DictionaryAnger.Add(Scene1Events.OnTimeTransition, "What if I...what if I could still fight for her?");
+        scene1DictionaryAnger.Add(Scene1Events.OnCommandToPayAttention, "If my attention never wavers, then I will never fail her. I resist the urge to blink.");
+        scene1DictionaryAnger.Add(Scene1Events.OnCrash, "But of course, I have already failed her as much as I ever could.");
+        scene1DictionaryAnger.Add(Scene1Events.OnShowCrashEnd, "There is no way to turn back the clock, yet still I can't help but wonder…");  //Prompt - the same for all emotions
         scene1DictionaryAnger.Add(Scene1Events.OnSceneEnd, "Why couldn’t I have died instead?");
 
-		scene1DictionarySurprise.Add(Scene1Events.OnSceneLoad, "What if I could go back to that ethereal city shifting beneath its white pall?");
-		scene1DictionarySurprise.Add(Scene1Events.OnShowCrashBeginning, "To that blinking wreckage of a future that proved to be as ephemeral as the snow.");
-		scene1DictionarySurprise.Add(Scene1Events.OnReverseCar, "What if I could do it over? What if I could uncover something new?");
-		scene1DictionarySurprise.Add(Scene1Events.OnTimeTransition, "What if I...what if I could still rewrite her fate?");
-		scene1DictionarySurprise.Add(Scene1Events.OnCommandToPayAttention, "If my attention never wavers, then who knows what will happen. I resist the urge to blink.");
-		scene1DictionarySurprise.Add(Scene1Events.OnCrash, "But of course, I will never know how things might have been.");
-		scene1DictionarySurprise.Add(Scene1Events.OnShowCrashEnd, "There is no way to turn back the clock, yet still I can't help but wonder…");    //Prompt - the same for all emotions
+        scene1DictionarySurprise.Add(Scene1Events.OnSceneLoad, "What if I could go back to that ethereal city shifting beneath its white pall?");
+        scene1DictionarySurprise.Add(Scene1Events.OnShowCrashBeginning, "To that blinking wreckage of a future that proved to be as ephemeral as the snow.");
+        scene1DictionarySurprise.Add(Scene1Events.OnReverseCar, "What if I could do it over? What if I could uncover something new?");
+        scene1DictionarySurprise.Add(Scene1Events.OnTimeTransition, "What if I...what if I could still rewrite her fate?");
+        scene1DictionarySurprise.Add(Scene1Events.OnCommandToPayAttention, "If my attention never wavers, then who knows what will happen. I resist the urge to blink.");
+        scene1DictionarySurprise.Add(Scene1Events.OnCrash, "But of course, I will never know how things might have been.");
+        scene1DictionarySurprise.Add(Scene1Events.OnShowCrashEnd, "There is no way to turn back the clock, yet still I can't help but wonder…");    //Prompt - the same for all emotions
         scene1DictionarySurprise.Add(Scene1Events.OnSceneEnd, "What am I supposed to do now?");
     }
 
@@ -298,16 +297,16 @@ public class DialogueManager : MonoBehaviour {
         scene2DictionaryJoy.Add(Scene2Events.OnThirdConversation3, "\"Ok, ok. You win Alex; I suppose freezing to death together IS kind of romantic.\"");    //Does not ask for input - follows previous line on timer
         scene2DictionaryJoy.Add(Scene2Events.OnWalkingOutside, "We walk and talk about things that don’t matter to anyone but us.");
         scene2DictionaryJoy.Add(Scene2Events.OnSnowflakeCommand, "When she stops to look up, opening her mouth, I laugh and join her.");
-		scene2DictionaryJoy.Add(Scene2Events.OnSnowflakeCompletion, "\"I love you.\"");   //Prompt - the same for all emotions
+        scene2DictionaryJoy.Add(Scene2Events.OnSnowflakeCompletion, "\"I love you.\"");   //Prompt - the same for all emotions
         scene2DictionaryJoy.Add(Scene2Events.OnCarCrash, "The careening car took away my chance to say it back to her every day.");
         scene2DictionaryJoy.Add(Scene2Events.OnEndScene, "With no clear path forward, I long to think back further.");
 
 
-		
 
-		
-		scene2DictionaryAnger.Add(Scene2Events.OnSceneLoad, "She made me stop caring what other people thought.");
-		scene2DictionaryAnger.Add(Scene2Events.OnIntro, "How could I have been stupid enough to drive that night? We should have walked home instead.");
+
+
+        scene2DictionaryAnger.Add(Scene2Events.OnSceneLoad, "She made me stop caring what other people thought.");
+        scene2DictionaryAnger.Add(Scene2Events.OnIntro, "How could I have been stupid enough to drive that night? We should have walked home instead.");
         //neutral
         scene2DictionaryAnger.Add(Scene2Events.OnFirstConversation1, "\"But what about the cold? That wind is wicked and it’s practically a blizzard out there!\"");   //Prompt - the same for all emotions
         scene2DictionaryAnger.Add(Scene2Events.OnFirstConversation2, "I want to shout a challenge to the entire world, daring them to even try to hurt her.");
@@ -320,17 +319,17 @@ public class DialogueManager : MonoBehaviour {
         scene2DictionaryAnger.Add(Scene2Events.OnThirdConversation1, "\"Well...but what about the car? We drove here, remember?\"");  //Prompt - the same for all emotions
         //frown
         scene2DictionaryAnger.Add(Scene2Events.OnThirdConversation2, "When I snap at her that the stupid car doesn’t matter, she frowns.");
-		scene2DictionaryAnger.Add(Scene2Events.OnThirdConversation3, "\"Ok, ok. You win Alex; there’s no reason to get so upset over it.\"");    //Does not ask for input - follows previous line on timer
+        scene2DictionaryAnger.Add(Scene2Events.OnThirdConversation3, "\"Ok, ok. You win Alex; there’s no reason to get so upset over it.\"");    //Does not ask for input - follows previous line on timer
         scene2DictionaryAnger.Add(Scene2Events.OnWalkingOutside, "We talk and talk about things the world unfairly stole from us too soon.");
-		scene2DictionaryAnger.Add(Scene2Events.OnSnowflakeCommand, "When she stops to look up, opening her mouth, I reluctantly join her.");
-		scene2DictionaryAnger.Add(Scene2Events.OnSnowflakeCompletion, "\"I love you.\"");    //Prompt - the same for all emotions
+        scene2DictionaryAnger.Add(Scene2Events.OnSnowflakeCommand, "When she stops to look up, opening her mouth, I reluctantly join her.");
+        scene2DictionaryAnger.Add(Scene2Events.OnSnowflakeCompletion, "\"I love you.\"");    //Prompt - the same for all emotions
         scene2DictionaryAnger.Add(Scene2Events.OnCarCrash, "The careening car meant she’d never hear it back as much as she deserved.");
-		scene2DictionaryAnger.Add(Scene2Events.OnEndScene, "With no clear path forward, all I can do now is think back further.");
-
-		
+        scene2DictionaryAnger.Add(Scene2Events.OnEndScene, "With no clear path forward, all I can do now is think back further.");
 
 
-		scene2DictionarySurprise.Add(Scene2Events.OnSceneLoad, "She made me feel like I was loved, even when I was alone.");
+
+
+        scene2DictionarySurprise.Add(Scene2Events.OnSceneLoad, "She made me feel like I was loved, even when I was alone.");
         scene2DictionarySurprise.Add(Scene2Events.OnIntro, "Would we still be together if we’d walked home that night instead of driving?");
         //neutral
         scene2DictionarySurprise.Add(Scene2Events.OnFirstConversation1, "\"But what about the cold? That wind is wicked and it’s practically a blizzard out there!\""); //Prompt - the same for all emotions
@@ -344,12 +343,12 @@ public class DialogueManager : MonoBehaviour {
         scene2DictionarySurprise.Add(Scene2Events.OnThirdConversation1, "\"Well...but what about the car? We drove here, remember?\"");   //Prompt - the same for all emotions
         //smile
         scene2DictionarySurprise.Add(Scene2Events.OnThirdConversation2, "When I gasp and tell her I hadn’t considered the inanimate object’s feelings, she laughs.");
-		scene2DictionarySurprise.Add(Scene2Events.OnThirdConversation3, "\"Ok, ok. You win Alex; I suppose the car will just have to settle for second best.\"");
-		scene2DictionarySurprise.Add(Scene2Events.OnWalkingOutside, "We walk and talk about things that could’ve been in a future that never was.");
-		scene2DictionarySurprise.Add(Scene2Events.OnSnowflakeCommand, "When she stops to look up, opening her mouth, I see no reason not to join her.");
-		scene2DictionarySurprise.Add(Scene2Events.OnSnowflakeCompletion, "\"I love you.\"");  //Prompt - the same for all emotions
+        scene2DictionarySurprise.Add(Scene2Events.OnThirdConversation3, "\"Ok, ok. You win Alex; I suppose the car will just have to settle for second best.\"");
+        scene2DictionarySurprise.Add(Scene2Events.OnWalkingOutside, "We walk and talk about things that could’ve been in a future that never was.");
+        scene2DictionarySurprise.Add(Scene2Events.OnSnowflakeCommand, "When she stops to look up, opening her mouth, I see no reason not to join her.");
+        scene2DictionarySurprise.Add(Scene2Events.OnSnowflakeCompletion, "\"I love you.\"");  //Prompt - the same for all emotions
         scene2DictionarySurprise.Add(Scene2Events.OnCarCrash, "The careening car made it impossible for me to ever reply.");
-		scene2DictionarySurprise.Add(Scene2Events.OnEndScene, "With no clear path forward, what else can I do but think back further?");
+        scene2DictionarySurprise.Add(Scene2Events.OnEndScene, "With no clear path forward, what else can I do but think back further?");
     }
 
     //Populate all dialogue text needed for Scene 4
@@ -374,26 +373,26 @@ public class DialogueManager : MonoBehaviour {
     //Populate all dialogue text needed for Scene 5
     void BuildScene5Dictionary()
     {
-		scene5DictionaryJoy.Add(Scene5Events.OnSceneLoad, "This used to be one of my favorite memories.");  //Prompt - the same for all emotions
+        scene5DictionaryJoy.Add(Scene5Events.OnSceneLoad, "This used to be one of my favorite memories.");  //Prompt - the same for all emotions
         scene5DictionaryJoy.Add(Scene5Events.OnShowPark, "It still is, in fact, and always will be no matter what happens.");
-		scene5DictionaryJoy.Add(Scene5Events.OnPlayerWaiting, "I wait, thinking about her and wondering if I should really do this.");
-		scene5DictionaryJoy.Add(Scene5Events.OnLoverAppear, "\"Hey there. I noticed you just standing here by yourself, and you looked like you could maybe use some company. I’m Ivy.\"");    //Prompt - the same for all emotions
+        scene5DictionaryJoy.Add(Scene5Events.OnPlayerWaiting, "I wait, thinking about her and wondering if I should really do this.");
+        scene5DictionaryJoy.Add(Scene5Events.OnLoverAppear, "\"Hey there. I noticed you just standing here by yourself, and you looked like you could maybe use some company. I’m Ivy.\"");    //Prompt - the same for all emotions
         scene5DictionaryJoy.Add(Scene5Events.OnPlayerDeciding, "This is my final chance to give up everything; if we’d never met, I would lose her completely, the good memories along with the bad.");
-		scene5DictionaryJoy.Add(Scene5Events.OnCommandToSmile, "She stands there, smiling, and all I can think of is how good that smile used to make me feel. I know then what I have to do.");
+        scene5DictionaryJoy.Add(Scene5Events.OnCommandToSmile, "She stands there, smiling, and all I can think of is how good that smile used to make me feel. I know then what I have to do.");
 
-		scene5DictionaryAnger.Add(Scene5Events.OnSceneLoad, "This used to be one of my favorite memories.");   //Prompt - the same for all emotions
+        scene5DictionaryAnger.Add(Scene5Events.OnSceneLoad, "This used to be one of my favorite memories.");   //Prompt - the same for all emotions
         scene5DictionaryAnger.Add(Scene5Events.OnShowPark, "Now I can’t think of it without wanting to punch something.");
-		scene5DictionaryAnger.Add(Scene5Events.OnPlayerWaiting, "I wait, fuming that it’s come to this, that this is the last recourse left to me.");
-		scene5DictionaryAnger.Add(Scene5Events.OnLoverAppear, "\"Hey there. I noticed you just standing here by yourself, and you looked like you could maybe use some company. I’m Ivy.\"");     //Prompt - the same for all emotions
+        scene5DictionaryAnger.Add(Scene5Events.OnPlayerWaiting, "I wait, fuming that it’s come to this, that this is the last recourse left to me.");
+        scene5DictionaryAnger.Add(Scene5Events.OnLoverAppear, "\"Hey there. I noticed you just standing here by yourself, and you looked like you could maybe use some company. I’m Ivy.\"");     //Prompt - the same for all emotions
         scene5DictionaryAnger.Add(Scene5Events.OnPlayerDeciding, "This is my final chance to make things right; if we’d never met, that would’ve prevented all of this.");
-		scene5DictionaryAnger.Add(Scene5Events.OnCommandToSmile, "She stands there, smiling, and all I can think of is how unfair it is that she’ll never smile like that again. I make my choice.");
+        scene5DictionaryAnger.Add(Scene5Events.OnCommandToSmile, "She stands there, smiling, and all I can think of is how unfair it is that she’ll never smile like that again. I make my choice.");
 
-		scene5DictionarySurprise.Add(Scene5Events.OnSceneLoad, "This used to be one of my favorite memories."); //Prompt - the same for all emotions
+        scene5DictionarySurprise.Add(Scene5Events.OnSceneLoad, "This used to be one of my favorite memories."); //Prompt - the same for all emotions
         scene5DictionarySurprise.Add(Scene5Events.OnShowPark, "There were so many ways that day could have gone.");
-		scene5DictionarySurprise.Add(Scene5Events.OnPlayerWaiting, "I wait, trying to predict the full ramifications of this decision.");
-		scene5DictionarySurprise.Add(Scene5Events.OnLoverAppear, "\"Hey there. I noticed you just standing here by yourself, and you looked like you could maybe use some company. I’m Ivy.\"");   //Prompt - the same for all emotions
+        scene5DictionarySurprise.Add(Scene5Events.OnPlayerWaiting, "I wait, trying to predict the full ramifications of this decision.");
+        scene5DictionarySurprise.Add(Scene5Events.OnLoverAppear, "\"Hey there. I noticed you just standing here by yourself, and you looked like you could maybe use some company. I’m Ivy.\"");   //Prompt - the same for all emotions
         scene5DictionarySurprise.Add(Scene5Events.OnPlayerDeciding, "This is my final chance to start over; if we’d never met, everything would be so incredibly different.");
-		scene5DictionarySurprise.Add(Scene5Events.OnCommandToSmile, "She stands there, smiling, and I marvel once more at the possibility of a new life without her. My course becomes clear.");
+        scene5DictionarySurprise.Add(Scene5Events.OnCommandToSmile, "She stands there, smiling, and I marvel once more at the possibility of a new life without her. My course becomes clear.");
     }
 
     //Populate all dialogue text needed for the good ending where you move on
@@ -410,391 +409,431 @@ public class DialogueManager : MonoBehaviour {
         goodEndingDictionaryJoy.Add(GoodEndingEvents.OnPetalFalling, "Dancing and twirling as it descends…");
         goodEndingDictionaryJoy.Add(GoodEndingEvents.OnPetalLanding, "Until at long last it comes to rest…");
         goodEndingDictionaryJoy.Add(GoodEndingEvents.OnPetalDying1, "Perhaps I too can find my peace…");    //Does not change across all 3 options
-		goodEndingDictionaryJoy.Add(GoodEndingEvents.OnPetalDying2, "In the memories I shared with her.");
-		goodEndingDictionaryJoy.Add(GoodEndingEvents.Cheese, "\"Say Cheese!\"");
+        goodEndingDictionaryJoy.Add(GoodEndingEvents.OnPetalDying2, "In the memories I shared with her.");
+        goodEndingDictionaryJoy.Add(GoodEndingEvents.Cheese, "\"Say Cheese!\"");
 
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPlayerSmile, "I smile and feel something break inside me that should have broken a long time ago.");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnAlexTalks, "\"Hi, I‘m Alex. I’m not lost! I’m just...figuring things out as I go.\"");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnIvyResponds1, "\"Ah, a person after my own heart. What better time for soul-searching than on this gorgeous day?\"");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnIvyResponds2, "\"In fact, it’s SO gorgeous that I want a picture to remember it. Come on.\"");   //Does not change across all 3 options
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPlayerSmile, "I smile and feel something break inside me that should have broken a long time ago.");
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnAlexTalks, "\"Hi, I‘m Alex. I’m not lost! I’m just...figuring things out as I go.\"");
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnIvyResponds1, "\"Ah, a person after my own heart. What better time for soul-searching than on this gorgeous day?\"");
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnIvyResponds2, "\"In fact, it’s SO gorgeous that I want a picture to remember it. Come on.\"");   //Does not change across all 3 options
         goodEndingDictionaryAnger.Add(GoodEndingEvents.OnTakePicture, "I still have that picture of her: it’s beaten up and a little torn, but nothing stays perfect forever.");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnReturnToStart1, "As long as I have my memories, her specter will linger, haunting me.");    //Does not change across all 3 options
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnReturnToStart1, "As long as I have my memories, her specter will linger, haunting me.");    //Does not change across all 3 options
         goodEndingDictionaryAnger.Add(GoodEndingEvents.OnReturnToStart2, "And that doesn’t bother me one bit.");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalBeginningToFall, "Like a blooming petal that’s lost it’s grip...");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalFalling, "Swirling about in a raging storm…");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalLanding, "Until at long last it settles down…");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalDying1, "Perhaps I too can find my peace…");  //Does not change across all 3 options
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalDying2, "Without letting go of her.");
-		goodEndingDictionaryAnger.Add(GoodEndingEvents.Cheese, "\"Say Cheese!\"");
-        
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPlayerSmile, "I smile and think about all the unknown paths forward now open to me, even as those behind me close for good.");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnAlexTalks, "\"Hi, I’m Alex. Did I really look that lost?\"");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnIvyResponds1, "\"I was worried you might start bawling any minute and ruin this gorgeous day.\"");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnIvyResponds2, "\"In fact, it’s SO gorgeous that I want a picture to remember it. Come on.\"");    //Does not change across all 3 options
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalBeginningToFall, "Like a blooming petal that’s lost it’s grip...");
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalFalling, "Swirling about in a raging storm…");
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalLanding, "Until at long last it settles down…");
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalDying1, "Perhaps I too can find my peace…");  //Does not change across all 3 options
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.OnPetalDying2, "Without letting go of her.");
+        goodEndingDictionaryAnger.Add(GoodEndingEvents.Cheese, "\"Say Cheese!\"");
+
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPlayerSmile, "I smile and think about all the unknown paths forward now open to me, even as those behind me close for good.");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnAlexTalks, "\"Hi, I’m Alex. Did I really look that lost?\"");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnIvyResponds1, "\"I was worried you might start bawling any minute and ruin this gorgeous day.\"");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnIvyResponds2, "\"In fact, it’s SO gorgeous that I want a picture to remember it. Come on.\"");    //Does not change across all 3 options
         goodEndingDictionarySurprise.Add(GoodEndingEvents.OnTakePicture, "I still have that picture of her: holding it, I can almost feel her with me again.");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnReturnToStart1, "As long as I have my memories, her specter will linger, haunting me.");     //Does not change across all 3 options
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnReturnToStart1, "As long as I have my memories, her specter will linger, haunting me.");     //Does not change across all 3 options
         goodEndingDictionarySurprise.Add(GoodEndingEvents.OnReturnToStart2, "And I wouldn’t have it any other way.");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalBeginningToFall, "Like a blooming petal cast adrift…");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalFalling, "Tumbling down as the seasons change…");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalLanding, "Until at long last it embraces its fate…");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalDying1, "Perhaps I too can find my peace…");   //Does not change across all 3 options
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalDying2, "In the choices I made with her.");
-		goodEndingDictionarySurprise.Add(GoodEndingEvents.Cheese, "\");\n");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalBeginningToFall, "Like a blooming petal cast adrift…");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalFalling, "Tumbling down as the seasons change…");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalLanding, "Until at long last it embraces its fate…");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalDying1, "Perhaps I too can find my peace…");   //Does not change across all 3 options
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.OnPetalDying2, "In the choices I made with her.");
+        goodEndingDictionarySurprise.Add(GoodEndingEvents.Cheese, "\");\n");
     }
 
     //Populate all dialogue text needed for the bad ending where you refuse to move on
     void BuildBadEndingDictionary()
     {
-       badEndingDictionaryJoy.Add(BadEndingEvents.OnRefuseToSmile, "Despite my reservations, I press my lips together and avoid her eyes.");
-       badEndingDictionaryJoy.Add(BadEndingEvents.OnIvyResponds, "\"Oh, um, ok. Sorry to bother you.\""); //Does not change across all 3 options
+        badEndingDictionaryJoy.Add(BadEndingEvents.OnRefuseToSmile, "Despite my reservations, I press my lips together and avoid her eyes.");
+        badEndingDictionaryJoy.Add(BadEndingEvents.OnIvyResponds, "\"Oh, um, ok. Sorry to bother you.\""); //Does not change across all 3 options
         badEndingDictionaryJoy.Add(BadEndingEvents.OnLoverGone, "Just that easily, I could have given her up in the name of some greater good.");
-       badEndingDictionaryJoy.Add(BadEndingEvents.OnRewind1, "Even if I COULD change what’s already happened, doing so feels wrong.");
-       badEndingDictionaryJoy.Add(BadEndingEvents.OnRewind2, "But here, now, for at least a moment, I take some small solace in the lie.");
-        
-		badEndingDictionaryAnger.Add(BadEndingEvents.OnRefuseToSmile, "I can’t even stand to look at her. I press my lips together and clench my fists.");
-		badEndingDictionaryAnger.Add(BadEndingEvents.OnIvyResponds, "\"Oh, um, ok. Sorry to bother you.\"");  //Does not change across all 3 options
-        badEndingDictionaryAnger.Add(BadEndingEvents.OnLoverGone, "Just that easily, I could have been rid of all this useless grief and guilt.");
-		badEndingDictionaryAnger.Add(BadEndingEvents.OnRewind1, "If only I could do more to change the past than sit and think helplessly about it.");
-		badEndingDictionaryAnger.Add(BadEndingEvents.OnRewind2, "But for now, whether right or wrong, thinking seems better than nothing.");
+        badEndingDictionaryJoy.Add(BadEndingEvents.OnRewind1, "Even if I COULD change what’s already happened, doing so feels wrong.");
+        badEndingDictionaryJoy.Add(BadEndingEvents.OnRewind2, "But here, now, for at least a moment, I take some small solace in the lie.");
 
-		badEndingDictionarySurprise.Add(BadEndingEvents.OnRefuseToSmile, "Knowing that being with her would only end in tragedy, I press my lips together and say nothing.");
-		badEndingDictionarySurprise.Add(BadEndingEvents.OnIvyResponds, "\"Oh, um, ok. Sorry to bother you.\"");   //Does not change across all 3 options
+        badEndingDictionaryAnger.Add(BadEndingEvents.OnRefuseToSmile, "I can’t even stand to look at her. I press my lips together and clench my fists.");
+        badEndingDictionaryAnger.Add(BadEndingEvents.OnIvyResponds, "\"Oh, um, ok. Sorry to bother you.\"");  //Does not change across all 3 options
+        badEndingDictionaryAnger.Add(BadEndingEvents.OnLoverGone, "Just that easily, I could have been rid of all this useless grief and guilt.");
+        badEndingDictionaryAnger.Add(BadEndingEvents.OnRewind1, "If only I could do more to change the past than sit and think helplessly about it.");
+        badEndingDictionaryAnger.Add(BadEndingEvents.OnRewind2, "But for now, whether right or wrong, thinking seems better than nothing.");
+
+        badEndingDictionarySurprise.Add(BadEndingEvents.OnRefuseToSmile, "Knowing that being with her would only end in tragedy, I press my lips together and say nothing.");
+        badEndingDictionarySurprise.Add(BadEndingEvents.OnIvyResponds, "\"Oh, um, ok. Sorry to bother you.\"");   //Does not change across all 3 options
         badEndingDictionarySurprise.Add(BadEndingEvents.OnLoverGone, "Just that easily, she could have been nothing but the faded memory of a dream.");
-		badEndingDictionarySurprise.Add(BadEndingEvents.OnRewind1, "If only it were that easy to take the other road, to forge a different path.");
-		badEndingDictionarySurprise.Add(BadEndingEvents.OnRewind2, "But instead, I’m trapped on this endless journey with no happy ending in sight.");
+        badEndingDictionarySurprise.Add(BadEndingEvents.OnRewind1, "If only it were that easy to take the other road, to forge a different path.");
+        badEndingDictionarySurprise.Add(BadEndingEvents.OnRewind2, "But instead, I’m trapped on this endless journey with no happy ending in sight.");
     }
 
-	private IEnumerator TimeDilation(){
-		float t = 0;
-		while (t < 1.0f) {
-			t += Time.deltaTime;
-			Time.timeScale = Mathf.Lerp (1.0f, c_timeMin, t);
-			yield return new WaitForEndOfFrame ();
-		}
-		t = 0;
-		while (t < 1.0f) {
-			t += Time.deltaTime;
-			Time.timeScale = Mathf.Lerp ( c_timeMin,1.0f, t);
-			yield return new WaitForEndOfFrame ();
-		}
-	}
+    private IEnumerator TimeDilation()
+    {
+        float t = 0;
+        while (t < 1.0f)
+        {
+            t += Time.deltaTime;
+            Time.timeScale = Mathf.Lerp(1.0f, c_timeMin, t);
+            yield return new WaitForEndOfFrame();
+        }
+        t = 0;
+        while (t < 1.0f)
+        {
+            t += Time.deltaTime;
+            Time.timeScale = Mathf.Lerp(c_timeMin, 1.0f, t);
+            yield return new WaitForEndOfFrame();
+        }
+    }
 
-	private IEnumerator TutorialCoroutine(TutorialEvents key,bool hold, Emotion emotion = Emotion.Joy, float HoldTime = 4.0f ){
+    private IEnumerator TutorialCoroutine(TutorialEvents key, bool hold, Emotion emotion = Emotion.Joy, float HoldTime = 4.0f)
+    {
+        while (m_fadeMutex == true)
+        {
+            yield return new WaitForEndOfFrame();
+        }
 
+        m_fadeMutex = true;
+        
 
-		while (m_fadeMutex == true) {
-			yield return new WaitForEndOfFrame ();
-		}
+        StartCoroutine(TimeDilation());
+        if (!textContainer.activeSelf)
+            textContainer.SetActive(true);
 
-		m_fadeMutex = true;
+        string text = tutorialDictionary[key];
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
 
-
-
-
-		StartCoroutine (TimeDilation());
-		if (!textContainer.activeSelf) 
-			textContainer.SetActive(true);
-
-		string text = tutorialDictionary[key];
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
-
-		StartCoroutine(SetFadeIn());
-		if (hold == false) {
-			StartCoroutine (DelayToHideText (false,HoldTime));
-		}
-		m_fadeMutex = false;
-	}
-
-	//Public function accessed through DialogueManager.Main to display text for a specific event in Scene 0
-	public void DisplayTutorialText(TutorialEvents key,bool hold = false, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
-	{
-		m_slowmo = false;
-		SetInstructionSprite.HideIcon ();
-		StartCoroutine (TutorialCoroutine (key,hold, emotion,holdTime));
-
-	}
-
-	bool m_revelationMutex = false;
-
-	private IEnumerator RevealTextOneSegmentAtATime(string remainingText){
-		Debug.Log ("Starting to print text");
-		string text = "";
-		txtDialogue.text = text;
-		txtDialogueShadow.text = text;
-		txtDialogueGlow.text = text;
-		//while not all of the text has been revealed
-		while(remainingText.Length > 0){	
-			//pick a key to reveal next
-			int nextKeyLength = Random.Range(1,5);
-			if (nextKeyLength > remainingText.Length) {
-				nextKeyLength = remainingText.Length;
-			}
-			int stop = nextKeyLength;
-
-			string key = remainingText.Substring (0, stop);
-
-			stop = remainingText.Length - nextKeyLength;
-			if (stop < 0) {
-				stop = 0;
-			}
-
-			remainingText = remainingText.Substring (nextKeyLength, stop);
-			text += key;
-
-
-			txtDialogue.text = text;
-			txtDialogueShadow.text = text;
-			txtDialogueGlow.text = text;
-			//instantiate a random amount of keys
-
-			int nKeys = Random.Range (0, 10);
-
-			for (int i = 0; i < nKeys; i++) {
-				GameObject go_key = GameObject.Instantiate (m_key);
-				go_key.GetComponent<Key> ().setText (key);
-				go_key.transform.SetParent(txtDialogue.transform.parent);
-				go_key.transform.localPosition = new Vector3 (txtDialogue.transform.localPosition.x + Random.Range (-1000.0f, 1000.0f), txtDialogue.transform.localPosition.y + Random.Range (-200.0f, 200.0f), txtDialogue.transform.localPosition.z + Random.Range (-100.0f, 100.0f));
-			}
-
-
-			//wait a set amount of time
-			yield return new WaitForSeconds(Random.Range(0.02f,.04f) * Time.timeScale);
-		}
-	}
-
-	private IEnumerator Scene0Coroutine(Scene0Events key,bool hold, Emotion emotion = Emotion.Joy, float holdTime = 4.0f ){
-
-		Debug.Log ("m_fadeMutex:" + m_fadeMutex);
-		while (m_fadeMutex == true) {
-			yield return new WaitForEndOfFrame ();
-		}
-
-		m_fadeMutex = true;
-
-
-
-		StartCoroutine (TimeDilation());
-		if (!textContainer.activeSelf) 
-			textContainer.SetActive(true);
-
-		string text = scene0DictionaryJoy[key];
-
-		switch(emotion){
-		case Emotion.Anger:
-			text = scene0DictionaryAnger[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.red, .5f);
-			break;
-		case Emotion.Joy:
-			text = scene0DictionaryJoy[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.green, .5f);
-			break;
-		case Emotion.Surprise:
-			text = scene0DictionarySurprise[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.yellow, .5f);
-			break;
-		}
-		Debug.Log (text);
-
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
-
-		StartCoroutine(SetFadeIn());
-		if (hold == false) {
-			StartCoroutine (DelayToHideText (false,holdTime));
-		}
-		m_fadeMutex = false;
-	}
+        StartCoroutine(SetFadeIn());
+        if (hold == false)
+        {
+            StartCoroutine(DelayToHideText(false, HoldTime));
+        }
+        m_fadeMutex = false;
+    }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 0
-	public void DisplayScene0Text(Scene0Events key,bool hold = false, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
-	{
-		m_dialog = TextType.Default;
-		Debug.Log (key.ToString ());
+    public void DisplayTutorialText(TutorialEvents key, bool hold = false, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
+    {
+        m_slowmo = false;
+        StartCoroutine(TutorialCoroutine(key, hold, emotion, holdTime));
 
-		m_slowmo = false;
+    }
 
-		StartCoroutine (Scene0Coroutine (key,hold, emotion, holdTime));
+    bool m_revelationMutex = false;
+
+    private IEnumerator RevealTextOneSegmentAtATime(string remainingText)
+    {
+        Debug.Log("Starting to print text");
+        string text = "";
+        txtDialogue.text = text;
+        txtDialogueShadow.text = text;
+        txtDialogueGlow.text = text;
+        //while not all of the text has been revealed
+        while (remainingText.Length > 0)
+        {
+            //pick a key to reveal next
+            int nextKeyLength = Random.Range(1, 5);
+            if (nextKeyLength > remainingText.Length)
+            {
+                nextKeyLength = remainingText.Length;
+            }
+            int stop = nextKeyLength;
+
+            string key = remainingText.Substring(0, stop);
+
+            stop = remainingText.Length - nextKeyLength;
+            if (stop < 0)
+            {
+                stop = 0;
+            }
+
+            remainingText = remainingText.Substring(nextKeyLength, stop);
+            text += key;
+
+
+            txtDialogue.text = text;
+            txtDialogueShadow.text = text;
+            txtDialogueGlow.text = text;
+            //instantiate a random amount of keys
+
+            int nKeys = Random.Range(0, 10);
+
+            for (int i = 0; i < nKeys; i++)
+            {
+                GameObject go_key = GameObject.Instantiate(m_key);
+                go_key.GetComponent<Key>().setText(key);
+                go_key.transform.SetParent(txtDialogue.transform.parent);
+                go_key.transform.localPosition = new Vector3(txtDialogue.transform.localPosition.x + Random.Range(-1000.0f, 1000.0f), txtDialogue.transform.localPosition.y + Random.Range(-200.0f, 200.0f), txtDialogue.transform.localPosition.z + Random.Range(-100.0f, 100.0f));
+            }
+
+
+            //wait a set amount of time
+            yield return new WaitForSeconds(Random.Range(0.02f, .04f) * Time.timeScale);
+        }
+    }
+
+    private IEnumerator Scene0Coroutine(Scene0Events key, bool hold, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
+    {
+
+        Debug.Log("m_fadeMutex:" + m_fadeMutex);
+        while (m_fadeMutex == true)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        m_fadeMutex = true;
+
+
+
+        StartCoroutine(TimeDilation());
+        if (!textContainer.activeSelf)
+            textContainer.SetActive(true);
+
+        string text = scene0DictionaryJoy[key];
+
+        switch (emotion)
+        {
+            case Emotion.Anger:
+                text = scene0DictionaryAnger[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.red, .5f);
+                break;
+            case Emotion.Joy:
+                text = scene0DictionaryJoy[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.green, .5f);
+                break;
+            case Emotion.Surprise:
+                text = scene0DictionarySurprise[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.yellow, .5f);
+                break;
+        }
+        Debug.Log(text);
+
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
+
+        StartCoroutine(SetFadeIn());
+        if (hold == false)
+        {
+            StartCoroutine(DelayToHideText(false, holdTime));
+        }
+        m_fadeMutex = false;
+    }
+
+    //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 0
+    public void DisplayScene0Text(Scene0Events key, bool hold = false, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
+    {
+        m_dialog = TextType.Default;
+        Debug.Log(key.ToString());
+
+        m_slowmo = false;
+
+        StartCoroutine(Scene0Coroutine(key, hold, emotion, holdTime));
 
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 1
-	public void DisplayScene1Text(Scene1Events key,bool hold = false, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
+    public void DisplayScene1Text(Scene1Events key, bool hold = false, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
     {
-		m_dialog = dialogType;
-		performFadeIn = true;
-		performFadeOut = false;
+        m_dialog = dialogType;
+
+        StartCoroutine(SetFadeIn());
 
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
-		string text = scene1DictionaryJoy[key];
+        string text = scene1DictionaryJoy[key];
+        EnableDialogIcon();
+        switch (emotion)
+        {
+            case Emotion.Anger:
+                text = scene1DictionaryAnger[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.red, .5f);
+                break;
+            case Emotion.Joy:
+                text = scene1DictionaryJoy[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.green, .5f);
+                break;
+            case Emotion.Surprise:
+                text = scene1DictionarySurprise[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.yellow, .5f);
+                break;
+        }
 
-		switch(emotion){
-		case Emotion.Anger:
-			text = scene1DictionaryAnger [key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.red, .5f);
-			break;
-		case Emotion.Joy:
-			text = scene1DictionaryJoy[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.green, .5f);
-			break;
-		case Emotion.Surprise:
-			text = scene1DictionarySurprise[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.yellow, .5f);
-			break;
-		}
-
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
 
         StartCoroutine(SetFadeIn());
-		if(hold == false){
-			StartCoroutine(DelayToHideText(false,holdTime));
-		}
+        if (hold == false)
+        {
+            StartCoroutine(DelayToHideText(false, holdTime));
+        }
     }
 
 
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 2
-	public void DisplayScene2Text(Scene2Events key,bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
+    public void DisplayScene2Text(Scene2Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
     {
-		m_halfColor = Color.yellow;
-		m_dialog = dialogType;
+        m_halfColor = Color.yellow;
+        m_dialog = dialogType;
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
-		string text = scene2DictionaryJoy[key];
+        string text = scene2DictionaryJoy[key];
 
-		switch(emotion){
-		case Emotion.Anger:
-			text = scene2DictionaryAnger[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.red, .5f);
-			break;
-		case Emotion.Joy:
-			text = scene2DictionaryJoy[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.green, .5f);
-			break;
-		case Emotion.Surprise:
-			text = scene2DictionarySurprise[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.yellow, .5f);
-			break;
-		}
+        EnableDialogIcon();
+        switch (emotion)
+        {
+            case Emotion.Anger:
+                text = scene2DictionaryAnger[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.red, .5f);
+                break;
+            case Emotion.Joy:
+                text = scene2DictionaryJoy[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.green, .5f);
+                break;
+            case Emotion.Surprise:
+                text = scene2DictionarySurprise[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.yellow, .5f);
+                break;
+        }
 
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
 
-
-		StartCoroutine(SetFadeIn());
-		if(hold == false){
-			StartCoroutine(DelayToHideText(false,holdTime));
-		}
-    }
-
-	private IEnumerator InterpolateDialog(){
-		Debug.Log ("InterpolateDialog called");
-		while (true) {
-			if (m_dialog == TextType.Command) {
-				Debug.Log ("Interpolating");
-				//Interpolate to half color
-				float t = 0.0f;
-
-				float fadeInTime = Random.Range (0.3f, 3.0f);
-				float fadeOutTime = Random.Range (0.3f, 3.0f);
-				Color rColor = new Color (Random.Range (0.0f, 1.0f), 0.0f, 0.0f);
-
-				while (t < fadeInTime * Time.timeScale) {
-					t += Time.deltaTime;
-					txtDialogue.color = Color.Lerp (m_startColor, rColor, t / (fadeInTime* Time.timeScale));
-
-					yield return new WaitForEndOfFrame ();
-				}
-				t = 0.0f;
-
-				//Interpolate back to regular color
-				while (t < fadeInTime* Time.timeScale) {
-					t += Time.deltaTime;
-					txtDialogue.color = Color.Lerp (rColor, m_startColor, t / (fadeInTime* Time.timeScale));
-					yield return new WaitForEndOfFrame ();
-				}
-			} else if (m_dialog == TextType.Dialog) {
-				Debug.Log ("Interpolating");
-				//Interpolate to half color
-				float t = 0.0f;
-
-				Color rColor = Color.Lerp (Color.yellow, Color.white, Random.Range (0.0f, 1.0f));//new Color (0.0f, Random.Range (0.0f, 1.0f), 0.0f);
-				float fadeInTime = Random.Range (0.3f, 3.0f);
-				float fadeOutTime = Random.Range (0.3f, 3.0f);
-
-				while (t < fadeInTime* Time.timeScale) {
-					t += Time.deltaTime;
-					txtDialogue.color = Color.Lerp (m_startColor, rColor, t / (fadeInTime* Time.timeScale));
-					Debug.Log (txtDialogue.color);
-					yield return new WaitForEndOfFrame ();
-				}
-				t = 0.0f;
-
-				//Interpolate back to regular color
-				while (t < fadeInTime* Time.timeScale) {
-					t += Time.deltaTime;
-					txtDialogue.color = Color.Lerp (rColor, m_startColor, t / (fadeInTime* Time.timeScale));
-					yield return new WaitForEndOfFrame ();
-				}
-
-			}
-
-			else {
-				txtDialogue.color = m_startColor;
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-	}
-
-	public void FadeOutCredits(){
-		performFadeOut = true;
-		performFadeIn = false;
-	}
-
-	public void FadeOut(){
-		SetInstructionSprite.StopWaitingForEmotion ();
-
-		performFadeOut = true;
-		performFadeIn = false;
-	}
-
-    //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 4
-	public void DisplayScene4Text(Scene4Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
-    {
-		/*m_dialog = TextType.Default;
-        if (!textContainer.activeSelf)
-            textContainer.SetActive(true);
-
-        txtDialogue.text = scene4DictionaryJoy[key];
-        txtDialogueShadow.text = scene4DictionaryJoy[key];
-        txtDialogueGlow.text = scene4DictionaryJoy[key];
 
         StartCoroutine(SetFadeIn());
+        if (hold == false)
+        {
+            StartCoroutine(DelayToHideText(false, holdTime));
+        }
+    }
 
-		StartCoroutine(DelayToHideText(false, holdTime));*/
+    private IEnumerator InterpolateDialog()
+    {
+        Debug.Log("InterpolateDialog called");
+        while (true)
+        {
+            if (m_dialog == TextType.Command)
+            {
+
+                EnableDialogIcon();
+                Debug.Log("Interpolating");
+                //Interpolate to half color
+                float t = 0.0f;
+
+                float fadeInTime = Random.Range(0.3f, 3.0f);
+                float fadeOutTime = Random.Range(0.3f, 3.0f);
+                Color rColor = new Color(Random.Range(0.0f, 1.0f), 0.0f, 0.0f);
+
+                while (t < fadeInTime * Time.timeScale)
+                {
+                    t += Time.deltaTime;
+                    txtDialogue.color = Color.Lerp(m_startColor, rColor, t / (fadeInTime * Time.timeScale));
+
+                    yield return new WaitForEndOfFrame();
+                }
+                t = 0.0f;
+
+                //Interpolate back to regular color
+                while (t < fadeInTime * Time.timeScale)
+                {
+                    t += Time.deltaTime;
+                    txtDialogue.color = Color.Lerp(rColor, m_startColor, t / (fadeInTime * Time.timeScale));
+                    yield return new WaitForEndOfFrame();
+                }
+            }
+            else if (m_dialog == TextType.Dialog)
+            {
+                Debug.Log("Interpolating");
+                //Interpolate to half color
+                float t = 0.0f;
+
+                Color rColor = Color.Lerp(Color.yellow, Color.white, Random.Range(0.0f, 1.0f));//new Color (0.0f, Random.Range (0.0f, 1.0f), 0.0f);
+                float fadeInTime = Random.Range(0.3f, 3.0f);
+                float fadeOutTime = Random.Range(0.3f, 3.0f);
+
+                while (t < fadeInTime * Time.timeScale)
+                {
+                    t += Time.deltaTime;
+                    txtDialogue.color = Color.Lerp(m_startColor, rColor, t / (fadeInTime * Time.timeScale));
+                    Debug.Log(txtDialogue.color);
+                    yield return new WaitForEndOfFrame();
+                }
+                t = 0.0f;
+
+                //Interpolate back to regular color
+                while (t < fadeInTime * Time.timeScale)
+                {
+                    t += Time.deltaTime;
+                    txtDialogue.color = Color.Lerp(rColor, m_startColor, t / (fadeInTime * Time.timeScale));
+                    yield return new WaitForEndOfFrame();
+                }
+
+            }
+
+            else {
+                txtDialogue.color = m_startColor;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public void FadeOut()
+    {
+        SetInstructionSprite.StopWaitingForEmotion();
+        StartCoroutine(FadeOutRoutine());
+    }
+
+    private IEnumerator FadeOutRoutine()
+    {
+        float t = m_fadeInTime;
 
 
+        SetInstructionSprite.ms_instance.FadeOutDialogImage();
 
+
+        while (t > 0.0f)
+        {
+            t -= Time.deltaTime;
+            
+            dialoguePopup.alpha = t / m_fadeInTime;
+            
+            yield return new WaitForEndOfFrame();
+
+        }
+
+        m_dialogIconEnabled = false;
+    }
+    
+    public void FadeOutIconOnly()
+    {
+        SetInstructionSprite.ms_instance.FadeOutDialogImage();
+        m_dialogIconEnabled = false;
+    }
+
+    public void EnableDialogIcon()
+    {
+        m_dialogIconEnabled = true;
+    }
+
+    //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 4
+    public void DisplayScene4Text(Scene4Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
+    {
+
+        EnableDialogIcon();
         m_halfColor = Color.yellow;
         m_dialog = dialogType;
         if (!textContainer.activeSelf)
@@ -834,220 +873,222 @@ public class DialogueManager : MonoBehaviour {
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 5
-	public void DisplayScene5Text(Scene5Events key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType dialog = TextType.Default,float holdTime = 4.0f)
+    public void DisplayScene5Text(Scene5Events key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType dialog = TextType.Default, float holdTime = 4.0f)
     {
-		m_dialog = dialog;
-		m_slowmo = slowmo;
+        EnableDialogIcon();
+        m_dialog = dialog;
+        m_slowmo = slowmo;
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
-		string text = scene5DictionaryJoy[key];
-		switch(emotion){
-		case Emotion.Anger:
-			text = scene5DictionaryAnger[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.red, .5f);
-			break;
-		case Emotion.Joy:
-			text = scene5DictionaryJoy[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.green, .5f);
-			break;
-		case Emotion.Surprise:
-			text = scene5DictionarySurprise[key];
-			txtDialogue.color = Color.Lerp (txtDialogue.color, Color.yellow, .5f);
-			break;
-		}
+        string text = scene5DictionaryJoy[key];
+        switch (emotion)
+        {
+            case Emotion.Anger:
+                text = scene5DictionaryAnger[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.red, .5f);
+                break;
+            case Emotion.Joy:
+                text = scene5DictionaryJoy[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.green, .5f);
+                break;
+            case Emotion.Surprise:
+                text = scene5DictionarySurprise[key];
+                txtDialogue.color = Color.Lerp(txtDialogue.color, Color.yellow, .5f);
+                break;
+        }
 
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
 
         StartCoroutine(SetFadeIn());
-		if (hold == false) {
-			StartCoroutine (DelayToHideText (slowmo,holdTime));
-		}
+        if (hold == false)
+        {
+            StartCoroutine(DelayToHideText(slowmo, holdTime));
+        }
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in the good ending
-	public void DisplayGoodEndingText(GoodEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType tt = TextType.Default, float holdTime = 4.0f)
+    public void DisplayGoodEndingText(GoodEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType tt = TextType.Default, float holdTime = 4.0f)
     {
-		m_dialog = tt;
+
+        EnableDialogIcon();
+        m_dialog = tt;
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
-		string text = goodEndingDictionaryJoy[key];
+        string text = goodEndingDictionaryJoy[key];
 
-		switch(emotion){
-		case Emotion.Anger:
-			text = goodEndingDictionaryAnger[key];
-			break;
-		case Emotion.Joy:
-			text = goodEndingDictionaryJoy[key];
-			break;
-		case Emotion.Surprise:
-			text = goodEndingDictionarySurprise[key];
-			break;
-		}
+        switch (emotion)
+        {
+            case Emotion.Anger:
+                text = goodEndingDictionaryAnger[key];
+                break;
+            case Emotion.Joy:
+                text = goodEndingDictionaryJoy[key];
+                break;
+            case Emotion.Surprise:
+                text = goodEndingDictionarySurprise[key];
+                break;
+        }
 
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
 
         StartCoroutine(SetFadeIn());
 
-		if (hold == false) {
-			StartCoroutine (DelayToHideText (slowmo, holdTime));
-		}
+        if (hold == false)
+        {
+            StartCoroutine(DelayToHideText(slowmo, holdTime));
+        }
     }
 
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in the bad ending
-	public void DisplayBadEndingText(BadEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
+    public void DisplayBadEndingText(BadEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
     {
+
+        EnableDialogIcon();
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
-		string text = badEndingDictionaryJoy[key];
+        string text = badEndingDictionaryJoy[key];
 
-		switch(emotion){
-		case Emotion.Anger:
-			text = badEndingDictionaryAnger[key];
-			break;
-		case Emotion.Joy:
-			text = badEndingDictionaryJoy[key];
-			break;
-		case Emotion.Surprise:
-			text = badEndingDictionarySurprise[key];
-			break;
-		}
+        switch (emotion)
+        {
+            case Emotion.Anger:
+                text = badEndingDictionaryAnger[key];
+                break;
+            case Emotion.Joy:
+                text = badEndingDictionaryJoy[key];
+                break;
+            case Emotion.Surprise:
+                text = badEndingDictionarySurprise[key];
+                break;
+        }
 
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
 
         StartCoroutine(SetFadeIn());
-		if (hold == false) {
-			StartCoroutine (DelayToHideText (slowmo,holdTime));
-		}
-    }
-
-	//Public function accessed through DialogueManager.Main to display text for a specific event in the bad ending
-	public void DisplayCreditsText(CreditsEvent key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
-	{
-		if (!textContainer.activeSelf)
-			textContainer.SetActive(true);
-
-		string text = creditsDictionary[key];
-
-		StopCoroutine (m_revealSegment);
-		m_revealSegment = RevealTextOneSegmentAtATime (text);
-		StartCoroutine(m_revealSegment);
-		txtDialogue.text = "";
-		txtDialogueShadow.text = "";
-		txtDialogueGlow.text = "";
-
-		StartCoroutine(SetFadeIn());
-		if (hold == false) {
-			StartCoroutine (DelayToHideText (slowmo,holdTime));
-		}
-	}
-
-
-    //Public function accessed through DialogueManager.Main to hide the text object in the scene
-    /*public void HideText()
-    {
-        // textContainer.SetActive(false);
-
-        StartCoroutine(DelayToHideText());
-    }*/
-	private static bool m_slowmo = false;
-	public void ActivateSlowmo(){
-		m_slowmo = true;
-	}
-
-	IEnumerator DelayToHideText(bool slowmo = false,float holdTime = 4.0f)
-    {
-		m_slowmo = slowmo;
-		float t = 0.0f;
-		while (t < holdTime ) {
-			t += Time.deltaTime * (1.0f/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-        performFadeOut = true;
-		performFadeIn = false;
-    }
-
-    //Handle fade out and fade in functionality when needed
-    void Update()
-    {
-		if (performFadeIn)
+        if (hold == false)
         {
-            if (dialoguePopup.alpha >= 1)
-            {
-				performFadeOut = false;
-                performFadeIn = false;
-            } else
-            {
-				dialoguePopup.alpha += 0.5f * Time.deltaTime * (1/Time.timeScale);
-            }
-        }
-
-        if (performFadeOut)
-        {
-            if (dialoguePopup.alpha <= 0)
-            {
-                performFadeOut = false;
-            } else
-            {
-				dialoguePopup.alpha -= 0.5f * Time.deltaTime * (1/Time.timeScale);
-
-            }
+            StartCoroutine(DelayToHideText(slowmo, holdTime));
         }
     }
 
-	public static bool CanGetCurrentEmotion(){
-		return m_facePassed;
-	}
+    //Public function accessed through DialogueManager.Main to display text for a specific event in the bad ending
+    public void DisplayCreditsText(CreditsEvent key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
+    {
 
-	public static DialogueManager.Emotion GetCurrentEmotion(){
-		return m_emotion;
-	}
+        EnableDialogIcon();
+        if (!textContainer.activeSelf)
+            textContainer.SetActive(true);
 
-	private static Emotion m_lastEmotion = Emotion.Joy;
+        string text = creditsDictionary[key];
 
-	public static Emotion GetLastEmotion(){
-		return m_lastEmotion;
-	}
+        StopCoroutine(m_revealSegment);
+        m_revealSegment = RevealTextOneSegmentAtATime(text);
+        StartCoroutine(m_revealSegment);
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
 
-	public static void SetCurrentEmotion(Emotion emotion){
-		m_emotion = emotion;
-		m_facePassed = true;
-		m_lastEmotion = emotion;
-	}
+        StartCoroutine(SetFadeIn());
+        if (hold == false)
+        {
+            StartCoroutine(DelayToHideText(slowmo, holdTime));
+        }
+    }
 
-	public static void SetLastEmotion(Emotion emotion){
-		m_lastEmotion = emotion;
-	}
+    private static bool m_slowmo = false;
+    public void ActivateSlowmo()
+    {
+        m_slowmo = true;
+    }
+
+    IEnumerator DelayToHideText(bool slowmo = false, float holdTime = 4.0f)
+    {
+        m_slowmo = slowmo;
+        float t = 0.0f;
+        while (t < holdTime)
+        {
+            t += Time.deltaTime * (1.0f / Time.timeScale);
+            yield return new WaitForEndOfFrame();
+        }
+
+        FadeOut();
+    }
+
+    public static bool CanGetCurrentEmotion()
+    {
+        return m_facePassed;
+    }
+
+    public static DialogueManager.Emotion GetCurrentEmotion()
+    {
+        return m_emotion;
+    }
+
+    private static Emotion m_lastEmotion = Emotion.Joy;
+
+    public static Emotion GetLastEmotion()
+    {
+        return m_lastEmotion;
+    }
+
+    public static void SetCurrentEmotion(Emotion emotion)
+    {
+        m_emotion = emotion;
+        m_facePassed = true;
+        m_lastEmotion = emotion;
+    }
+
+    public static void SetLastEmotion(Emotion emotion)
+    {
+        m_lastEmotion = emotion;
+    }
 
 
-	public static void DisableCurrentEmotion(){
-		m_facePassed = false;
-	}
+    public static void DisableCurrentEmotion()
+    {
+        m_facePassed = false;
+    }
 
-	public bool CanProceed(){
-		return performFadeOut == false && performFadeIn == false;
-	}
 
     IEnumerator SetFadeIn()
-	{
-		performFadeIn = true;
+    {
+        //TODO: show emotion text icon here
+        
+        float t = 0.0f;
+
+        if (m_dialogIconEnabled)
+        {
+            SetInstructionSprite.ms_instance.FadeInDialogImage();
+        }
+
+        while (t < m_fadeInTime)
+        {
+            t += Time.deltaTime;
+            
+            dialoguePopup.alpha = t / m_fadeInTime;
+
+            yield return new WaitForEndOfFrame();
+
+        }
+
+
         yield return null;
 
     }

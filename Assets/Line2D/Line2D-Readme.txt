@@ -10,7 +10,7 @@ Note : you can safely delete the "Demo" folder. No important assets in it, just 
 ----------------------------
 
 To create a new line -> GameObject/2D Object/Line2D 
-or you can just add a Line2DRenderer to an empty gameobject (mesh filter and mesh renderer will be added) -> AddComponent/Line2D/Line2DRenderer
+or you can just add a Line2DRenderer to an Color.clear gameobject (mesh filter and mesh renderer will be added) -> AddComponent/Line2D/Line2DRenderer
 
 ----------------------------
 

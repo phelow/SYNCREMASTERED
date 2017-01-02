@@ -23,7 +23,7 @@ public class Scene1_City_far : MonoBehaviour {
 		//Wait for player to emote
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();

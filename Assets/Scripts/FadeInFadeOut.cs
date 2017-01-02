@@ -119,7 +119,7 @@ public class FadeInFadeOut : MonoBehaviour
 		yield return new WaitForEndOfFrame ();
 		}
 #endif
-        ms_fading = false;
+        FadeInFadeOut.FadeOut();
 
     }
 

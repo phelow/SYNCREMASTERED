@@ -13,7 +13,7 @@ public class Scene51Script : MonoBehaviour {
 		yield return new WaitForSeconds(1.0f);
 		bool waiting = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		ImageResultsListener.TakeSample ();
+		
 		Debug.Log (17);
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
@@ -35,7 +35,7 @@ public class Scene51Script : MonoBehaviour {
         waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
 		Debug.Log (34);
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
@@ -53,7 +53,7 @@ public class Scene51Script : MonoBehaviour {
 		/*waiting = true;
 		emotion = DialogueManager.Emotion.Joy;
 		Debug.Log (52);
-		ImageResultsListener.TakeSample ();
+		
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();

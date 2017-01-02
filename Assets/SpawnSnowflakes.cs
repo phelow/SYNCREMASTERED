@@ -22,7 +22,6 @@ public class SpawnSnowflakes : MonoBehaviour {
 	[SerializeField]private int c_flakesNeededToProceed = 7;
 	[SerializeField]private float c_snowflakeWaitTime = 6.0f;
 	private static bool m_hyperSpawn;
-	private static int ms_flakesSpawned = 0;
 
 	private static bool m_firstFlakeSpawned = false;
 
@@ -110,7 +109,6 @@ public class SpawnSnowflakes : MonoBehaviour {
 			for (int i = 0; i < flakes; i++) {
 				//Spawn a flake at a random spawner
 				GameObject flake = GameObject.Instantiate (m_flake);
-				ms_flakesSpawned++;
 
 				VaryPositionByAttention.AddSnowflake ();
 
@@ -120,7 +118,7 @@ public class SpawnSnowflakes : MonoBehaviour {
 				flake.transform.position = m_spawners [flakeIndex].transform.position;
 				flake.transform.parent = m_parent;
 				flake.GetComponent<Rigidbody2D> ().AddTorque (Random.Range (m_minTorque, m_maxTorque));
-				flake.transform.localScale =Vector3.one * Random.Range (m_minSize, m_maxSize);
+				flake.transform.localScale = Vector3.one * Random.Range (m_minSize, m_maxSize);
 			}
 
 		} else {
@@ -129,17 +127,14 @@ public class SpawnSnowflakes : MonoBehaviour {
 			for (int i = 0; i < flakes; i++) {
 				//Spawn a flake at a random spawner
 				GameObject flake = GameObject.Instantiate (m_flake);
-				ms_flakesSpawned++;
 
 				VaryPositionByAttention.AddSnowflake ();
-
 				int flakeIndex = Random.Range (0, m_spawners.Length - 1);
-
-
+                
 				flake.transform.position = m_spawners [flakeIndex].transform.position;
 				flake.transform.parent = m_parent;
 				flake.GetComponent<Rigidbody2D> ().AddTorque (Random.Range (m_minTorque, m_maxTorque));
-				flake.transform.localScale =Vector3.one * Random.Range (m_minSize, m_maxSize);
+				flake.transform.localScale = Vector3.one * Random.Range (m_minSize, m_maxSize);
 			}
 		}
 	}
@@ -154,7 +149,6 @@ public class SpawnSnowflakes : MonoBehaviour {
 
 			//Spawn a flake at a random spawner
 			GameObject flake = GameObject.Instantiate(m_flake);
-			ms_flakesSpawned++;
 
 
 			int flakeIndex = Random.Range (0, m_spawners.Length - 1);
@@ -163,7 +157,7 @@ public class SpawnSnowflakes : MonoBehaviour {
 			flake.transform.position = m_spawners [flakeIndex].transform.position;
 			flake.transform.parent = m_parent;
 			flake.GetComponent<Rigidbody2D> ().AddTorque (Random.Range (m_minTorque, m_maxTorque));
-			flake.transform.localScale =Vector3.one * Random.Range (m_minSize, m_maxSize);
+			flake.transform.localScale = Vector3.one * Random.Range (m_minSize, m_maxSize);
 		
 
 			yield return new WaitForSeconds (Random.Range (c_minSpawnInterval, c_maxSpawnInterval) * 10.0f);

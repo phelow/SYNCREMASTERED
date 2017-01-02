@@ -25,7 +25,7 @@ public class GoodEndingCameraProgression : MonoBehaviour {
 
 		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.Cheese, false, DialogueManager.Emotion.Joy, true);
 		yield return new WaitForSeconds (1.0f);
-		ImageResultsListener.TakeSample (false, false);
+		
 		while (emotion != DialogueManager.Emotion.Joy) {
 			yield return new WaitForEndOfFrame ();
 
@@ -34,10 +34,7 @@ public class GoodEndingCameraProgression : MonoBehaviour {
 				if (DialogueManager.CanGetCurrentEmotion ()) {
 					emotion = DialogueManager.GetCurrentEmotion ();
 					waiting = false;
-
-					if (emotion != DialogueManager.Emotion.Joy) {
-						ImageResultsListener.TakeSample (true, true);
-					}
+                    
 					DialogueManager.DisableCurrentEmotion ();
 
 					yield return new WaitForEndOfFrame ();

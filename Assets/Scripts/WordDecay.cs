@@ -103,7 +103,6 @@ public class WordDecay : MonoBehaviour {
 		erpo = true;
 		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
 		bool waiting = true;
-		ImageResultsListener.TakeSample (true);
 		while (waiting) {
 			if (DialogueManager.CanGetCurrentEmotion ()) {
 				emotion = DialogueManager.GetCurrentEmotion ();
