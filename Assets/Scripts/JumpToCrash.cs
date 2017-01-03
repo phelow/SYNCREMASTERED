@@ -66,7 +66,7 @@ public class JumpToCrash : MonoBehaviour {
 		yield return new WaitForEndOfFrame ();
 
 		DialogueManager.Main.DisplayScene1Text (Scene1Events.OnCommandToPayAttention, true,DialogueManager.Emotion.Joy,DialogueManager.TextType.Command);
-		SetInstructionSprite.SetWaitingForFaceIndicator (SetInstructionSprite.FaceState.FOCUS);
+		SetInstructionSprite.StartWaitingForEmotion(SetInstructionSprite.FaceState.FOCUS);
 		yield return new WaitForSeconds (5.0f);
 		m_lock = true;
     }

@@ -10,38 +10,12 @@ public class TutorialEventSystem : MonoBehaviour
     private const float c_delayBeforeFadeOut = 4.0f;
     private const float c_fadeTime = 1.0f;
     private static TutorialEventSystem ms_instance;
-
-    [SerializeField]
-    private Image m_happyIcon;
-    [SerializeField]
-    private Image m_angryIcon;
-    [SerializeField]
-    private Image m_surprisedIcon;
-
-    [SerializeField]
-    private Image m_happyCheckMark;
-
-    [SerializeField]
-    private Image m_angryCheckMark;
-
-    [SerializeField]
-    private Image m_surprisedCheckMark;
-
+    
     private Color c_visible = new Color(1, 1, 1, 1);
     private Color c_inVisible = new Color(1, 1, 1, 0);
 
     private bool m_isCalibrated = false;
     private bool m_playerOpenedMouth = false;
-
-    private float m_checkMarkInterpolationTime = 1.0f;
-
-    [SerializeField]
-    private AnimationCurve m_checkMarkAnimationCurve;
-
-    [SerializeField]
-    private CanvasGroup m_tutorialImageGroup;
-
-    private float m_fadeOutTime = 1.0f;
 
     // Use this for initialization
     void Start()
@@ -51,133 +25,48 @@ public class TutorialEventSystem : MonoBehaviour
     }
 
     bool happyCoroutineCompleted;
-    private IEnumerator CheckForHappy()
+
+    private IEnumerator CalibrationCoroutine()
     {
-        while (true)
+
+        yield return SetInstructionSprite.ms_instance.FadeInTutorialEmotions();
+
+        SetInstructionSprite.EmotionRatioDelegate joyDelegate = ImageResultsListener.ms_instance.GetJoyRatio;
+        IEnumerator JoyCoroutine = SetInstructionSprite.ms_instance.CheckForEmotion(joyDelegate, SetInstructionSprite.ms_instance.m_joyImage, SetInstructionSprite.ms_instance.m_happyCheckMark,SetInstructionSprite.FaceState.JOY);
+        StartCoroutine(JoyCoroutine);
+
+
+        SetInstructionSprite.EmotionRatioDelegate angerDelegate = ImageResultsListener.ms_instance.GetAngerRatio;
+        IEnumerator angerCoroutine = SetInstructionSprite.ms_instance.CheckForEmotion(angerDelegate, SetInstructionSprite.ms_instance.m_angerImage, SetInstructionSprite.ms_instance.m_angryCheckMark,SetInstructionSprite.FaceState.ANGER);
+        StartCoroutine(angerCoroutine);
+
+
+        SetInstructionSprite.EmotionRatioDelegate surpriseDelegate = ImageResultsListener.ms_instance.GetSurpriseRatio;
+        IEnumerator surpriseCoroutine = SetInstructionSprite.ms_instance.CheckForEmotion(surpriseDelegate, SetInstructionSprite.ms_instance.m_surpriseImage, SetInstructionSprite.ms_instance.m_surprisedCheckMark, SetInstructionSprite.FaceState.SURPRISE);
+        StartCoroutine(surpriseCoroutine);
+
+        while (!(JoyCoroutine.MoveNext() == false && angerCoroutine.MoveNext() == false && surpriseCoroutine.MoveNext() == false))
         {
-            float? ratio = ImageResultsListener.ms_instance.GetJoyRatio();
-            while(ratio == null)
-            {
-                ratio = ImageResultsListener.ms_instance.GetJoyRatio();
-                yield return new WaitForEndOfFrame();
-            }
-
-            m_happyIcon.CrossFadeAlpha(Mathf.Max(.1f,Mathf.Min((float)ratio, 1.0f)), .1f, false);
-            yield return new WaitForSeconds(.1f);
-
-            if(ratio >= 1.0f)
-            {
-                break;
-            }
-        }
-
-
-        float t = 0.0f;
-        while (t < m_checkMarkInterpolationTime)
-        {
-            t += Time.deltaTime;
-
-            m_happyCheckMark.color = Color.Lerp(Color.clear, Color.white, t / m_checkMarkInterpolationTime);
-            m_happyCheckMark.transform.localScale = Vector3.one * m_checkMarkAnimationCurve.Evaluate(t / m_checkMarkInterpolationTime);
             yield return new WaitForEndOfFrame();
         }
-
-        happyCoroutineCompleted = true;
     }
-
-    bool angryCoroutineCompleted;
-    private IEnumerator CheckForAngry()
+    
+    private IEnumerator WaitForOpenMouth()
     {
-        while (true)
+        SetInstructionSprite.StartWaitingForEmotion(SetInstructionSprite.FaceState.OPEN);
+        
+        m_playerOpenedMouth = false;
+        while (m_playerOpenedMouth == false)
         {
-            float? ratio = ImageResultsListener.ms_instance.GetAngerRatio();
-            while (ratio == null)
-            {
-                ratio = ImageResultsListener.ms_instance.GetAngerRatio();
-                yield return new WaitForEndOfFrame();
-            }
-
-            m_angryIcon.CrossFadeAlpha(Mathf.Max(.1f, Mathf.Min((float)ratio, 1.0f)), .1f, false);
-            yield return new WaitForSeconds(.1f);
-
-            if (ratio >= 1.0f)
-            {
-                break;
-            }
-        }
-
-
-
-        float t = 0.0f;
-        while (t < m_checkMarkInterpolationTime)
-        {
-            t += Time.deltaTime;
-
-            m_angryCheckMark.color = Color.Lerp(Color.clear, Color.white, t / m_checkMarkInterpolationTime);
-            m_angryCheckMark.transform.localScale = Vector3.one * m_checkMarkAnimationCurve.Evaluate(t / m_checkMarkInterpolationTime);
             yield return new WaitForEndOfFrame();
         }
 
-        angryCoroutineCompleted = true;
-    }
-
-    bool surprisedCoroutineCompleted;
-    private IEnumerator CheckForSurprised()
-    {
-        while (true)
-        {
-            float? ratio = ImageResultsListener.ms_instance.GetSurpriseRatio();
-            while (ratio == null)
-            {
-                ratio = ImageResultsListener.ms_instance.GetSurpriseRatio();
-                yield return new WaitForEndOfFrame();
-            }
-
-            m_surprisedIcon.CrossFadeAlpha(Mathf.Max(.1f, Mathf.Min((float)ratio, 1.0f)), .1f, false);
-            yield return new WaitForSeconds(.1f);
-
-            if (ratio >= 1.0f)
-            {
-                break;
-            }
-        }
-
-
-
-        float t = 0.0f;
-        while (t < m_checkMarkInterpolationTime)
-        {
-            t += Time.deltaTime;
-
-            m_surprisedCheckMark.color = Color.Lerp(Color.clear, Color.white, t / m_checkMarkInterpolationTime);
-            m_surprisedCheckMark.transform.localScale = Vector3.one * m_checkMarkAnimationCurve.Evaluate(t / m_checkMarkInterpolationTime);
-            yield return new WaitForEndOfFrame();
-        }
-
-        surprisedCoroutineCompleted = true;
-    }
-
-    private IEnumerator FadeOutTutorialIcons()
-    {
-        float t = 0.0f;
-        while (t < m_fadeOutTime)
-        {
-            t += Time.deltaTime;
-            m_happyCheckMark.color = Color.Lerp(Color.white, Color.clear, t / m_fadeOutTime);
-            m_angryCheckMark.color = Color.Lerp(Color.white, Color.clear, t / m_fadeOutTime);
-            m_surprisedCheckMark.color = Color.Lerp(Color.white, Color.clear, t / m_fadeOutTime);
-            m_happyIcon.color = Color.Lerp(Color.white, Color.clear, t / m_fadeOutTime);
-            m_angryIcon.color = Color.Lerp(Color.white, Color.clear, t / m_fadeOutTime);
-            m_surprisedIcon.color = Color.Lerp(Color.white, Color.clear, t / m_fadeOutTime);
-
-
-            yield return new WaitForEndOfFrame();
-        }
+        SetInstructionSprite.StopWaitingForEmotion();
+        yield return DialogueManager.Main.FadeOutRoutine();
     }
 
     private IEnumerator TutorialSequence()
     {
-        m_tutorialImageGroup.alpha = 0;
         yield return new WaitForSeconds(c_delayBeforeFadeOut);
 
         float t = 0.0f;
@@ -189,111 +78,49 @@ public class TutorialEventSystem : MonoBehaviour
         }
 
 
-        DialogueManager.Main.DisplayTutorialText(TutorialEvents.Calibration, true); //TODO: streamline these coroutines
+        yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.Calibration, true);
         SetInstructionSprite.ms_instance.StartCoroutine(SetInstructionSprite.ms_instance.PopInFadeIn());
         m_isCalibrated = false;
-        yield return new WaitForSeconds(2.0f);
         yield return Calibrate();
 
-        DialogueManager.Main.FadeOut();
-        yield return new WaitForSeconds(3.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        
 
-
-        SetInstructionSprite.StartWaitingForEmotion(SetInstructionSprite.FaceState.OPEN);
-        DialogueManager.Main.DisplayTutorialText(TutorialEvents.OpenMouthToContinue, true);
-        yield return new WaitForSeconds(3.0f);
-
-        m_playerOpenedMouth = false;
-        while (m_playerOpenedMouth == false)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-        SetInstructionSprite.StopWaitingForEmotion();
-        DialogueManager.Main.FadeOut();
-        yield return new WaitForSeconds(3.0f);
+        yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.OpenMouthToContinue, true);
+        yield return WaitForOpenMouth();
 
 
 
-        DialogueManager.Main.DisplayTutorialText(TutorialEvents.PromptEmotions, true);
-        yield return new WaitForSeconds(5.0f);
+        yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.PromptEmotions, true);
+
         bool waiting = true;
 
         GameObject.Find("PopInIndicator").gameObject.SetActive(false);
         //SetInstructionSprite.HideIcon();    //Hide the petal icon now so that the mouth command can be displayed instead
 
-        SetInstructionSprite.StartWaitingForEmotion(SetInstructionSprite.FaceState.OPEN);
-        m_playerOpenedMouth = false;
-        while (m_playerOpenedMouth == false)
-        {
-            Debug.Log(78);
-            yield return new WaitForEndOfFrame();
-        }
-        SetInstructionSprite.StopWaitingForEmotion();
-        DialogueManager.Main.FadeOut();
-        yield return new WaitForSeconds(3.0f);
-
-        happyCoroutineCompleted = false;
-        angryCoroutineCompleted = false;
-        surprisedCoroutineCompleted = false;
+        yield return WaitForOpenMouth();
+             
 
         DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Disgust);
 
-        DialogueManager.Main.DisplayTutorialText(TutorialEvents.PromptTutorial, true);
-
-        yield return FadeInTutorialEmotions();
-
-        StartCoroutine(CheckForHappy());
-        StartCoroutine(CheckForAngry());
-        StartCoroutine(CheckForSurprised());
-
-        while (!(happyCoroutineCompleted && angryCoroutineCompleted && surprisedCoroutineCompleted))
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
-        yield return FadeOutTutorialIcons();
+        yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.PromptTutorial, true);
+        
+        yield return CalibrationCoroutine();
+        
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return SetInstructionSprite.ms_instance.FadeOutTutorialIcons();
 
 
         waiting = true;
 
         DialogueManager.Emotion emotion = DialogueManager.Emotion.Anger;
-
-        yield return new WaitForSeconds(5.0f);
-
-        DialogueManager.Main.DisplayTutorialText(TutorialEvents.MakeAnyFaceToStart, true);
-
-        yield return new WaitForSeconds(3.0f);
-
-
-        waiting = true;
-
-        emotion = DialogueManager.Emotion.Anger;
-        while (waiting)
-        {
-            yield return new WaitForEndOfFrame();
-            if (DialogueManager.CanGetCurrentEmotion())
-            {
-                emotion = DialogueManager.GetCurrentEmotion();
-                waiting = false;
-                DialogueManager.DisableCurrentEmotion();
-            }
-            yield return new WaitForEndOfFrame();
-        }
+        
+        yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.MakeAnyFaceToStart, true);
+        
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         FadeInFadeOut.FadeOut();
     }
-
-    private IEnumerator FadeInTutorialEmotions()
-    {
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t += Time.deltaTime;
-            m_tutorialImageGroup.alpha = t;
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
-
+    
     public static void playerOpenMouth()
     {
         Debug.Log("ms_instance.m_playerOpenedMouth = true;");

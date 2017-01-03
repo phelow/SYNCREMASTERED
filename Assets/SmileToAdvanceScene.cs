@@ -99,35 +99,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 		emotion = DialogueManager.Emotion.Joy;
 
 		yield return new WaitForSeconds(4.0f);
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(2f);
-
-    
-        /*Debug.Log (80);
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		Debug.Log (90);
-		SetInstructionSprite.StopWaitingForEmotion ();
-
-		//DialogueManager.Main.FadeOut();
-		//yield return new WaitForSeconds(1.0f);
-		
-		yield return new WaitForSeconds(2.0f);
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-
-		yield return new WaitForSeconds(1.0f);
-		*/
-
-
-
 		float t = 0.0f;
 
 		float c_maxMoveTime = 3.0f;
@@ -142,11 +115,6 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-
-		//yield return new WaitForSeconds(2.0f);
-
-		/*m_rigidbody.velocity = Vector2.zero;
-		m_instance.m_spriteRenderer.sprite = m_instance.m_lookingAtPlayer;*/
 		StartCoroutine (SlowDownTime ());
 
 		StartCoroutine (FadeInLover ());
@@ -162,8 +130,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 
-        DialogueManager.Main.FadeOut();
-		t = 0.0f;
+        yield return DialogueManager.Main.FadeOutRoutine();
+        t = 0.0f;
 		while (t < 1.0f) {
 			t += Time.deltaTime * (1/Time.timeScale);
 			yield return new WaitForEndOfFrame ();
@@ -210,9 +178,9 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
 
-		t = 0.0f;
+        t = 0.0f;
 		while (t < 4.0f ) {
 			t += Time.deltaTime * (1/Time.timeScale);
 			yield return new WaitForEndOfFrame ();
@@ -230,7 +198,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-        //DialogueManager.Main.FadeOut();
+        //yiyield return DialogueManager.Main.TutorialCoroutine();();
 
         yield return new WaitForSeconds(4.0f);
 
@@ -257,9 +225,9 @@ public class SmileToAdvanceScene : MonoBehaviour {
 
         yield return new WaitForSeconds(1f);
 
-		DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
 
-		yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f);
 
 
 		if (emotion != DialogueManager.Emotion.Joy) {
@@ -278,7 +246,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 				yield return new WaitForEndOfFrame ();
 			}
 			SetInstructionSprite.StopWaitingForEmotion ();
-			DialogueManager.Main.FadeOut();t = 0.0f;
+            yield return DialogueManager.Main.FadeOutRoutine();
+            t = 0.0f;
 			while (t < 3.0f ) {
 				t += Time.deltaTime * (1/Time.timeScale);
 				yield return new WaitForEndOfFrame ();
@@ -304,7 +273,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 				yield return new WaitForEndOfFrame ();
 			}
 			SetInstructionSprite.StopWaitingForEmotion ();
-			DialogueManager.Main.FadeOut();t = 0.0f;
+            yield return DialogueManager.Main.FadeOutRoutine();
+            t = 0.0f;
 			while (t < 3.0f ) {
 				t += Time.deltaTime * (1/Time.timeScale);
 				yield return new WaitForEndOfFrame ();
@@ -327,8 +297,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 				yield return new WaitForEndOfFrame ();
 			}
 			SetInstructionSprite.StopWaitingForEmotion ();
-			DialogueManager.Main.FadeOut();
-			yield return new WaitForSeconds(3.0f);
+            yield return DialogueManager.Main.FadeOutRoutine();
+            yield return new WaitForSeconds(3.0f);
 			FadeInFadeOut.FadeOut (30);
 
 		} else {
@@ -352,8 +322,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 				yield return new WaitForEndOfFrame ();
 			}
 			SetInstructionSprite.StopWaitingForEmotion ();
-			DialogueManager.Main.FadeOut();
-			t = 0.0f;
+            yield return DialogueManager.Main.FadeOutRoutine();
+            t = 0.0f;
 			while (t < 3.0f ) {
 				t += Time.deltaTime * (1/Time.timeScale);
 				yield return new WaitForEndOfFrame ();
@@ -376,7 +346,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 				yield return new WaitForEndOfFrame ();
 			}
 			SetInstructionSprite.StopWaitingForEmotion ();
-			DialogueManager.Main.FadeOut();t = 0.0f;
+            yield return DialogueManager.Main.FadeOutRoutine();
+            t = 0.0f;
 			while (t < 3.0f) {
 				t += Time.deltaTime * (1/Time.timeScale);
 				yield return new WaitForEndOfFrame ();
@@ -398,7 +369,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 				yield return new WaitForEndOfFrame ();
 			}
 			SetInstructionSprite.StopWaitingForEmotion ();
-			DialogueManager.Main.FadeOut();t = 0.0f;
+            yield return DialogueManager.Main.FadeOutRoutine();
+            t = 0.0f;
 			while (t < 3.0f) {
 				t += Time.deltaTime * (1/Time.timeScale);
 				yield return new WaitForEndOfFrame ();
@@ -420,8 +392,8 @@ public class SmileToAdvanceScene : MonoBehaviour {
 				yield return new WaitForEndOfFrame ();
 			}
 			SetInstructionSprite.StopWaitingForEmotion ();
-			DialogueManager.Main.FadeOut();
-			yield return new WaitForSeconds(3.0f);
+            yield return DialogueManager.Main.FadeOutRoutine();
+            yield return new WaitForSeconds(3.0f);
 			FadeInFadeOut.FadeOut ();
 
 		}

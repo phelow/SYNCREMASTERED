@@ -29,13 +29,13 @@ public class Scene400script : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut();
-		yield return new WaitForSeconds(2.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds(2.0f);
 
 
 		DialogueManager.Main.DisplayScene4Text(m_line, true, emotion); //M_LINE, EMOTION
 		yield return new WaitForSeconds (4.0f);
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(2f);
 		FadeInFadeOut.FadeOut ();
 	}

@@ -22,8 +22,8 @@ public class ShowDialogAndAdvance : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut();
-		DialogueManager.Main.DisplayScene2Text (Scene2Events.OnCarCrash);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        DialogueManager.Main.DisplayScene2Text (Scene2Events.OnCarCrash);
 		yield return new WaitForSeconds (6.0f);
 
 		FadeInFadeOut.FadeOut ();

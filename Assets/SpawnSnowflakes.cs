@@ -39,7 +39,7 @@ public class SpawnSnowflakes : MonoBehaviour {
 
 	private IEnumerator SnowFlakeTutorial(){
 
-		SetInstructionSprite.SetWaitingForFaceIndicator (SetInstructionSprite.FaceState.OPEN);
+		SetInstructionSprite.StartWaitingForEmotion (SetInstructionSprite.FaceState.OPEN);
 		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSnowflakeCommand, true,DialogueManager.Emotion.Joy,DialogueManager.TextType.Command);
 		
 
@@ -53,9 +53,9 @@ public class SpawnSnowflakes : MonoBehaviour {
 			
 			yield return new WaitForEndOfFrame ();
 
-		}
-		DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds (4.0f);
+        }
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds (4.0f);
 		DialogueManager.Main.CenterDialog ();
 		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSnowflakeCompletion, true,DialogueManager.Emotion.Joy,DialogueManager.TextType.Dialog);
 		yield return new WaitForSeconds (c_snowflakeWaitTime);

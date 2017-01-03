@@ -211,7 +211,7 @@ public class DialogueManager : MonoBehaviour
 
         tutorialDictionary.Add(TutorialEvents.Calibration, "SYNC uses the camera on your device to capture your facial expressions.\n\nPlease move yourself or your camera until you are comfortable and the icons remains solid, indicating it can pick up your face.\n");
         tutorialDictionary.Add(TutorialEvents.OpenMouthToContinue, "A symbol will appear on your screen when you need to act.\n\nIf you aren’t sure what you’re supposed to do, look to the text for help.\r\n\r\n Please open your mouth to continue.");
-        tutorialDictionary.Add(TutorialEvents.PromptEmotions, "When you see the petal icon, you can move the main character to one of three different emotional states to direct the narrative: Happy, Angry, or Surprised.\n\nThe large face in the upper left shows the character's current emotional state, while the small faces show YOUR emotional state.\n\nPlease open your mouth to proceed.");
+        tutorialDictionary.Add(TutorialEvents.PromptEmotions, "When you see the three face icons, you can move the main character to one of three different emotional states to direct the narrative: Happy, Angry, or Surprised.\n\nThe large face near the text shows the character's current emotional state, while the small faces show YOUR emotional state.\n\nPlease open your mouth to proceed.");
         tutorialDictionary.Add(TutorialEvents.PromptTutorial, "Make each of these faces to continue.");
         tutorialDictionary.Add(TutorialEvents.MakeAnyFaceToStart, "Your choices over time will affect your experience, so choose wisely.\n\nMake any face to start the game.\n");
 
@@ -463,25 +463,7 @@ public class DialogueManager : MonoBehaviour
         badEndingDictionarySurprise.Add(BadEndingEvents.OnRewind2, "But instead, I’m trapped on this endless journey with no happy ending in sight.");
     }
 
-    private IEnumerator TimeDilation()
-    {
-        float t = 0;
-        while (t < 1.0f)
-        {
-            t += Time.deltaTime;
-            Time.timeScale = Mathf.Lerp(1.0f, c_timeMin, t);
-            yield return new WaitForEndOfFrame();
-        }
-        t = 0;
-        while (t < 1.0f)
-        {
-            t += Time.deltaTime;
-            Time.timeScale = Mathf.Lerp(c_timeMin, 1.0f, t);
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
-    private IEnumerator TutorialCoroutine(TutorialEvents key, bool hold, Emotion emotion = Emotion.Joy, float HoldTime = 4.0f)
+    public IEnumerator TutorialCoroutine(TutorialEvents key, bool hold, Emotion emotion = Emotion.Joy, float HoldTime = 4.0f)
     {
         while (m_fadeMutex == true)
         {
@@ -490,35 +472,22 @@ public class DialogueManager : MonoBehaviour
 
         m_fadeMutex = true;
         
-
-        StartCoroutine(TimeDilation());
+        
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
         string text = tutorialDictionary[key];
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
-        txtDialogue.text = "";
-        txtDialogueShadow.text = "";
-        txtDialogueGlow.text = "";
-
+        
         StartCoroutine(SetFadeIn());
+        yield return RevealTextOneSegmentAtATime(text);
+
         if (hold == false)
         {
             StartCoroutine(DelayToHideText(false, HoldTime));
         }
         m_fadeMutex = false;
     }
-
-    //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 0
-    public void DisplayTutorialText(TutorialEvents key, bool hold = false, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
-    {
-        m_slowmo = false;
-        StartCoroutine(TutorialCoroutine(key, hold, emotion, holdTime));
-
-    }
-
+    
     bool m_revelationMutex = false;
 
     private IEnumerator RevealTextOneSegmentAtATime(string remainingText)
@@ -582,10 +551,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         m_fadeMutex = true;
-
-
-
-        StartCoroutine(TimeDilation());
+        
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
@@ -791,14 +757,9 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void FadeOut()
+    public IEnumerator FadeOutRoutine()
     {
         SetInstructionSprite.StopWaitingForEmotion();
-        StartCoroutine(FadeOutRoutine());
-    }
-
-    private IEnumerator FadeOutRoutine()
-    {
         float t = m_fadeInTime;
 
 
@@ -1027,8 +988,7 @@ public class DialogueManager : MonoBehaviour
             t += Time.deltaTime * (1.0f / Time.timeScale);
             yield return new WaitForEndOfFrame();
         }
-
-        FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
     }
 
     public static bool CanGetCurrentEmotion()

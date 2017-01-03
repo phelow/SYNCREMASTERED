@@ -35,9 +35,9 @@ public class Scene1_Back_to_Crash : MonoBehaviour {
         SetInstructionSprite.StopWaitingForEmotion();
 
 
-        
-        DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds(3.0f);
+
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds(3.0f);
 
 		DialogueManager.Main.DisplayScene1Text(Scene1Events.OnTimeTransition,true,emotion);
 		yield return new WaitForSeconds(4.0f);

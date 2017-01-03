@@ -44,14 +44,13 @@ public class Scene1_Back_to_journal: MonoBehaviour {
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
 
-		DialogueManager.Main.FadeOut ();
-
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(2f);
 
         DialogueManager.Main.DisplayScene1Text(Scene1Events.OnSceneEnd, true, emotion);
 
         yield return new WaitForSeconds(3f);
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(1f);
         FadeInFadeOut.FadeOut ();//Application.LoadLevel(5);
     }

@@ -23,13 +23,13 @@ public class Scene26Dialog : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut();
-		yield return new WaitForSeconds(2.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds(2.0f);
 
 
 		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnCarCrash,true,emotion);
 		yield return new WaitForSeconds (3.0f);
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(2.0f);
 
         waiting = true;
@@ -44,13 +44,13 @@ public class Scene26Dialog : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		//DialogueManager.Main.FadeOut();
+		//yield return DialogueManager.Main.TutorialCoroutine();
 		yield return new WaitForSeconds(2.0f);
 
 
 		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnEndScene,true,emotion);
 		yield return new WaitForSeconds (4.0f);
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(1.0f);
 
         FadeInFadeOut.FadeOut ();

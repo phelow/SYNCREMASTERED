@@ -43,7 +43,7 @@ public class FadeInFadeOut : MonoBehaviour
             }
 
             float alpha = Mathf.Lerp(0.0f, 1.0f, opacity);
-            //AudioListener.volume = Mathf.Lerp (5.0f, 1.0f, opacity);
+
             m_image.color = new Color(Color.black.r, Color.black.g, Color.black.b, alpha);
             yield return new WaitForEndOfFrame();
         }
@@ -208,8 +208,6 @@ public class FadeInFadeOut : MonoBehaviour
 
     void Start()
     {
-
-
         instance = this;
         instance.m_fadeInFadeOut = instance.FadeInCoroutine();
         FadeIn();

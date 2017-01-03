@@ -60,7 +60,8 @@ public class GoodEndingCameraProgression : MonoBehaviour {
 
         yield return new WaitForSeconds(4.0f);
 
-        DialogueManager.Main.FadeOut();
+
+        yield return DialogueManager.Main.FadeOutRoutine();
 
         yield return new WaitForSeconds(3.0f);
 
@@ -68,15 +69,16 @@ public class GoodEndingCameraProgression : MonoBehaviour {
 
         yield return new WaitForSeconds(4.0f);
 
-        DialogueManager.Main.FadeOut();
 
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(3.0f);
 
         DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnReturnToStart2, false, emotion);
 
         yield return new WaitForSeconds(4.0f);
 
-        DialogueManager.Main.FadeOut();
+
+        yield return DialogueManager.Main.FadeOutRoutine();
 
         yield return new WaitForSeconds(2.0f);
 

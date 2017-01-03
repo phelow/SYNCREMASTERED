@@ -116,9 +116,9 @@ public class PetalMovement : MonoBehaviour {
 
 			while (SceneZeroListener.IsEmotionalIntensitySufficient () == false) {
 				yield return new WaitForEndOfFrame ();
-			}
-			DialogueManager.Main.FadeOut ();
-			yield return new WaitForEndOfFrame ();
+            }
+            yield return DialogueManager.Main.FadeOutRoutine();
+            yield return new WaitForEndOfFrame ();
 		}
 	}
 
@@ -169,13 +169,13 @@ public class PetalMovement : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds (2.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds (2.0f);
 		Debug.Log (147);
 		DialogueManager.Main.DisplayScene0Text(Scene0Events.OnSceneLoad,true,emotion);
 		yield return new WaitForSeconds (3.0f);
-		DialogueManager.Main.FadeOut();
-		yield return new WaitForSeconds(2.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds(2.0f);
 		
 		Debug.Log (150);
 		waiting = true;
@@ -190,18 +190,14 @@ public class PetalMovement : MonoBehaviour {
 		}
 		Debug.Log (161);
 		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut ();
-		DialogueManager.Main.DisplayScene0Text(Scene0Events.OnCommandToSmile, true,emotion);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        DialogueManager.Main.DisplayScene0Text(Scene0Events.OnCommandToSmile, true,emotion);
 
 		yield return new WaitForSeconds (4.0f);
-		//SceneZeroListener.SetNotEmotionallySufficient ();
-		/*while (SceneZeroListener.IsEmotionalIntensitySufficient () == false) {
-			yield return new WaitForEndOfFrame ();
-		}*/
-		DialogueManager.Main.FadeOut ();
+        yield return DialogueManager.Main.FadeOutRoutine();
 
 
-		m_remindToSmile = RemindToSmile ();
+        m_remindToSmile = RemindToSmile ();
 		StartCoroutine (m_remindToSmile);
 		//ImageResultsListener.StartContinousSample ();
 		Debug.Log (175);
@@ -318,8 +314,8 @@ public class PetalMovement : MonoBehaviour {
 		interactible = true;
 		Unlock ();
 		s_instance.StopCoroutine (s_instance.m_bringToLife);
-		DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds (3.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds (3.0f);
 
 
 		if (s_instance.m_goodEnding == false) {
@@ -408,8 +404,8 @@ public class PetalMovement : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut ();
-		PetalMovement.FreezePetal ();
+        yield return DialogueManager.Main.FadeOutRoutine();
+        PetalMovement.FreezePetal ();
 		yield return new WaitForSeconds (4.0f);
 		PetalMovement.FreezePetal ();
 
@@ -430,8 +426,8 @@ public class PetalMovement : MonoBehaviour {
 		//TODO
 		DialogueManager.Main.DisplayScene0Text (Scene0Events.PromptOnSceneEnd1, true, emotion);
 		yield return new WaitForSeconds (3f);
-		DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds (3f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds (3f);
 
 		PetalMovement.FreezePetal ();
 		
@@ -446,8 +442,8 @@ public class PetalMovement : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut ();
-		PetalMovement.FreezePetal ();
+        yield return DialogueManager.Main.FadeOutRoutine();
+        PetalMovement.FreezePetal ();
 		yield return new WaitForSeconds (4.0f);
 		PetalMovement.FreezePetal ();
 

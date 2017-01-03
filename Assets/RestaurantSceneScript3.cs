@@ -22,46 +22,15 @@ public class RestaurantSceneScript3 : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 		SetInstructionSprite.StopWaitingForEmotion ();
-		//DialogueManager.Main.FadeOut();
-		//yield return new WaitForSeconds(3.0f);
-		/*DialogueManager.Main.DisplayScene2Text(Scene2Events.OnThirdConversation3,true,emotion,DialogueManager.TextType.Dialog);
-		yield return new WaitForSeconds(1.0f);
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-		DialogueManager.Main.FadeOut();*/
 		yield return new WaitForSeconds(2.0f);
 
 
 		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnWalkingOutside,true,emotion);
 
-        /*yield return new WaitForSeconds(1.0f);
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();*/
-
         yield return new WaitForSeconds(4f);
 
-		DialogueManager.Main.FadeOut();
-		yield return new WaitForSeconds(2.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds(2.0f);
 		FadeInFadeOut.FadeOut ();
 	}
 }

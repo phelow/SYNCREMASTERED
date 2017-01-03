@@ -66,11 +66,11 @@ public class SetInstructionSprite : MonoBehaviour
     private Image m_faceImage;
 
     [SerializeField]
-    private Image m_angerImage;
+    public Image m_angerImage;
     [SerializeField]
-    private Image m_surpriseImage;
+    public Image m_surpriseImage;
     [SerializeField]
-    private Image m_joyImage;
+    public Image m_joyImage;
     [SerializeField]
     private Image m_popInImage;
 
@@ -99,15 +99,79 @@ public class SetInstructionSprite : MonoBehaviour
 
     private const float c_mouthWaitTime = 2.0f;
 
+    public delegate float? EmotionRatioDelegate();
     private float m_fadeInTime = 3.0f;
+
+    private float emotionTimeSlice = .01f;
+    private float emotionHoldTime = .1f;
+
+    [SerializeField]
+    public Image m_happyCheckMark;
+
+    [SerializeField]
+    public Image m_angryCheckMark;
+
+    [SerializeField]
+    public Image m_surprisedCheckMark;
+
+    private float m_fadeOutTime = 1.0f;
+
+    private float m_checkMarkInterpolationTime = 1.0f;
+
+    [SerializeField]
+    private AnimationCurve m_checkMarkAnimationCurve;
+
+    [SerializeField]
+    private CanvasGroup m_emotionSelectionCanvasGroup;
+
+    [SerializeField]
+    private CanvasGroup m_checkMarkCanvasGroup;
+
+
+    public IEnumerator FadeOutTutorialIcons()
+    {
+        float t = 0.0f;
+
+        float startingAlphaSelectionCanvas = m_emotionSelectionCanvasGroup.alpha;
+        float startingalphaReadingCanvas = m_emotionReadingCanvasRenderer.alpha;
+        float startingAlphaCheckMarkCanvasGroup = m_checkMarkCanvasGroup.alpha;
+
+        while (t < m_fadeOutTime)
+        {
+            t += Time.deltaTime;
+            m_emotionSelectionCanvasGroup.alpha = Mathf.Lerp(startingAlphaSelectionCanvas, 0.0f, t);
+            m_emotionReadingCanvasRenderer.alpha = Mathf.Lerp(startingalphaReadingCanvas, 0.0f, t);
+            m_checkMarkCanvasGroup.alpha = Mathf.Lerp(startingAlphaCheckMarkCanvasGroup, 0.0f, t);
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+
+
+    public IEnumerator FadeInTutorialEmotions()
+    {
+        float t = 0.0f;
+        while (t < 1.0f)
+        {
+            t += Time.deltaTime;
+            m_emotionSelectionCanvasGroup.alpha = t;
+            yield return new WaitForEndOfFrame();
+        }
+    }
 
     // Use this for initialization
     void Awake()
     {
+        m_emotionSelectionCanvasGroup.alpha = 0;
         ms_instance = this;
         m_faceIcon = BlinkIcon();
         m_facePrompt = BlinkPrompt();
         m_faceImage.CrossFadeAlpha(0.0f, 0.0f, false);
+
+        m_happyCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
+        m_surprisedCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
+        m_angryCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
     }
 
     public void FadeInDialogImage()
@@ -141,6 +205,88 @@ public class SetInstructionSprite : MonoBehaviour
     }
 
     private bool m_fading = false;
+
+
+    public IEnumerator CheckForEmotion(EmotionRatioDelegate specifiedEmotionRatioDelegate, Image emotionIcon, Image checkMark, SetInstructionSprite.FaceState emotionToCheckFor)
+    {
+        float emotionHeldTime = 0.0f;
+        while (true)
+        {
+            float? ratio = specifiedEmotionRatioDelegate();
+            while (ratio == null)
+            {
+                ratio = specifiedEmotionRatioDelegate();
+                yield return new WaitForEndOfFrame();
+            }
+
+            emotionIcon.CrossFadeAlpha(Mathf.Max(0.4f, Mathf.Min((float)ratio, 1.0f)), emotionTimeSlice, false);
+            yield return new WaitForSeconds(emotionTimeSlice);
+
+            if (ratio >= 1.0f)
+            {
+                emotionHeldTime += emotionTimeSlice;
+            }
+
+            if (emotionHeldTime > emotionHoldTime)
+            {
+                break;
+            }
+        }
+
+
+        float t = 0.0f;
+
+        checkMark.color = Color.white;
+        checkMark.CrossFadeAlpha(1.0f, m_checkMarkInterpolationTime, false);
+
+        while (t < m_checkMarkInterpolationTime)
+        {
+            t += Time.deltaTime;
+            checkMark.transform.localScale = Vector3.one * m_checkMarkAnimationCurve.Evaluate(t / m_checkMarkInterpolationTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+        SetInstructionSprite.SetFaceState(emotionToCheckFor);
+    }
+
+
+    public IEnumerator WaitForAnEmotionToBeSet()
+    {
+        m_happyCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
+        m_surprisedCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
+        m_angryCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
+        m_checkMarkCanvasGroup.alpha = 1.0f;
+
+        yield return SetInstructionSprite.ms_instance.FadeInTutorialEmotions();
+
+        EmotionRatioDelegate joyDelegate = ImageResultsListener.ms_instance.GetJoyRatio;
+        IEnumerator JoyCoroutine = CheckForEmotion(joyDelegate, ms_instance.m_joyImage, ms_instance.m_happyCheckMark, SetInstructionSprite.FaceState.JOY);
+        StartCoroutine(JoyCoroutine);
+
+
+        EmotionRatioDelegate angerDelegate = ImageResultsListener.ms_instance.GetAngerRatio;
+        IEnumerator angerCoroutine = CheckForEmotion(angerDelegate, ms_instance.m_angerImage, ms_instance.m_angryCheckMark, SetInstructionSprite.FaceState.ANGER);
+        StartCoroutine(angerCoroutine);
+
+
+        EmotionRatioDelegate surpriseDelegate = ImageResultsListener.ms_instance.GetSurpriseRatio;
+
+
+        IEnumerator surpriseCoroutine = CheckForEmotion(surpriseDelegate, ms_instance.m_surpriseImage, ms_instance.m_surprisedCheckMark, SetInstructionSprite.FaceState.SURPRISE);
+        StartCoroutine(surpriseCoroutine);
+        
+        while ((JoyCoroutine.MoveNext() && angerCoroutine.MoveNext() && surpriseCoroutine.MoveNext()))
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        StopCoroutine(JoyCoroutine);
+        StopCoroutine(angerCoroutine);
+        StopCoroutine(surpriseCoroutine);
+
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return FadeOutTutorialIcons();
+    }
 
     private IEnumerator ScaleUpForTime(float targetTime)
     {
@@ -442,11 +588,11 @@ public class SetInstructionSprite : MonoBehaviour
 
     public static void StartWaitingForEmotion(SetInstructionSprite.FaceState fps = SetInstructionSprite.FaceState.NEUTRAL)
     {
-
         switch (fps)
         {
             case SetInstructionSprite.FaceState.BLINK:
                 ms_instance.StartCoroutine(ms_instance.BlinkPrompt());
+                JournalWordTracker.CanBlink();
                 ms_instance.StartCoroutine(ms_instance.FadeInIndicator());
                 break;
             case SetInstructionSprite.FaceState.FOCUS:
@@ -463,7 +609,7 @@ public class SetInstructionSprite : MonoBehaviour
         {
             Debug.LogError("Emotional Sampling ");
             ms_instance.m_currentlySampling = true;
-            SetInstructionSprite.SetWaitingForFaceIndicator(fps);
+            SetInstructionSprite.SetWaitingForFaceIndicator();
         }
     }
 
@@ -471,20 +617,6 @@ public class SetInstructionSprite : MonoBehaviour
     {
         ms_instance.StartCoroutine(ms_instance.FadeOutIndicator());
     }
-
-    /*
-	 * 
-	public enum EmotionState
-	{
-		JOY,
-		SADNESS,
-		ANGER,
-		SURPRISE,
-		DISGUST
-	}
-	 * */
-
-
 
     private IEnumerator OpenPrompt()
     {
@@ -541,8 +673,7 @@ public class SetInstructionSprite : MonoBehaviour
     }
 
     private IEnumerator OpenIcon()
-    {
-
+    { 
         for (int i = 0; i < 999; i = (i + 1) % ms_instance.m_open.Length)
         {
             yield return new WaitForSeconds(.2f);
@@ -552,7 +683,6 @@ public class SetInstructionSprite : MonoBehaviour
 
     private IEnumerator FocusIcon()
     {
-
         for (int i = 0; i < 999; i = (i + 1) % ms_instance.m_focus.Length)
         {
             //ms_instance.m_faceImage.sprite = ms_instance.m_focus [i];
@@ -570,7 +700,7 @@ public class SetInstructionSprite : MonoBehaviour
         }
     }
 
-    public static void SetWaitingForFaceIndicator(FaceState es)
+    public static void SetWaitingForFaceIndicator()
     {
         ms_instance.StartCoroutine(ms_instance.FadeInFacialDetectionCanvas());
         ms_instance.StopCoroutine(ms_instance.m_facePrompt);

@@ -56,7 +56,7 @@ public class RestuarantSceneScript : MonoBehaviour {
 		#endif
 		
 		yield return new WaitForSeconds(4.0f);
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(2.0f);
 
 		waiting = true;
@@ -79,8 +79,8 @@ public class RestuarantSceneScript : MonoBehaviour {
 		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnIntro,true,emotion);
       
         yield return new WaitForSeconds(4.0f);
-        DialogueManager.Main.FadeOut();
-		yield return new WaitForSeconds(1.0f);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return new WaitForSeconds(1.0f);
 
 		FadeInFadeOut.FadeOut ();
 	

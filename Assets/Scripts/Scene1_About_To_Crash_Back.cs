@@ -34,7 +34,7 @@ public class Scene1_About_To_Crash_Back : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 		DialogueManager.Main.DisplayScene1Text(Scene1Events.OnShowCrashBeginning,true,emotion);
 		yield return new WaitForSeconds(3f);
-        DialogueManager.Main.FadeOut();
+        yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds(1f);
 
         FadeInFadeOut.FadeOut ();

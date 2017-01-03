@@ -93,7 +93,8 @@ public class WordDecay : MonoBehaviour {
 		}
 
 		Debug.Log ("Erase Text Started");
-		if (m_invisAtStart) {
+
+        if (m_invisAtStart) {
 			this.GetComponent<Text> ().enabled = true;
 			yield return new WaitForSeconds (m_timeDelay);
 
@@ -101,22 +102,11 @@ public class WordDecay : MonoBehaviour {
 
 		//Loop until the player makes face
 		erpo = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		bool waiting = true;
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		JournalWordTracker.CanBlink ();
 
-		SetInstructionSprite.StopWaitingForEmotion ();
-
-		yield return new WaitForSeconds (1.0f);
-		SetInstructionSprite.SetWaitingForFaceIndicator (SetInstructionSprite.FaceState.BLINK);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return SetInstructionSprite.ms_instance.FadeOutTutorialIcons();
+        
+		SetInstructionSprite.StartWaitingForEmotion (SetInstructionSprite.FaceState.BLINK);
 
 
 		Debug.Log ("Setting s_eraseInput to 0");
