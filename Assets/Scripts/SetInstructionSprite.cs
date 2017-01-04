@@ -59,8 +59,6 @@ public class SetInstructionSprite : MonoBehaviour
 
     [SerializeField]
     private Image m_waitingForFaceIndicator;
-    [SerializeField]
-    private CanvasGroup m_emotionReadingCanvasRenderer;
 
     [SerializeField]
     private Image m_faceImage;
@@ -120,58 +118,37 @@ public class SetInstructionSprite : MonoBehaviour
 
     [SerializeField]
     private AnimationCurve m_checkMarkAnimationCurve;
-
-    [SerializeField]
-    private CanvasGroup m_emotionSelectionCanvasGroup;
-
-    [SerializeField]
-    private CanvasGroup m_checkMarkCanvasGroup;
-
-
+    
     public IEnumerator FadeOutTutorialIcons()
     {
         float t = 0.0f;
 
-        float startingAlphaSelectionCanvas = m_emotionSelectionCanvasGroup.alpha;
-        float startingalphaReadingCanvas = m_emotionReadingCanvasRenderer.alpha;
-        float startingAlphaCheckMarkCanvasGroup = m_checkMarkCanvasGroup.alpha;
+        m_angerImage.CrossFadeAlpha(0.01f, m_fadeOutTime, false);
+        m_surpriseImage.CrossFadeAlpha(0.01f, m_fadeOutTime, false);
+        m_joyImage.CrossFadeAlpha(0.01f, m_fadeOutTime, false);
 
-        while (t < m_fadeOutTime)
-        {
-            t += Time.deltaTime;
-            m_emotionSelectionCanvasGroup.alpha = Mathf.Lerp(startingAlphaSelectionCanvas, 0.0f, t);
-            m_emotionReadingCanvasRenderer.alpha = Mathf.Lerp(startingalphaReadingCanvas, 0.0f, t);
-            m_checkMarkCanvasGroup.alpha = Mathf.Lerp(startingAlphaCheckMarkCanvasGroup, 0.0f, t);
+        m_angryCheckMark.CrossFadeAlpha(0.01f, m_fadeOutTime, false);
+        m_happyCheckMark.CrossFadeAlpha(0.01f, m_fadeOutTime, false);
+        m_surprisedCheckMark.CrossFadeAlpha(0.01f, m_fadeOutTime, false);
 
-            yield return new WaitForEndOfFrame();
-        }
+        yield return new WaitForSeconds(m_fadeOutTime);
     }
-
-
-
-    public IEnumerator FadeInTutorialEmotions()
-    {
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t += Time.deltaTime;
-            m_emotionSelectionCanvasGroup.alpha = t;
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
+    
     // Use this for initialization
     void Awake()
     {
-        m_emotionSelectionCanvasGroup.alpha = 0;
         ms_instance = this;
         m_faceIcon = BlinkIcon();
         m_facePrompt = BlinkPrompt();
-        m_faceImage.CrossFadeAlpha(0.0f, 0.0f, false);
+        m_faceImage.CrossFadeAlpha(0.01f, 0.0f, false);
 
-        m_happyCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
-        m_surprisedCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
-        m_angryCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
+        m_surpriseImage.CrossFadeAlpha(0.01f, 0.1f, false);
+        m_joyImage.CrossFadeAlpha(0.01f, 0.1f, false);
+        m_angerImage.CrossFadeAlpha(0.01f, 0.1f, false);
+
+        m_happyCheckMark.CrossFadeAlpha(0.01f, 0.1f, false);
+        m_surprisedCheckMark.CrossFadeAlpha(0.01f, 0.1f, false);
+        m_angryCheckMark.CrossFadeAlpha(0.01f, 0.1f, false);
     }
 
     public void FadeInDialogImage()
@@ -181,7 +158,7 @@ public class SetInstructionSprite : MonoBehaviour
 
     public void FadeOutDialogImage()
     {
-        this.m_faceImage.CrossFadeAlpha(0.0f, m_fadeInTime, false);
+        this.m_faceImage.CrossFadeAlpha(0.01f, m_fadeInTime, false);
     }
 
     public static void GrowIcon(float dt)
@@ -210,6 +187,16 @@ public class SetInstructionSprite : MonoBehaviour
     public IEnumerator CheckForEmotion(EmotionRatioDelegate specifiedEmotionRatioDelegate, Image emotionIcon, Image checkMark, SetInstructionSprite.FaceState emotionToCheckFor)
     {
         float emotionHeldTime = 0.0f;
+
+        float f = 0.0f;
+        while (f < .4f)
+        {
+            f += Time.deltaTime;
+            emotionIcon.CrossFadeAlpha(f, .0f, false);
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForSeconds(5.5f);
         while (true)
         {
             float? ratio = specifiedEmotionRatioDelegate();
@@ -252,12 +239,9 @@ public class SetInstructionSprite : MonoBehaviour
 
     public IEnumerator WaitForAnEmotionToBeSet()
     {
-        m_happyCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
-        m_surprisedCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
-        m_angryCheckMark.CrossFadeAlpha(0.0f, 0.0f, false);
-        m_checkMarkCanvasGroup.alpha = 1.0f;
-
-        yield return SetInstructionSprite.ms_instance.FadeInTutorialEmotions();
+        m_happyCheckMark.CrossFadeAlpha(0.01f, 0.0f, false);
+        m_surprisedCheckMark.CrossFadeAlpha(0.01f, 0.0f, false);
+        m_angryCheckMark.CrossFadeAlpha(0.01f, 0.0f, false);
 
         EmotionRatioDelegate joyDelegate = ImageResultsListener.ms_instance.GetJoyRatio;
         IEnumerator JoyCoroutine = CheckForEmotion(joyDelegate, ms_instance.m_joyImage, ms_instance.m_happyCheckMark, SetInstructionSprite.FaceState.JOY);
@@ -570,8 +554,7 @@ public class SetInstructionSprite : MonoBehaviour
         float t = 0.0f;
         Color origColor = m_waitingForFaceIndicator.color;
         Color origColor2 = m_popInImage.color;
-
-        float startingAlpha = m_emotionReadingCanvasRenderer.alpha;
+        
         m_currentlySampling = false;
 
         while (t <= c_fadeTime)
@@ -579,7 +562,6 @@ public class SetInstructionSprite : MonoBehaviour
             t += Time.deltaTime * (1 / Time.timeScale);
             m_waitingForFaceIndicator.color = Color.Lerp(origColor, c_fadedOut, t / c_fadeTime);
             m_popInImage.color = Color.Lerp(origColor2, c_fadedOut, t / c_fadeTime);
-            m_emotionReadingCanvasRenderer.alpha = startingAlpha - t / c_fadeTime;
             yield return new WaitForEndOfFrame();
         }
 
@@ -702,22 +684,8 @@ public class SetInstructionSprite : MonoBehaviour
 
     public static void SetWaitingForFaceIndicator()
     {
-        ms_instance.StartCoroutine(ms_instance.FadeInFacialDetectionCanvas());
         ms_instance.StopCoroutine(ms_instance.m_facePrompt);
 
-    }
-
-    public IEnumerator FadeInFacialDetectionCanvas()
-    {
-        float t = 0.0f;
-
-        while (t < m_fadeInTime)
-        {
-            t += Time.deltaTime;
-
-            m_emotionReadingCanvasRenderer.alpha = t / m_fadeInTime;
-            yield return new WaitForEndOfFrame();
-        }
     }
 
     public IEnumerator AnimatePetalAtWaitingForFaceIndicator()

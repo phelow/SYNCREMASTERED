@@ -20,9 +20,11 @@ public class JournalWordTracker : ImageResultsListener
 	public override void setTextLost (){
 		m_text.text = "Move your face into the camera";
 	}
+
 	public override void setTextFound(){
 		m_text.text = "";
 	}
+
 	public override void onImageResults(Dictionary<int, Face> faces)
 	{
 		if(faces.Count > 0)
@@ -42,7 +44,6 @@ public class JournalWordTracker : ImageResultsListener
 				}
 			}
 
-
 			m_lastEyes = faces [0].Expressions [Affdex.Expressions.EyeClosure];
 		}
 	}
@@ -54,14 +55,5 @@ public class JournalWordTracker : ImageResultsListener
 
 		yield return new WaitForSeconds (c_blinkTime);
 		m_blinking = false;
-	}
-
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
 	}
 }

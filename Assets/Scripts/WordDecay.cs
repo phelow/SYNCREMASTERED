@@ -37,7 +37,10 @@ public class WordDecay : MonoBehaviour {
 			s_totalErased = 0;
 			s_eraseInput = 0;
 			m_origText = m_text.text;
-			StartCoroutine (EraseText ());	
+            if (m_erase)
+            {
+                StartCoroutine(EraseText());
+            }	
 			m_erase = false;
 			//StartCoroutine (SpamLetters ());
 		}
@@ -97,11 +100,12 @@ public class WordDecay : MonoBehaviour {
         if (m_invisAtStart) {
 			this.GetComponent<Text> ().enabled = true;
 			yield return new WaitForSeconds (m_timeDelay);
-
 		}
 
 		//Loop until the player makes face
 		erpo = true;
+
+        yield return new WaitForSeconds(5.0f);
 
         yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         yield return SetInstructionSprite.ms_instance.FadeOutTutorialIcons();
@@ -126,7 +130,7 @@ public class WordDecay : MonoBehaviour {
 						go.GetComponent<WordDecay> ().StartCoroutine (go.GetComponent<WordDecay> ().FadeAway ());
 						go.transform.position = transform.position;
 
-						go.transform.parent = transform.parent;
+						go.transform.SetParent(transform.parent);
 						go.transform.localScale = transform.localScale;
 
 						string lastLetter = "";

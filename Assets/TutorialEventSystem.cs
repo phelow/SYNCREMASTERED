@@ -28,9 +28,6 @@ public class TutorialEventSystem : MonoBehaviour
 
     private IEnumerator CalibrationCoroutine()
     {
-
-        yield return SetInstructionSprite.ms_instance.FadeInTutorialEmotions();
-
         SetInstructionSprite.EmotionRatioDelegate joyDelegate = ImageResultsListener.ms_instance.GetJoyRatio;
         IEnumerator JoyCoroutine = SetInstructionSprite.ms_instance.CheckForEmotion(joyDelegate, SetInstructionSprite.ms_instance.m_joyImage, SetInstructionSprite.ms_instance.m_happyCheckMark,SetInstructionSprite.FaceState.JOY);
         StartCoroutine(JoyCoroutine);
@@ -72,8 +69,8 @@ public class TutorialEventSystem : MonoBehaviour
         float t = 0.0f;
         while (t <= c_fadeTime)
         {
-            m_spriteRenderer.color = Color.Lerp(c_visible, c_inVisible, t);
             t += Time.deltaTime;
+            m_spriteRenderer.color = Color.Lerp(c_visible, c_inVisible, t);
             yield return new WaitForEndOfFrame();
         }
 

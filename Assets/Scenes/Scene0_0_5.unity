@@ -1330,22 +1330,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 474676, guid: db382f66f48e85849a51b8f33b3ecca5, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -444
-      objectReference: {fileID: 0}
-    - target: {fileID: 453992, guid: db382f66f48e85849a51b8f33b3ecca5, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 27
-      objectReference: {fileID: 0}
-    - target: {fileID: 11409580, guid: db382f66f48e85849a51b8f33b3ecca5, type: 2}
-      propertyPath: m_lerpScreenTime
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 11409580, guid: db382f66f48e85849a51b8f33b3ecca5, type: 2}
-      propertyPath: m_maxSize
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: db382f66f48e85849a51b8f33b3ecca5, type: 2}
   m_IsPrefabParent: 0
