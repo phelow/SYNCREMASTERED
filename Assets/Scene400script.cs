@@ -17,26 +17,11 @@ public class Scene400script : MonoBehaviour {
 
 	private IEnumerator OneLiner(){
 		yield return new WaitForSeconds(1.0f);
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(2.0f);
 
-
-		DialogueManager.Main.DisplayScene4Text(m_line, true, emotion); //M_LINE, EMOTION
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        
+		yield return DialogueManager.Main.DisplayScene4Text(m_line, true); //M_LINE, EMOTION
 		yield return new WaitForSeconds (4.0f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(2f);
 		FadeInFadeOut.FadeOut ();
 	}
 }

@@ -101,7 +101,8 @@ public class SetInstructionSprite : MonoBehaviour
     private float m_fadeInTime = 3.0f;
 
     private float emotionTimeSlice = .01f;
-    private float emotionHoldTime = .1f;
+    private float emotionHoldTime = 1.0f;
+    public static bool m_playerOpenedMouth = false;
 
     [SerializeField]
     public Image m_happyCheckMark;

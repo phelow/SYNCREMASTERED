@@ -838,6 +838,48 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 405713588}
+--- !u!1001 &453468261
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 164
+      objectReference: {fileID: 0}
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -142
+      objectReference: {fileID: 0}
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 456756, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 44d8e08afacbff144a2faacd5c361fc9, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &474791266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,7 +1266,6 @@ GameObject:
   - component: {fileID: 915525755}
   - component: {fileID: 915525759}
   - component: {fileID: 915525758}
-  - component: {fileID: 915525757}
   - component: {fileID: 915525756}
   m_Layer: 5
   m_Name: txtTitle
@@ -1271,30 +1312,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &915525757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 915525754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5525d2e92fc77c4485ca53407e7b628, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_text: {fileID: 915525758}
-  m_timeDelay: 10
-  m_waitTime: 0.1
-  m_intervalTime: 0.1
-  m_rb: {fileID: 915525756}
-  m_erase: 0
-  m_nextScene: 0
-  m_lastLevel: 0
-  m_goodEnding: 0
-  m_textRatioX: 4.1
-  m_textRatioY: 2.34
-  m_triggerEnding: 0
-  m_invisAtStart: 0
 --- !u!114 &915525758
 MonoBehaviour:
   m_ObjectHideFlags: 0

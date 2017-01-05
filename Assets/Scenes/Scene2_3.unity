@@ -175,7 +175,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22457856, guid: 1ac0d2d95b6dfa447b230e9387e69bed, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -802
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 11409440, guid: 1ac0d2d95b6dfa447b230e9387e69bed, type: 2}
       propertyPath: m_FontData.m_Alignment
@@ -810,7 +810,7 @@ ParticleSystemRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -889,7 +889,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: 126390129
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3521,7 +3521,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22455306, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 22455306, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
       propertyPath: m_AnchoredPosition.x

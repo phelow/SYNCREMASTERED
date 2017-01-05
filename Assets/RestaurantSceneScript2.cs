@@ -17,8 +17,8 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 	private IEnumerator SceneTwo(){
 		yield return new WaitForSeconds(1.0f);
 		bool waiting = true;
-		
-		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation1);
+        
+        yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation1);
         yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
         

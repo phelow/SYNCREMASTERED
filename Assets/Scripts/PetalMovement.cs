@@ -81,16 +81,17 @@ public class PetalMovement : MonoBehaviour
 
         DialogueManager.Emotion em = DialogueManager.Emotion.Anger;
 
-        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalBeginningToFall, false, em);
-        yield return new WaitForSeconds(10.0f);
-        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalFalling, false, em);
-        yield return new WaitForSeconds(10.0f);
-        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalLanding, false, em);
-        yield return new WaitForSeconds(10.0f);
-        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalDying1, false, em);
-        yield return new WaitForSeconds(10.0f);
-        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalDying2, false, em);
-        yield return new WaitForSeconds(10.0f);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalBeginningToFall, false, em);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalFalling, false, em);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalLanding, false, em);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalDying1, false, em);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalDying2, false, em);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
         FadeInFadeOut.FadeOut();
     }

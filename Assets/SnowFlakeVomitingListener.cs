@@ -42,7 +42,8 @@ public class SnowFlakeVomitingListener : ImageResultsListener {
 				Debug.Log ("Spawn");
 
 				SpawnSnowflakes.SpawnASnowflake ();
-				m_flakesGenerated++;
+                TutorialEventSystem.playerOpenMouth();
+                m_flakesGenerated++;
 
 
 			} 

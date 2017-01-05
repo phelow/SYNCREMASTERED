@@ -77,26 +77,12 @@ public class SmileToAdvanceScene : MonoBehaviour {
 	}
 
 	private IEnumerator AddForceAfterTime(){
-		DialogueManager.Emotion em = DialogueManager.Emotion.Anger;
-        yield return new WaitForSeconds(2.0f);
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
+        Time.timeScale = 10.0f;
+
+
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+		yield return DialogueManager.Main.DisplayScene5Text (Scene5Events.OnPlayerWaiting,false);
 		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-
-        yield return new WaitForSeconds(2f);
-
-		DialogueManager.Main.DisplayScene5Text (Scene5Events.OnPlayerWaiting,false,em,true);
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
 
 		yield return new WaitForSeconds(4.0f);
         yield return DialogueManager.Main.FadeOutRoutine();
@@ -105,295 +91,60 @@ public class SmileToAdvanceScene : MonoBehaviour {
 
 		float c_maxMoveTime = 3.0f;
 
-		while (waiting && t < c_maxMoveTime) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-		StartCoroutine (SlowDownTime ());
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        StartCoroutine (SlowDownTime ());
 
-		StartCoroutine (FadeInLover ());
-		t = 0.0f;
-		while (t < 7.0f ) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-		DialogueManager.Main.DisplayScene5Text (Scene5Events.OnLoverAppear,true,em,true,DialogueManager.TextType.Dialog);
-		t = 0.0f;
-		while (t < 7.0f ) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-
-        yield return DialogueManager.Main.FadeOutRoutine();
-        t = 0.0f;
-		while (t < 1.0f) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-
+		yield return FadeInLover ();
 		
-		t = 0.0f;
-		while (t < 7.0f ) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		t = 0.0f;
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-		
-		t = 0.0f;
-		while (t < 4.0f ) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-		//DialogueManager.Main.ActivateSlowmo ();
-		t = 0.0f;
-		while (t < 4.0f ) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
+		yield return DialogueManager.Main.DisplayScene5Text (Scene5Events.OnLoverAppear,true);
 
-		DialogueManager.DisableCurrentEmotion ();
-
-		DialogueManager.Main.DisplayScene5Text (Scene5Events.OnPlayerDeciding,true,em,true);
-
-		t = 0.0f;
-		while (t < 4.0f ) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-
-        yield return DialogueManager.Main.FadeOutRoutine();
-
-        t = 0.0f;
-		while (t < 4.0f ) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-        //yiyield return DialogueManager.Main.TutorialCoroutine();();
-
-        yield return new WaitForSeconds(4.0f);
-
-        DialogueManager.Main.DisplayScene5Text (Scene5Events.OnCommandToSmile,true,em,true,DialogueManager.TextType.Command);
-
-		m_waitingForSmile = true;
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		t = 0.0f;
-		while (t < 7.0f) {
-			t += Time.deltaTime * (1/Time.timeScale);
-			yield return new WaitForEndOfFrame ();
-		}
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-
-        yield return new WaitForSeconds(1f);
-
-        yield return DialogueManager.Main.FadeOutRoutine();
-
-        yield return new WaitForSeconds(1f);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
 
-		if (emotion != DialogueManager.Emotion.Joy) {
+        yield return DialogueManager.Main.DisplayScene5Text (Scene5Events.OnPlayerDeciding,true);
+
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+        yield return DialogueManager.Main.DisplayScene5Text (Scene5Events.OnCommandToSmile,true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+
+
+        if (DialogueManager.GetCurrentEmotion() != DialogueManager.Emotion.Joy) {
 			StartCoroutine (FastSpeedUpTime ());
 
-			DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRefuseToSmile,true,em,true);
-			waiting = true;
-			emotion = DialogueManager.Emotion.Joy;
-			
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-					DialogueManager.DisableCurrentEmotion ();
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-			SetInstructionSprite.StopWaitingForEmotion ();
-            yield return DialogueManager.Main.FadeOutRoutine();
-            t = 0.0f;
-			while (t < 3.0f ) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
+			yield return DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRefuseToSmile,false);
+
+            
 			m_instance.m_spriteRenderer.sprite = m_instance.m_walkingAway;
-			StartCoroutine (LoverFadeOut ());
-			//m_rigidbody.AddForce (Vector2.right * c_impulseForce);
-			DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnIvyResponds,true,em,true);
-			t = 0.0f;
-			while (t < 4.0f) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			waiting = true;
-			emotion = DialogueManager.Emotion.Joy;
-			
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-					DialogueManager.DisableCurrentEmotion ();
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-			SetInstructionSprite.StopWaitingForEmotion ();
-            yield return DialogueManager.Main.FadeOutRoutine();
-            t = 0.0f;
-			while (t < 3.0f ) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnLoverGone,true,em,true);
-			t = 0.0f;
-			while (t < 4.0f ) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			waiting = true;
-			emotion = DialogueManager.Emotion.Joy;
-			
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-					DialogueManager.DisableCurrentEmotion ();
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-			SetInstructionSprite.StopWaitingForEmotion ();
-            yield return DialogueManager.Main.FadeOutRoutine();
-            yield return new WaitForSeconds(3.0f);
-			FadeInFadeOut.FadeOut (30);
+            yield return LoverFadeOut();
+
+            yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+            yield return DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnIvyResponds, false);
+
+
+            yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+            yield return DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnLoverGone, false);
+
+            yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+            FadeInFadeOut.FadeOut (30);
 
 		} else {
 			StartCoroutine (SpeedUpTime ());
 			m_instance.m_spriteRenderer.sprite = m_instance.m_outstretchingHand;
-			DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPlayerSmile,false,em,true);
-			t = 0.0f;
-			while (t < 4.0f ) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			waiting = true;
-			emotion = DialogueManager.Emotion.Joy;
-			
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-					DialogueManager.DisableCurrentEmotion ();
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-			SetInstructionSprite.StopWaitingForEmotion ();
-            yield return DialogueManager.Main.FadeOutRoutine();
-            t = 0.0f;
-			while (t < 3.0f ) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnAlexTalks,false,em,true,DialogueManager.TextType.Dialog);
-			t = 0.0f;
-			while (t < 4.0f) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			waiting = true;
-			emotion = DialogueManager.Emotion.Joy;
-			
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-					DialogueManager.DisableCurrentEmotion ();
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-			SetInstructionSprite.StopWaitingForEmotion ();
-            yield return DialogueManager.Main.FadeOutRoutine();
-            t = 0.0f;
-			while (t < 3.0f) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnIvyResponds1, false,em,true,DialogueManager.TextType.Dialog);t = 0.0f;
-			while (t < 4.0f ) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			waiting = true;
-			emotion = DialogueManager.Emotion.Joy;
-			
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-					DialogueManager.DisableCurrentEmotion ();
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-			SetInstructionSprite.StopWaitingForEmotion ();
-            yield return DialogueManager.Main.FadeOutRoutine();
-            t = 0.0f;
-			while (t < 3.0f) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnIvyResponds2, false,em,true,DialogueManager.TextType.Dialog);t = 0.0f;
-			while (t < 4.0f) {
-				t += Time.deltaTime * (1/Time.timeScale);
-				yield return new WaitForEndOfFrame ();
-			}
-			waiting = true;
-			emotion = DialogueManager.Emotion.Joy;
-			
-			while (waiting) {
-				if (DialogueManager.CanGetCurrentEmotion ()) {
-					emotion = DialogueManager.GetCurrentEmotion ();
-					waiting = false;
-					DialogueManager.DisableCurrentEmotion ();
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-			SetInstructionSprite.StopWaitingForEmotion ();
-            yield return DialogueManager.Main.FadeOutRoutine();
-            yield return new WaitForSeconds(3.0f);
+
+
+            yield return DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPlayerSmile,false);
+
+
+            yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+            yield return DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnAlexTalks,false);
+
+            yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+            yield return DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnIvyResponds1, false);
+
+            yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+            yield return DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnIvyResponds2, false);
 			FadeInFadeOut.FadeOut ();
 
 		}
@@ -402,8 +153,10 @@ public class SmileToAdvanceScene : MonoBehaviour {
 	}
 
 	private IEnumerator LoverFadeOut(){
-		while(true){
-			m_instance.m_spriteRenderer.color = Color.Lerp (m_instance.m_spriteRenderer.color, m_instance.m_invisColor, Time.deltaTime);
+        float t = 0.0f;
+		while(t < 5.0f){
+            t += Time.deltaTime;
+			m_instance.m_spriteRenderer.color = Color.Lerp (m_instance.m_spriteRenderer.color, m_instance.m_invisColor, t/5.0f);
 			yield return new WaitForEndOfFrame();
 		}
 	}

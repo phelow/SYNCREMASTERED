@@ -15,7 +15,6 @@ public class TutorialEventSystem : MonoBehaviour
     private Color c_inVisible = new Color(1, 1, 1, 0);
 
     private bool m_isCalibrated = false;
-    private bool m_playerOpenedMouth = false;
 
     // Use this for initialization
     void Start()
@@ -48,12 +47,12 @@ public class TutorialEventSystem : MonoBehaviour
         }
     }
     
-    private IEnumerator WaitForOpenMouth()
+    public static IEnumerator WaitForOpenMouth()
     {
         SetInstructionSprite.StartWaitingForEmotion(SetInstructionSprite.FaceState.OPEN);
-        
-        m_playerOpenedMouth = false;
-        while (m_playerOpenedMouth == false)
+
+        SetInstructionSprite.m_playerOpenedMouth = false;
+        while (SetInstructionSprite.m_playerOpenedMouth == false)
         {
             yield return new WaitForEndOfFrame();
         }
@@ -118,7 +117,7 @@ public class TutorialEventSystem : MonoBehaviour
     public static void playerOpenMouth()
     {
         Debug.Log("ms_instance.m_playerOpenedMouth = true;");
-        ms_instance.m_playerOpenedMouth = true;
+        SetInstructionSprite.m_playerOpenedMouth = true;
     }
 
     private IEnumerator Calibrate()

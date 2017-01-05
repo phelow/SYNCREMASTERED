@@ -36,28 +36,24 @@ public class SpawnSnowflakes : MonoBehaviour {
 		}
 		ms_instance = this;
 	}
+    
 
 	private IEnumerator SnowFlakeTutorial(){
 
-		SetInstructionSprite.StartWaitingForEmotion (SetInstructionSprite.FaceState.OPEN);
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSnowflakeCommand, true,DialogueManager.Emotion.Joy,DialogueManager.TextType.Command);
-		
-
-
-		m_firstFlakeSpawned = false;
-		while (m_firstFlakeSpawned == false) {
-			yield return new WaitForEndOfFrame ();
-		}
-
-		while (VaryPositionByAttention.GetSnowFlakesSpawned () < c_flakesNeededToProceed) {
-			
-			yield return new WaitForEndOfFrame ();
-
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSnowflakeCommand, false);
+        yield return DialogueManager.Main.FadeOutRoutine();
+        //TODO: add the mouth opening tutorial
+        //TODO: center all the snowflakes
+        while (VaryPositionByAttention.GetSnowFlakesSpawned() < c_flakesNeededToProceed)
+        {
+            yield return TutorialEventSystem.WaitForOpenMouth();
+            SpawnASnowflake();
         }
         yield return DialogueManager.Main.FadeOutRoutine();
         yield return new WaitForSeconds (4.0f);
 		DialogueManager.Main.CenterDialog ();
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSnowflakeCompletion, true,DialogueManager.Emotion.Joy,DialogueManager.TextType.Dialog);
+		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSnowflakeCompletion);
 		yield return new WaitForSeconds (c_snowflakeWaitTime);
 
 		FadeInFadeOut.FadeOutToCrash ();

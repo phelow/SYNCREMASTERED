@@ -62,11 +62,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene5_3.unity
   - enabled: 1
-    path: Assets/Scenes/Scene5_4.unity
-  - enabled: 1
     path: Assets/Scenes/Scene5_6.unity
   - enabled: 1
     path: Assets/Scenes/Scene5_5.unity
+  - enabled: 1
+    path: Assets/Scenes/Scene5_4.unity
   - enabled: 1
     path: Assets/Scenes/Scene5_7.unity
   - enabled: 1

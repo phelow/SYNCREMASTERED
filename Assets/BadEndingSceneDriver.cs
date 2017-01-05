@@ -9,9 +9,9 @@ public class BadEndingSceneDriver : MonoBehaviour {
 	}
 
 	private IEnumerator BadEndingSceneDialog(){
-		DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRewind1);
+		yield return DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRewind1);
 		yield return new WaitForSeconds (10.0f);
-		DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRewind2);
+		yield return DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRewind2);
 		yield return new WaitForSeconds (20.0f);
 	}
 

@@ -119,7 +119,7 @@ public class FadeInFadeOut : MonoBehaviour
 		yield return new WaitForEndOfFrame ();
 		}
 #endif
-        FadeInFadeOut.FadeOut();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     }
 

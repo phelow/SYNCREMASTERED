@@ -590,7 +590,7 @@ public class DialogueManager : MonoBehaviour
 
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 2
-    public IEnumerator DisplayScene2Text(Scene2Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
+    public IEnumerator DisplayScene2Text(Scene2Events key, bool hold = false, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
     {
         emotion = DialogueManager.GetCurrentEmotion();
         m_halfColor = Color.yellow;
@@ -712,6 +712,10 @@ public class DialogueManager : MonoBehaviour
 
         }
 
+
+        txtDialogue.text = "";
+        txtDialogueShadow.text = "";
+        txtDialogueGlow.text = "";
         m_dialogIconEnabled = false;
     }
     
@@ -798,18 +802,14 @@ public class DialogueManager : MonoBehaviour
                 break;
         }
 
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
+
+
         txtDialogue.text = "";
         txtDialogueShadow.text = "";
         txtDialogueGlow.text = "";
-
         StartCoroutine(SetFadeIn());
-        if (hold == false)
-        {
-            StartCoroutine(DelayToHideText(slowmo, holdTime));
-        }
+        yield return RevealTextOneSegmentAtATime(text);
+        yield return SetInstructionSprite.ms_instance.FadeOutDialogImage();
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in the good ending
@@ -838,19 +838,13 @@ public class DialogueManager : MonoBehaviour
                 break;
         }
 
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
+
         txtDialogue.text = "";
         txtDialogueShadow.text = "";
         txtDialogueGlow.text = "";
-
         StartCoroutine(SetFadeIn());
-
-        if (hold == false)
-        {
-            StartCoroutine(DelayToHideText(slowmo, holdTime));
-        }
+        yield return RevealTextOneSegmentAtATime(text);
+        yield return SetInstructionSprite.ms_instance.FadeOutDialogImage();
     }
 
 
@@ -879,44 +873,30 @@ public class DialogueManager : MonoBehaviour
                 break;
         }
 
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
         txtDialogue.text = "";
         txtDialogueShadow.text = "";
         txtDialogueGlow.text = "";
-
         StartCoroutine(SetFadeIn());
-        if (hold == false)
-        {
-            StartCoroutine(DelayToHideText(slowmo, holdTime));
-        }
+        yield return RevealTextOneSegmentAtATime(text);
+        yield return SetInstructionSprite.ms_instance.FadeOutDialogImage();
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in the bad ending
     public IEnumerator DisplayCreditsText(CreditsEvent key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
-    {
-        emotion = DialogueManager.GetCurrentEmotion();
-
+    {        
         EnableDialogIcon();
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
         string text = creditsDictionary[key];
-        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
 
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
+
         txtDialogue.text = "";
         txtDialogueShadow.text = "";
         txtDialogueGlow.text = "";
-
         StartCoroutine(SetFadeIn());
-        if (hold == false)
-        {
-            StartCoroutine(DelayToHideText(slowmo, holdTime));
-        }
+        yield return RevealTextOneSegmentAtATime(text);
+        yield return SetInstructionSprite.ms_instance.FadeOutDialogImage();
     }
 
     private static bool m_slowmo = false;

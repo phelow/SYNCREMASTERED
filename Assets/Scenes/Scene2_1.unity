@@ -301,7 +301,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: 234866462
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3104,30 +3104,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22455306, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
       propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 22453572, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 22453572, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 22453572, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11499614, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
-      propertyPath: m_nextScene
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 100864, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 22351896, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

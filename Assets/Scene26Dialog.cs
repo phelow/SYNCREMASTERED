@@ -10,48 +10,12 @@ public class Scene26Dialog : MonoBehaviour {
 	}
 
 	private IEnumerator playDialog(){
-		yield return new WaitForSeconds(1.0f);
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
+        yield return new WaitForSeconds(5.0f);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnCarCrash,false);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnEndScene,true);
 		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(2.0f);
-
-
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnCarCrash,true,emotion);
-		yield return new WaitForSeconds (3.0f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(2.0f);
-
-        waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-		//yield return DialogueManager.Main.TutorialCoroutine();
-		yield return new WaitForSeconds(2.0f);
-
-
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnEndScene,true,emotion);
-		yield return new WaitForSeconds (4.0f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(1.0f);
 
         FadeInFadeOut.FadeOut ();
 	}
