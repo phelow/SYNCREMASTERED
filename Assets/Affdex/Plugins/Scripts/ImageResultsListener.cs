@@ -152,14 +152,10 @@ namespace Affdex
         public IEnumerator FacialSampler(bool idle = false)
         {
             FacialSamplerRunning = true;
-            SetInstructionSprite.SetInUse();
-            SetEmotionDeciding();
             Debug.Log("--STarting Facial Sampler--");
             bool sampleTaken = false;
             int checks = 0;
-
-            DialogueManager.Main.FadeOutIconOnly();
-
+            
             while (sampleTaken == false)
             {
                 m_samples = 0;
@@ -236,7 +232,6 @@ namespace Affdex
                 m_totalJoy += faces[0].Emotions[Affdex.Emotions.Joy] * ms_joyMultiplier;
                 m_totalAnger += faces[0].Emotions[Affdex.Emotions.Anger] * ms_angerMultiplier;
                 m_totalSurprise += faces[0].Emotions[Affdex.Emotions.Surprise] * ms_surpriseMultiplier;
-                SetInstructionSprite.SetFaceRatios(m_totalJoy / m_samples, m_totalAnger / m_samples, m_totalSurprise / m_samples);
             }
             else {
                 Debug.Log("No faces");

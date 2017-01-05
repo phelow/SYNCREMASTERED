@@ -151,14 +151,16 @@ public class SetInstructionSprite : MonoBehaviour
         m_angryCheckMark.CrossFadeAlpha(0.01f, 0.1f, false);
     }
 
-    public void FadeInDialogImage()
+    public IEnumerator FadeInDialogImage()
     {
         this.m_faceImage.CrossFadeAlpha(1.0f, m_fadeInTime, false);
+        yield return new WaitForSeconds(m_fadeInTime);
     }
 
-    public void FadeOutDialogImage()
+    public IEnumerator FadeOutDialogImage()
     {
         this.m_faceImage.CrossFadeAlpha(0.01f, m_fadeInTime, false);
+        yield return new WaitForSeconds(m_fadeInTime);
     }
 
     public static void GrowIcon(float dt)
@@ -182,37 +184,43 @@ public class SetInstructionSprite : MonoBehaviour
     }
 
     private bool m_fading = false;
-
+    float m_minOpacity = .6f;
 
     public IEnumerator CheckForEmotion(EmotionRatioDelegate specifiedEmotionRatioDelegate, Image emotionIcon, Image checkMark, SetInstructionSprite.FaceState emotionToCheckFor)
     {
         float emotionHeldTime = 0.0f;
 
         float f = 0.0f;
-        while (f < .4f)
+
+
+
+        while (f < m_minOpacity)
         {
             f += Time.deltaTime;
             emotionIcon.CrossFadeAlpha(f, .0f, false);
             yield return new WaitForEndOfFrame();
         }
 
-        yield return new WaitForSeconds(5.5f);
+        Debug.LogError(204);
         while (true)
         {
             float? ratio = specifiedEmotionRatioDelegate();
             while (ratio == null)
             {
                 ratio = specifiedEmotionRatioDelegate();
+                Debug.LogError(211);
                 yield return new WaitForEndOfFrame();
             }
 
-            emotionIcon.CrossFadeAlpha(Mathf.Max(0.4f, Mathf.Min((float)ratio, 1.0f)), emotionTimeSlice, false);
+            emotionIcon.CrossFadeAlpha(Mathf.Max(m_minOpacity, Mathf.Min((float)ratio, 1.0f)), emotionTimeSlice, false);
             yield return new WaitForSeconds(emotionTimeSlice);
 
             if (ratio >= 1.0f)
             {
                 emotionHeldTime += emotionTimeSlice;
             }
+
+            Debug.LogError(emotionHeldTime);
 
             if (emotionHeldTime > emotionHoldTime)
             {
@@ -234,6 +242,19 @@ public class SetInstructionSprite : MonoBehaviour
         }
 
         SetInstructionSprite.SetFaceState(emotionToCheckFor);
+        switch (emotionToCheckFor)
+        {
+            case FaceState.ANGER:
+                DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
+                break;
+            case FaceState.JOY:
+                DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
+                break;
+            case FaceState.SURPRISE:
+                DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
+                break;
+
+        }
     }
 
 
@@ -709,15 +730,6 @@ public class SetInstructionSprite : MonoBehaviour
         }
     }
 
-    public static void SetFaceRatios(float joy, float anger, float surprise)
-    { //TODO: currently this is the only thing controlling fade in
-        float totalEmotion = joy + anger + surprise;
-
-        ms_instance.m_joyImage.color = Color.Lerp(ms_instance.c_fadedOutGrey, ms_instance.c_fadedIn, joy / totalEmotion);
-        ms_instance.m_angerImage.color = Color.Lerp(ms_instance.c_fadedOutGrey, ms_instance.c_fadedIn, anger / totalEmotion);
-        ms_instance.m_surpriseImage.color = Color.Lerp(ms_instance.c_fadedOutGrey, ms_instance.c_fadedIn, surprise / totalEmotion);
-    }
-
     public static void SetEmotionDeciding()
     {
         ms_instance.StartCoroutine(ms_instance.LoseHalfOpacity());
@@ -726,9 +738,6 @@ public class SetInstructionSprite : MonoBehaviour
 
     public static void SetFaceState(FaceState fs)
     {
-
-
-
         ms_instance.StopCoroutine(ms_instance.m_faceIcon);
         switch (fs)
         {

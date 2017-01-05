@@ -52,12 +52,11 @@ public class DialogueManager : MonoBehaviour
         Command,
         Dialog
     }
+
     public enum Emotion
     {
         Joy,
-        Disgust,
         Anger,
-        Sadness,
         Surprise
     }
 
@@ -107,9 +106,7 @@ public class DialogueManager : MonoBehaviour
     Dictionary<BadEndingEvents, string> badEndingDictionarySurprise;
 
     Dictionary<CreditsEvent, string> creditsDictionary;
-
-    bool m_fadeMutex = false;
-
+    
     private float m_fadeInTime = 1.0f;
 
     [SerializeField]
@@ -464,15 +461,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     public IEnumerator TutorialCoroutine(TutorialEvents key, bool hold, Emotion emotion = Emotion.Joy, float HoldTime = 4.0f)
-    {
-        while (m_fadeMutex == true)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
-        m_fadeMutex = true;
-        
-        
+    {          
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
@@ -485,7 +474,6 @@ public class DialogueManager : MonoBehaviour
         {
             StartCoroutine(DelayToHideText(false, HoldTime));
         }
-        m_fadeMutex = false;
     }
     
     bool m_revelationMutex = false;
@@ -540,23 +528,14 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.02f, .04f) * Time.timeScale);
         }
     }
-
-    private IEnumerator Scene0Coroutine(Scene0Events key, bool hold, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
+    public IEnumerator Scene0Coroutine(Scene0Events key, bool hold, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
     {
-
-        Debug.Log("m_fadeMutex:" + m_fadeMutex);
-        while (m_fadeMutex == true)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
-        m_fadeMutex = true;
-        
+        emotion = DialogueManager.GetCurrentEmotion();
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
         string text = scene0DictionaryJoy[key];
-
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
         switch (emotion)
         {
             case Emotion.Anger:
@@ -572,35 +551,12 @@ public class DialogueManager : MonoBehaviour
                 txtDialogue.color = Color.Lerp(txtDialogue.color, Color.yellow, .5f);
                 break;
         }
-        Debug.Log(text);
-
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
-        txtDialogue.text = "";
-        txtDialogueShadow.text = "";
-        txtDialogueGlow.text = "";
-
+        
         StartCoroutine(SetFadeIn());
-        if (hold == false)
-        {
-            StartCoroutine(DelayToHideText(false, holdTime));
-        }
-        m_fadeMutex = false;
+        yield return RevealTextOneSegmentAtATime(text);
+        yield return SetInstructionSprite.ms_instance.FadeOutDialogImage();
     }
-
-    //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 0
-    public void DisplayScene0Text(Scene0Events key, bool hold = false, Emotion emotion = Emotion.Joy, float holdTime = 4.0f)
-    {
-        m_dialog = TextType.Default;
-        Debug.Log(key.ToString());
-
-        m_slowmo = false;
-
-        StartCoroutine(Scene0Coroutine(key, hold, emotion, holdTime));
-
-    }
-
+    
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 1
     public void DisplayScene1Text(Scene1Events key, bool hold = false, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
     {

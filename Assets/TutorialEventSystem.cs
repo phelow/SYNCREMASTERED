@@ -97,9 +97,6 @@ public class TutorialEventSystem : MonoBehaviour
 
         yield return WaitForOpenMouth();
              
-
-        DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Disgust);
-
         yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.PromptTutorial, true);
         
         yield return CalibrationCoroutine();

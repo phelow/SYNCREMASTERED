@@ -13,16 +13,18 @@ public class JournalWordTracker : ImageResultsListener
 	private bool m_blinking = false;
 	private const float c_blinkTime = 1.0f;
 
-	public static void CanBlink(){
+    public void Awake()
+    {
+        base.Awake();
+    }
+    public static void CanBlink(){
 		m_canBlink = true;
 	}
 
 	public override void setTextLost (){
-		m_text.text = "Move your face into the camera";
 	}
 
 	public override void setTextFound(){
-		m_text.text = "";
 	}
 
 	public override void onImageResults(Dictionary<int, Face> faces)

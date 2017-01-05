@@ -2,456 +2,272 @@
 using Affdex;
 using System.Collections;
 
-public class PetalMovement : MonoBehaviour {
-	private static PetalMovement s_instance;
+public class PetalMovement : MonoBehaviour
+{
+    private static PetalMovement s_instance;
 
-	float petalSize = 1.3f;
-	public Transform leftPosition;
-	public Transform rightPosition;
-	public Rigidbody2D m_rb;
+    float petalSize = 1.3f;
+    public Transform leftPosition;
+    public Transform rightPosition;
+    public Rigidbody2D m_rb;
 
-	public PetalWaypoint m_nextTarget;
+    public PetalWaypoint m_nextTarget;
 
-	public static PetalMovement ms_instance;
+    [SerializeField]
+    private PetalWaypoint m_targetA;
+    [SerializeField]
+    private PetalWaypoint m_targetB;
+    [SerializeField]
+    private PetalWaypoint m_targetC;
+    [SerializeField]
+    private PetalWaypoint m_targetD;
+    [SerializeField]
+    private PetalWaypoint m_targetE;
 
-	private static bool interactible;
+    public static PetalMovement ms_instance;
 
-	const float ms_windForce = 20.0f;
-	const float ms_downDraftForce = 10.0f;
-	const float c_horizontalWind = 1.2f;
+    private static bool interactible;
 
-	const float c_startSize = 1.0f;
-	const float c_endSize = .5f;
-	const float c_resizeDistance = 30.0f;
+    const float ms_windForce = 20.0f;
+    const float ms_downDraftForce = 10.0f;
+    const float c_horizontalWind = 1.2f;
 
-	const float c_startingWaitTime = 18.0f;
+    const float c_startSize = 1.0f;
+    const float c_endSize = .5f;
+    const float c_resizeDistance = 30.0f;
 
-	private float ms_life = 0.0f;
+    const float c_startingWaitTime = 18.0f;
 
-	[SerializeField] private Animator m_animator;
+    private float ms_life = 0.0f;
 
-	private IEnumerator m_bringToLife;
-	private IEnumerator m_remindToSmile;
+    [SerializeField]
+    private Animator m_animator;
 
-	[SerializeField]private float m_animationSpeedModifier = 3.0f;
+    private IEnumerator m_bringToLife;
 
-	public static bool m_alive = false;
-	public static bool m_moving = false;
+    [SerializeField]
+    private float m_animationSpeedModifier = 3.0f;
 
-	[SerializeField]private bool m_goodEnding = false;
+    public static bool m_alive = false;
+    public static bool m_moving = false;
 
-	private bool notLerping = true;
-	private bool m_locked = true;
-	public GameObject m_targetPetal;
+    [SerializeField]
+    private bool m_goodEnding = false;
 
-	// Use this for initialization
-	void Start () {
-		ms_instance = this;
-		s_instance = this;
-		interactible = false;
-		m_rb.AddTorque (Random.Range (.1f, 1.0f)); //add a random tortional force
-		m_bringToLife = BringToLife();
-		StartCoroutine(m_bringToLife);
-        StartCoroutine(ContinueToAddWind());
+    private bool notLerping = true;
+    public GameObject m_targetPetal;
 
-		//Show the beginning dialogue
-		if (m_goodEnding == false) {
-			StartCoroutine (ShowBeginningDialogue ());
-		} else {
-			StartCoroutine (ShowGoodEndingDialogue ());
-		}
-	}
-	static Vector2 vel;
-
-    private IEnumerator ContinueToAddWind()
+    // Use this for initialization
+    void Start()
     {
-        while (true)
+        ms_instance = this;
+        s_instance = this;
+        interactible = false;
+        m_rb.AddTorque(Random.Range(.1f, 1.0f)); //add a random tortional force
+
+        //Show the beginning dialogue
+        if (m_goodEnding == false)
         {
-            TryToAddWind();
-            yield return new WaitForSeconds(Random.Range(.5f, .4f));
+            StartCoroutine(ShowBeginningDialogue());
+        }
+        else {
+            StartCoroutine(ShowGoodEndingDialogue());
+        }
+    }
+    static Vector2 vel;
+
+    private IEnumerator ShowGoodEndingDialogue()
+    {
+
+        DialogueManager.Emotion em = DialogueManager.Emotion.Anger;
+
+        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalBeginningToFall, false, em);
+        yield return new WaitForSeconds(10.0f);
+        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalFalling, false, em);
+        yield return new WaitForSeconds(10.0f);
+        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalLanding, false, em);
+        yield return new WaitForSeconds(10.0f);
+        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalDying1, false, em);
+        yield return new WaitForSeconds(10.0f);
+        DialogueManager.Main.DisplayGoodEndingText(GoodEndingEvents.OnPetalDying2, false, em);
+        yield return new WaitForSeconds(10.0f);
+
+        FadeInFadeOut.FadeOut();
+    }
+
+    //Handle the beginning dialogue sequence
+    IEnumerator ShowBeginningDialogue()
+    {
+        yield return new WaitForSeconds(c_startingWaitTime);
+
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnSceneLoad, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+
+        yield return BringToLife();
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnCommandToSmile, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnDeadPetal, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+
+        yield return FlyToTarget(m_targetA);
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnPetalRising, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+        yield return FlyToTarget(m_targetB);
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnPetalInTree, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+        yield return FlyToTarget(m_targetC);
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.PromptOnSceneEnd1, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+        yield return FlyToTarget(m_targetD);
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnSceneEnd2, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+        yield return FlyToTarget(m_targetD);
+        FadeInFadeOut.FadeOut();
+    }
+
+    private IEnumerator FlyToTarget(PetalWaypoint target)
+    {
+        m_nextTarget = target;
+
+        while (Vector2.Distance(target.transform.position, this.transform.position) > 5.0f)
+        {
+            StartCoroutine(AddWind());
+            yield return new WaitForSeconds(Random.Range(0.3f, 2.0f));
         }
     }
 
-	public static void FreezePetal(){
-		try{
-			vel = ms_instance.m_rb.velocity;
-			ms_instance.m_rb.velocity = Vector2.zero;
-			ms_instance.m_rb.isKinematic = true;
-		}
-		catch{
-		}
-	}
-
-	public static void UnfreezePetal(){
-		try{
-			ms_instance.m_rb.isKinematic = false;
-			ms_instance.m_rb.velocity = vel;
-		}
-		catch{
-
-		}
-	}
-
-	public IEnumerator RemindToSmile(){
-
-		bool hasSmiled = true;
-
-		while (true) {
-			hasSmiled = true;
-			while (hasSmiled == true) {
-				//sample the smiling
-				hasSmiled = false;
-				for (int i = 0; i < 10; i++) {
-					if (SceneZeroListener.IsEmotionalIntensitySufficient ()) {
-						hasSmiled = true;
-					}
-
-					yield return new WaitForSeconds (.5f);
-
-				}
-
-			}
-
-			DialogueManager.Main.DisplayScene0Text (Scene0Events.OnCommandToSmile, true);
-
-			while (SceneZeroListener.IsEmotionalIntensitySufficient () == false) {
-				yield return new WaitForEndOfFrame ();
+    private IEnumerator LerpToPosition()
+    {
+        Destroy(m_rb);
+        m_moving = true;
+        float moveTime = 0;
+        float totalMoveTime = 6.0f;
+        while (moveTime < totalMoveTime)
+        {
+            moveTime += Time.deltaTime;
+            Debug.Log("Lerping to target petal");
+            if (m_targetPetal != null)
+            {
+                transform.position = Vector3.Slerp(transform.position, m_targetPetal.transform.position, moveTime / totalMoveTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, m_targetPetal.transform.rotation, moveTime / totalMoveTime);
             }
-            yield return DialogueManager.Main.FadeOutRoutine();
-            yield return new WaitForEndOfFrame ();
-		}
-	}
+            yield return new WaitForEndOfFrame();
+        }
 
-	public static void Grow(){
+        yield return new WaitForSeconds(c_startingWaitTime);
 
-	}
+        Debug.Log("End Scene");
+    }
 
-	public static void Shrink(){
+    public IEnumerator AddWind()
+    {
+        Debug.Log("Adding Wind");
+        for (int i = 0; i < 10; i++)
+        {
+            float leftDist = Vector3.Distance(new Vector3(leftPosition.position.x, leftPosition.position.y, 0), new Vector3(transform.position.x, transform.position.y, 0));
+            float rightDist = Vector3.Distance(new Vector3(rightPosition.position.x, rightPosition.position.y, 0), new Vector3(transform.position.x, transform.position.y, 0));
 
-	}
+            float targetDistance = float.PositiveInfinity;
 
-	private void Unlock(){
-		m_locked = false;
-	}
+            if (m_nextTarget != null)
+            {
+                targetDistance = Vector3.Distance(m_nextTarget.m_transform.position, transform.position);
+            }
+            if (m_nextTarget != null && m_nextTarget.m_nextPetalWaypoint == null)
+            {
+                m_rb.velocity *= Mathf.Lerp(1, .3f, 1 / Vector3.Distance(m_nextTarget.m_transform.position, transform.position));
+            }
 
-	private IEnumerator ShowGoodEndingDialogue(){
+            //TODO: End level when final target is reached
 
-		DialogueManager.Emotion em = DialogueManager.Emotion.Anger;
 
-        DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalBeginningToFall,false,em);
-		yield return new WaitForSeconds (10.0f);
-		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalFalling,false,em);
-		yield return new WaitForSeconds (10.0f);
-		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalLanding,false,em);
-		yield return new WaitForSeconds (10.0f);
-		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalDying1,false,em);
-		yield return new WaitForSeconds (10.0f);
-		DialogueManager.Main.DisplayGoodEndingText (GoodEndingEvents.OnPetalDying2,false,em);
-		yield return new WaitForSeconds (10.0f);
+            if (m_nextTarget != null)
+            {
+                Vector2 targetVec = new Vector2(m_nextTarget.transform.position.x, m_nextTarget.transform.position.y) - new Vector2(transform.position.x, transform.position.y);
+                //Blow from whichever side we are closer too.
+                if (leftDist < rightDist)
+                {
 
-		FadeInFadeOut.FadeOut ();
-		m_newMutex = true;
-	}
-	bool m_newMutex = false;
-	//Handle the beginning dialogue sequence
-	IEnumerator ShowBeginningDialogue()
-	{
-		yield return new WaitForSeconds (c_startingWaitTime);
-		
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
+                    GameObject[] backgroundPetals = GameObject.FindGameObjectsWithTag("Background Petal");
+                    Vector2 wind = ((targetVec + Vector2.right * c_horizontalWind) * ms_windForce * .1f);
+                    foreach (GameObject bg in backgroundPetals)
+                    {
+                        bg.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(wind.x * .9f, wind.x * 1.1f), Random.Range(wind.y * .9f, wind.y * 1.1f)));
+                    }
+
+                    m_rb.AddForce(wind * Mathf.Lerp(.5f, 1.0f, SceneZeroListener.s_smileMultiplier));
+                }
+                else {
+                    GameObject[] backgroundPetals = GameObject.FindGameObjectsWithTag("Background Petal");
+                    Vector2 wind = ((targetVec + Vector2.left * c_horizontalWind) * ms_windForce * .1f);
+                    foreach (GameObject bg in backgroundPetals)
+                    {
+                        bg.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(wind.x * .9f, wind.x * 1.1f), Random.Range(wind.y * .9f, wind.y * 1.1f)));
+                    }
+                    m_rb.AddForce(wind * Mathf.Lerp(.5f, 1.0f, SceneZeroListener.s_smileMultiplier));
+                }
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
+    }
+
+
+    public static void freezeAnimation()
+    {
+        s_instance.m_animator.speed = 0.0f;
+        s_instance.m_animator.SetBool("Alive", false);
+    }
+
+    private IEnumerator BringToLife()
+    {
+        m_animator.SetBool("Alive", false);
+
+        m_animator.speed = 0.0f;
+        float t = 0.0f;
+        while (t < 5.0f)
+        {
+            t += Time.deltaTime;
+            if (ms_life < 0.01f)
+            {
+                ms_life = 0.01f;
+            }
+
+            m_animator.speed = ((SceneZeroListener.s_smileMultiplier) / 2.0f) * m_animationSpeedModifier;
+
+            Debug.Log(m_animator.speed);
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    //Handles displaying the last two lines of dialogue at the end of the scene
+    IEnumerator ShowEndDialogue()
+    {
+        bool waiting = true;
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.PromptOnSceneEnd1, true);
+        yield return new WaitForSeconds(3f);
         yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds (2.0f);
-		Debug.Log (147);
-		DialogueManager.Main.DisplayScene0Text(Scene0Events.OnSceneLoad,true,emotion);
-		yield return new WaitForSeconds (3.0f);
+        yield return new WaitForSeconds(3f);
+
+        yield return new WaitForSeconds(3.0f);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
         yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(2.0f);
-		
-		Debug.Log (150);
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		Debug.Log (161);
-		SetInstructionSprite.StopWaitingForEmotion ();
-        yield return DialogueManager.Main.FadeOutRoutine();
-        DialogueManager.Main.DisplayScene0Text(Scene0Events.OnCommandToSmile, true,emotion);
-
-		yield return new WaitForSeconds (4.0f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-
-
-        m_remindToSmile = RemindToSmile ();
-		StartCoroutine (m_remindToSmile);
-		//ImageResultsListener.StartContinousSample ();
-		Debug.Log (175);
-		m_newMutex = true;
-	}
-
-	private IEnumerator LerpToPosition(){
-		Destroy (m_rb);
-		StopCoroutine (m_remindToSmile);
-		m_moving = true;
-		float moveTime = 0;
-		float totalMoveTime = 6.0f;
-		while (moveTime < totalMoveTime) {
-			moveTime += Time.deltaTime;
-			Debug.Log("Lerping to target petal");
-			if (m_targetPetal != null) {
-				transform.position = Vector3.Slerp (transform.position, m_targetPetal.transform.position, moveTime / totalMoveTime);
-				transform.rotation = Quaternion.Slerp (transform.rotation, m_targetPetal.transform.rotation, moveTime / totalMoveTime);
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-
-		yield return new WaitForSeconds (c_startingWaitTime);
-
-		Debug.Log ("End Scene");
-	}
-
-	public IEnumerator AddWind(){
-		//Determine if we are closer to the left or right side of the screen
-		if (m_locked == false && m_goodEnding == false) {
-			Debug.Log ("192");
-			for (int i = 0; i < 10; i++) {
-				float leftDist = Vector3.Distance (new Vector3 (leftPosition.position.x, leftPosition.position.y, 0), new Vector3 (transform.position.x, transform.position.y, 0));
-				float rightDist = Vector3.Distance (new Vector3 (rightPosition.position.x, rightPosition.position.y, 0), new Vector3 (transform.position.x, transform.position.y, 0));
-
-				float targetDistance = float.PositiveInfinity;
-
-				if (m_nextTarget != null) {
-					targetDistance = Vector3.Distance (m_nextTarget.m_transform.position, transform.position);
-				}
-				if (m_nextTarget != null && m_nextTarget.m_nextPetalWaypoint == null) {
-					m_rb.velocity *= Mathf.Lerp (1, .3f, 1 / Vector3.Distance (m_nextTarget.m_transform.position, transform.position));
-				}
-
-				//TODO: End level when final target is reached
-
-
-				if (m_nextTarget != null) {
-					Vector2 targetVec = new Vector2 (m_nextTarget.transform.position.x, m_nextTarget.transform.position.y) - new Vector2 (transform.position.x, transform.position.y);
-					//Blow from whichever side we are closer too.
-					if (leftDist < rightDist) {
-
-						GameObject[] backgroundPetals = GameObject.FindGameObjectsWithTag ("Background Petal");
-						Vector2 wind = ((targetVec + Vector2.right * c_horizontalWind) * ms_windForce * .1f);
-						foreach (GameObject bg in backgroundPetals) {
-							bg.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (wind.x * .9f, wind.x * 1.1f), Random.Range (wind.y * .9f, wind.y * 1.1f)));
-						}
-
-						m_rb.AddForce (wind * Mathf.Lerp (.5f, 1.0f, SceneZeroListener.s_smileMultiplier));
-					} else {
-						GameObject[] backgroundPetals = GameObject.FindGameObjectsWithTag ("Background Petal");
-						Vector2 wind = ((targetVec + Vector2.left * c_horizontalWind) * ms_windForce * .1f);
-						foreach (GameObject bg in backgroundPetals) {
-							bg.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (wind.x * .9f, wind.x * 1.1f), Random.Range (wind.y * .9f, wind.y * 1.1f)));
-						}
-						m_rb.AddForce (wind * Mathf.Lerp (.5f, 1.0f, SceneZeroListener.s_smileMultiplier));
-					}
-				}
-				yield return new WaitForEndOfFrame ();
-			}
-		}
-	}
-
-
-	public static void freezeAnimation (){
-		s_instance.m_animator.speed = 0.0f;
-		s_instance.m_animator.SetBool ("Alive", false);
-	}
-
-	private IEnumerator BringToLife(){
-		m_animator.SetBool ("Alive", false);
-		while (
-			m_newMutex == false) {
-			yield return new WaitForEndOfFrame ();
-		}
-		m_animator.speed = 0.0f;
-		while (true) {
-			if (ms_life < 0.01f) {
-				ms_life = 0.01f;
-			}
-
-			m_animator.speed = ((SceneZeroListener.s_smileMultiplier)/2.0f ) * m_animationSpeedModifier;
-
-			Debug.Log (m_animator.speed);
-
-			yield return new WaitForEndOfFrame ();
-		}
-	}
-
-	public static void TryToAddWind(){
-
-		if (interactible) {
-			if(SceneZeroListener.IsEmotionalIntensitySufficient()){
-				Debug.Log ("266: Trying to add wind");
-				s_instance.StartCoroutine (s_instance.AddWind ());
-			}
-		}
-	}
-
-	public IEnumerator ToggleAliveCoroutine(){
-		yield return new WaitForEndOfFrame ();
-		Debug.Log ("Petal is now alive");
-		m_alive = true;
-		interactible = true;
-		Unlock ();
-		s_instance.StopCoroutine (s_instance.m_bringToLife);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds (3.0f);
-
-
-		if (s_instance.m_goodEnding == false) {
-			//Handle dialogue once the petal comes to life
-			DialogueManager.Main.DisplayScene0Text (Scene0Events.OnDeadPetal);
-		}
-	}
-
-
-	public static void ToggleAlive(){
-		s_instance.StartCoroutine (s_instance.ToggleAliveCoroutine ());
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-		transform.localScale = Vector3.Lerp (Vector3.one * c_startSize, Vector3.one * c_endSize, transform.position.y / c_resizeDistance);
-
-		float targetDistance = float.PositiveInfinity;
-		if (m_nextTarget != null) {
-			targetDistance = Vector3.Distance (m_nextTarget.m_transform.position, transform.position);
-		}
-		if (targetDistance < 10.0f && m_nextTarget.m_nextPetalWaypoint == null && notLerping) {
-			GameObject prevTarget = m_nextTarget.gameObject;
-			m_nextTarget = m_nextTarget.m_nextPetalWaypoint;
-			Destroy (prevTarget);
-
-			Debug.Log ("Beginning Lerp to stem");
-			StartCoroutine (LerpToPosition ());
-			notLerping = false;
-
-			//Start final dialogue sequence
-			StartCoroutine(ShowEndDialogue());
-
-		} else if (targetDistance < 3.0f) {
-
-			GameObject prevTarget = m_nextTarget.gameObject;
-			m_nextTarget = m_nextTarget.m_nextPetalWaypoint;
-			Destroy (prevTarget);
-			Debug.Log ("Targt changed");
-
-			//Determine which lines of dialogue to show as the petal is rising
-			if (m_alive)
-			{
-				ShowMiddleDialogue(m_nextTarget.m_waypointNumber);
-			}
-
-
-		} else {
-			if (m_rb != null) {
-				m_rb.velocity *= Mathf.Lerp (1.0f, .99f, 1 / targetDistance);
-			}
-		}
-	}
-	//Handles displaying the middle lines of dialogue as the petal is rising
-	void ShowMiddleDialogue(int _waypointNumber)
-	{
-		if (m_goodEnding == false) {
-			Debug.Log ("_waypointNumber" + _waypointNumber);
-			switch (_waypointNumber) {//TODO
-			case (3):
-				StartCoroutine(SampleEmotionAndPlayDialog (Scene0Events.OnPetalRising));
-				break;
-			case (4):
-				StartCoroutine(SampleEmotionAndPlayDialog (Scene0Events.OnPetalInTree));
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	private IEnumerator SampleEmotionAndPlayDialog(Scene0Events dialog){
-
-		PetalMovement.FreezePetal ();
-		
-		yield return new WaitForSeconds (3.0f);
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-        yield return DialogueManager.Main.FadeOutRoutine();
-        PetalMovement.FreezePetal ();
-		yield return new WaitForSeconds (4.0f);
-		PetalMovement.FreezePetal ();
+        yield return new WaitForSeconds(4.0f);
 
 
 
-		DialogueManager.Main.DisplayScene0Text (dialog, false,DialogueManager.GetCurrentEmotion());
-		yield return new WaitForSeconds (6.0f);
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnSceneEnd2, false);
+        yield return new WaitForSeconds(6.0f);
 
-
-		PetalMovement.UnfreezePetal ();
-	}
-
-	//Handles displaying the last two lines of dialogue at the end of the scene
-	IEnumerator ShowEndDialogue()
-	{
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		//TODO
-		DialogueManager.Main.DisplayScene0Text (Scene0Events.PromptOnSceneEnd1, true, emotion);
-		yield return new WaitForSeconds (3f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds (3f);
-
-		PetalMovement.FreezePetal ();
-		
-		yield return new WaitForSeconds (3.0f);
-		waiting = true;
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-        yield return DialogueManager.Main.FadeOutRoutine();
-        PetalMovement.FreezePetal ();
-		yield return new WaitForSeconds (4.0f);
-		PetalMovement.FreezePetal ();
-
-
-
-		DialogueManager.Main.DisplayScene0Text (Scene0Events.OnSceneEnd2, false,DialogueManager.GetCurrentEmotion());
-		yield return new WaitForSeconds (6.0f);
-
-		FadeInFadeOut.FadeOut ();
-	}
+        FadeInFadeOut.FadeOut();
+    }
 }
