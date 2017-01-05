@@ -47,7 +47,6 @@ namespace Affdex
         public void Awake()
         {
             ms_instance = this;
-            StartCoroutine(ContinuousSampling());
         }
 
         public static void SetEmotionDeciding()
@@ -136,99 +135,24 @@ namespace Affdex
 
         private IEnumerator ContinuousSampler;
 
-        private IEnumerator ContinuousSampling()
-        {
-            while (true)
-            {
-                if (FacialSamplerRunning == false)
-                {
-                    StartCoroutine(FacialSampler());
-                }
-                yield return new WaitForEndOfFrame();
-            }
-        }
 
-        public static bool FacialSamplerRunning = false;
-        public IEnumerator FacialSampler(bool idle = false)
-        {
-            FacialSamplerRunning = true;
-            Debug.Log("--STarting Facial Sampler--");
-            bool sampleTaken = false;
-            int checks = 0;
-            
-            while (sampleTaken == false)
-            {
-                m_samples = 0;
-
-                m_totalJoy = 0.0f;
-                m_totalDisgust = 0.0f;
-                m_totalAnger = 0.0f;
-                m_totalSadness = 0.0f;
-                m_totalSurprise = 0.0f;
-                Debug.Log("51 m_totalJoy:" + m_totalJoy + "m_totalAnger:" + m_totalAnger + "m_totalSurprise:" + m_totalSurprise);
-
-
-                //yield return new WaitForSeconds (c_sampleTime * Time.timeScale);
-                checks++;
-                if (m_samples > 0)
-                {
-                    m_totalJoy *= 1.0f / m_samples;
-                    m_totalDisgust *= 1.0f / m_samples;
-                    m_totalAnger *= 1.0f / m_samples;
-                    m_totalSadness *= 1.0f / m_samples;
-                    m_totalSurprise *= 1.0f / m_samples;
-
-                    m_totalSadness *= c_sadnessModifier;
-
-
-                    Debug.Log("idle: " + idle + " m_totalJoy:" + m_totalJoy + " m_totalDisgust:" + m_totalDisgust + " m_totalAnger:" + m_totalAnger + " m_totalSadness:" + m_totalSadness + " m_totalSurprise:" + m_totalSurprise);
-
-                    if (IsHappy())
-                    {
-                        sampleTaken = true;
-                        DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Joy);
-                        SetDominantEmotion();
-                        FacialSamplerRunning = false;
-                        yield break;
-                    }
-                    else if (IsAngry())
-                    {
-                        sampleTaken = true;
-                        DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Anger);
-                        SetDominantEmotion();
-                        FacialSamplerRunning = false;
-                        yield break;
-                    }
-                    else if (IsSurprised())
-                    {
-                        sampleTaken = true;
-                        DialogueManager.SetCurrentEmotion(DialogueManager.Emotion.Surprise);
-                        SetDominantEmotion();
-                        FacialSamplerRunning = false;
-                        yield break;
-
-                    }
-                }
-
-                if (checks >= 2 && idle == false)
-                {
-                    sampleTaken = true;
-                    DialogueManager.SetCurrentEmotion(DialogueManager.GetLastEmotion());
-                    FacialSamplerRunning = false;
-                    yield break;
-                }
-            }
-            SetInstructionSprite.SetOutOfUse();
-            FacialSamplerRunning = false;
-        }
 
         //This needs to be tossed into every child listener class
         public static void ReportSample(Dictionary<int, Face> faces)
         {
+            Debug.Log("Base reporting sample");
             if (faces.Count > 0)
             {
-
                 m_samples++;
+
+                if (m_samples > 10)
+                {
+                    m_samples = m_samples / 5;
+                    m_totalJoy = m_totalJoy / 5.0f;
+                    m_totalAnger = m_totalAnger / 5.0f;
+                    m_totalSurprise = m_totalSurprise / 5.0f;
+                }
+
                 m_totalJoy += faces[0].Emotions[Affdex.Emotions.Joy] * ms_joyMultiplier;
                 m_totalAnger += faces[0].Emotions[Affdex.Emotions.Anger] * ms_angerMultiplier;
                 m_totalSurprise += faces[0].Emotions[Affdex.Emotions.Surprise] * ms_surpriseMultiplier;

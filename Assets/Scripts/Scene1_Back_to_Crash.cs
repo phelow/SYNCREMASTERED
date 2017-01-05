@@ -14,32 +14,14 @@ public class Scene1_Back_to_Crash : MonoBehaviour {
     //Handle multiple lines of dialogue in this one scene, with a slight pause between them
     IEnumerator WaitForDialogue()
     {
-        yield return new WaitForSeconds(2f);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
-		DialogueManager.Main.DisplayScene1Text(Scene1Events.OnReverseCar,true);
+        yield return DialogueManager.Main.DisplayScene1Text(Scene1Events.OnReverseCar,true);
 
-        yield return new WaitForSeconds(2f);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+              
         
-        bool waiting = true;
-        DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-        while (waiting)
-        {
-            if (DialogueManager.CanGetCurrentEmotion())
-            {
-                emotion = DialogueManager.GetCurrentEmotion();
-                waiting = false;
-                DialogueManager.DisableCurrentEmotion();
-            }
-            yield return new WaitForEndOfFrame();
-        }
-        SetInstructionSprite.StopWaitingForEmotion();
-
-
-
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(3.0f);
-
-		DialogueManager.Main.DisplayScene1Text(Scene1Events.OnTimeTransition,true,emotion);
+		yield return DialogueManager.Main.DisplayScene1Text(Scene1Events.OnTimeTransition,true);
 		yield return new WaitForSeconds(4.0f);
 		FadeInFadeOut.FadeOut ();
     }

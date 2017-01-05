@@ -26,32 +26,14 @@ public class Scene1_Back_to_journal: MonoBehaviour {
     //Handle multiple lines of dialogue in this one scene, with a slight pause between them
     IEnumerator WaitForDialogue()
     {
-        yield return new WaitForSeconds(2f);
-        DialogueManager.Main.DisplayScene1Text(Scene1Events.OnShowCrashEnd, true, DialogueManager.Emotion.Joy);
-        yield return new WaitForSeconds(2.0f);
-
-
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.DisplayScene1Text(Scene1Events.OnShowCrashEnd, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        
+        yield return DialogueManager.Main.DisplayScene1Text(Scene1Events.OnSceneEnd, true);
+        
         yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(2f);
-
-        DialogueManager.Main.DisplayScene1Text(Scene1Events.OnSceneEnd, true, emotion);
-
-        yield return new WaitForSeconds(3f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(1f);
+        
         FadeInFadeOut.FadeOut ();//Application.LoadLevel(5);
     }
 }

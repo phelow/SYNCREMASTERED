@@ -184,7 +184,7 @@ public class SetInstructionSprite : MonoBehaviour
     }
 
     private bool m_fading = false;
-    float m_minOpacity = .6f;
+    float m_minOpacity = .5f;
 
     public IEnumerator CheckForEmotion(EmotionRatioDelegate specifiedEmotionRatioDelegate, Image emotionIcon, Image checkMark, SetInstructionSprite.FaceState emotionToCheckFor)
     {
@@ -200,15 +200,13 @@ public class SetInstructionSprite : MonoBehaviour
             emotionIcon.CrossFadeAlpha(f, .0f, false);
             yield return new WaitForEndOfFrame();
         }
-
-        Debug.LogError(204);
+        
         while (true)
         {
             float? ratio = specifiedEmotionRatioDelegate();
             while (ratio == null)
             {
                 ratio = specifiedEmotionRatioDelegate();
-                Debug.LogError(211);
                 yield return new WaitForEndOfFrame();
             }
 
@@ -220,8 +218,7 @@ public class SetInstructionSprite : MonoBehaviour
                 emotionHeldTime += emotionTimeSlice;
             }
 
-            Debug.LogError(emotionHeldTime);
-
+        
             if (emotionHeldTime > emotionHoldTime)
             {
                 break;

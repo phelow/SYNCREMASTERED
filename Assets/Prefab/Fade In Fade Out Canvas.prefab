@@ -5,12 +5,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22455306}
-  - 223: {fileID: 22351896}
-  - 114: {fileID: 11470628}
-  - 114: {fileID: 11479328}
+  - component: {fileID: 22455306}
+  - component: {fileID: 22351896}
+  - component: {fileID: 11470628}
+  - component: {fileID: 11479328}
   m_Layer: 5
   m_Name: Fade In Fade Out Canvas
   m_TagString: Untagged
@@ -23,12 +23,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22453572}
-  - 222: {fileID: 22241334}
-  - 114: {fileID: 11459196}
-  - 114: {fileID: 11499614}
+  - component: {fileID: 22453572}
+  - component: {fileID: 22241334}
+  - component: {fileID: 11459196}
+  - component: {fileID: 11499614}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -112,7 +112,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_image: {fileID: 11459196}
-  m_nextScene: 5
   m_source: {fileID: 0}
   m_horn: {fileID: 0}
   m_crash: {fileID: 0}
@@ -149,10 +148,11 @@ RectTransform:
   m_GameObject: {fileID: 113366}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 22455306}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1, y: -1}
@@ -171,6 +171,7 @@ RectTransform:
   - {fileID: 22453572}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}

@@ -16,25 +16,10 @@ public class Scene1_About_To_Crash_Back : MonoBehaviour {
 	
     IEnumerator DelayDialogue()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2.0f);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
-        bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-
-        yield return new WaitForSeconds(1f);
-		DialogueManager.Main.DisplayScene1Text(Scene1Events.OnShowCrashBeginning,true,emotion);
-		yield return new WaitForSeconds(3f);
-        yield return DialogueManager.Main.FadeOutRoutine();
+        yield return DialogueManager.Main.DisplayScene1Text(Scene1Events.OnShowCrashBeginning,true);
         yield return new WaitForSeconds(1f);
 
         FadeInFadeOut.FadeOut ();

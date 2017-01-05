@@ -558,15 +558,12 @@ public class DialogueManager : MonoBehaviour
     }
     
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 1
-    public void DisplayScene1Text(Scene1Events key, bool hold = false, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
+    public IEnumerator DisplayScene1Text(Scene1Events key, bool hold = false, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
     {
+        emotion = DialogueManager.GetCurrentEmotion();
         m_dialog = dialogType;
 
-        StartCoroutine(SetFadeIn());
-
-        if (!textContainer.activeSelf)
-            textContainer.SetActive(true);
-
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
         string text = scene1DictionaryJoy[key];
         EnableDialogIcon();
         switch (emotion)
@@ -585,31 +582,24 @@ public class DialogueManager : MonoBehaviour
                 break;
         }
 
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
-        txtDialogue.text = "";
-        txtDialogueShadow.text = "";
-        txtDialogueGlow.text = "";
-
         StartCoroutine(SetFadeIn());
-        if (hold == false)
-        {
-            StartCoroutine(DelayToHideText(false, holdTime));
-        }
+        yield return RevealTextOneSegmentAtATime(text);
+        yield return SetInstructionSprite.ms_instance.FadeOutDialogImage();
     }
 
 
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 2
-    public void DisplayScene2Text(Scene2Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
+    public IEnumerator DisplayScene2Text(Scene2Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
     {
+        emotion = DialogueManager.GetCurrentEmotion();
         m_halfColor = Color.yellow;
         m_dialog = dialogType;
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
         string text = scene2DictionaryJoy[key];
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
 
         EnableDialogIcon();
         switch (emotion)
@@ -627,20 +617,10 @@ public class DialogueManager : MonoBehaviour
                 txtDialogue.color = Color.Lerp(txtDialogue.color, Color.yellow, .5f);
                 break;
         }
-
-        StopCoroutine(m_revealSegment);
-        m_revealSegment = RevealTextOneSegmentAtATime(text);
-        StartCoroutine(m_revealSegment);
-        txtDialogue.text = "";
-        txtDialogueShadow.text = "";
-        txtDialogueGlow.text = "";
-
-
         StartCoroutine(SetFadeIn());
-        if (hold == false)
-        {
-            StartCoroutine(DelayToHideText(false, holdTime));
-        }
+        yield return RevealTextOneSegmentAtATime(text);
+        yield return SetInstructionSprite.ms_instance.FadeOutDialogImage();
+
     }
 
     private IEnumerator InterpolateDialog()
@@ -747,9 +727,10 @@ public class DialogueManager : MonoBehaviour
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 4
-    public void DisplayScene4Text(Scene4Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
+    public IEnumerator DisplayScene4Text(Scene4Events key, bool hold = true, Emotion emotion = Emotion.Joy, TextType dialogType = TextType.Default, float holdTime = 4.0f)
     {
 
+        emotion = DialogueManager.GetCurrentEmotion();
         EnableDialogIcon();
         m_halfColor = Color.yellow;
         m_dialog = dialogType;
@@ -757,6 +738,7 @@ public class DialogueManager : MonoBehaviour
             textContainer.SetActive(true);
 
         string text = scene4DictionaryJoy[key];
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
 
         switch (emotion)
         {
@@ -790,14 +772,16 @@ public class DialogueManager : MonoBehaviour
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in Scene 5
-    public void DisplayScene5Text(Scene5Events key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType dialog = TextType.Default, float holdTime = 4.0f)
+    public IEnumerator DisplayScene5Text(Scene5Events key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType dialog = TextType.Default, float holdTime = 4.0f)
     {
+        emotion = DialogueManager.GetCurrentEmotion();
         EnableDialogIcon();
         m_dialog = dialog;
         m_slowmo = slowmo;
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
         string text = scene5DictionaryJoy[key];
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
         switch (emotion)
         {
             case Emotion.Anger:
@@ -829,9 +813,10 @@ public class DialogueManager : MonoBehaviour
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in the good ending
-    public void DisplayGoodEndingText(GoodEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType tt = TextType.Default, float holdTime = 4.0f)
+    public IEnumerator DisplayGoodEndingText(GoodEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, TextType tt = TextType.Default, float holdTime = 4.0f)
     {
 
+        emotion = DialogueManager.GetCurrentEmotion();
         EnableDialogIcon();
         m_dialog = tt;
         if (!textContainer.activeSelf)
@@ -839,6 +824,7 @@ public class DialogueManager : MonoBehaviour
 
         string text = goodEndingDictionaryJoy[key];
 
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
         switch (emotion)
         {
             case Emotion.Anger:
@@ -869,14 +855,16 @@ public class DialogueManager : MonoBehaviour
 
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in the bad ending
-    public void DisplayBadEndingText(BadEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
+    public IEnumerator DisplayBadEndingText(BadEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
     {
 
+        emotion = DialogueManager.GetCurrentEmotion();
         EnableDialogIcon();
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
         string text = badEndingDictionaryJoy[key];
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
 
         switch (emotion)
         {
@@ -906,14 +894,16 @@ public class DialogueManager : MonoBehaviour
     }
 
     //Public function accessed through DialogueManager.Main to display text for a specific event in the bad ending
-    public void DisplayCreditsText(CreditsEvent key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
+    public IEnumerator DisplayCreditsText(CreditsEvent key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
     {
+        emotion = DialogueManager.GetCurrentEmotion();
 
         EnableDialogIcon();
         if (!textContainer.activeSelf)
             textContainer.SetActive(true);
 
         string text = creditsDictionary[key];
+        yield return SetInstructionSprite.ms_instance.FadeInDialogImage();
 
         StopCoroutine(m_revealSegment);
         m_revealSegment = RevealTextOneSegmentAtATime(text);

@@ -11,8 +11,8 @@ public class JumpTimer : MonoBehaviour {
 
     private IEnumerator DialogueForThisScene()
     {
-        DialogueManager.Main.DisplayScene1Text(Scene1Events.OnCrash);
-        yield return new WaitForSeconds(waitTime);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.DisplayScene1Text(Scene1Events.OnCrash);
         FadeInFadeOut.FadeOut();
     }
     

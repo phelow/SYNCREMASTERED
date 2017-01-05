@@ -41,12 +41,6 @@ public class GenericListener : ImageResultsListener
 		return s_emotionalIntensityValid;
 	}
 
-
-	// Use this for initialization
-	void Start () {
-
-	}
-
 	// Update is called once per frame
 	void Update () {
 

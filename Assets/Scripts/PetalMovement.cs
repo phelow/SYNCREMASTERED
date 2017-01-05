@@ -100,11 +100,12 @@ public class PetalMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(c_startingWaitTime);
 
-        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnSceneLoad, true);
         yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnSceneLoad, true);
 
 
         yield return BringToLife();
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         yield return DialogueManager.Main.Scene0Coroutine(Scene0Events.OnCommandToSmile, true);
         yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 

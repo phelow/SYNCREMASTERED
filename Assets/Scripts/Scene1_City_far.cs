@@ -18,25 +18,10 @@ public class Scene1_City_far : MonoBehaviour {
 
     IEnumerator DelayDialogue()
     {
-		SetInstructionSprite.StartWaitingForEmotion ();
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+        
 
-		//Wait for player to emote
-		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-
-
-		DialogueManager.Main.DisplayScene1Text(Scene1Events.OnSceneLoad, false, emotion);
-		yield return new WaitForSeconds(4f);
+		yield return DialogueManager.Main.DisplayScene1Text(Scene1Events.OnSceneLoad, false);
 
 		FadeInFadeOut.FadeOut ();
     }

@@ -17,57 +17,18 @@ public class RestaurantSceneScript2 : MonoBehaviour {
 	private IEnumerator SceneTwo(){
 		yield return new WaitForSeconds(1.0f);
 		bool waiting = true;
-		DialogueManager.Emotion emotion = DialogueManager.Emotion.Joy;
-
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation1,true,emotion,DialogueManager.TextType.Dialog);
-
-        yield return new WaitForSeconds(5f);
-
-        yield return DialogueManager.Main.FadeOutRoutine();
-
-		//Wait for blink
-		yield return new WaitForSeconds(3.0f);
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
 		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
+		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation1);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
+        
         yield return new WaitForSeconds(2f);
 
-
-        DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation2, true, emotion);
+        yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation2);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         
-		yield return new WaitForSeconds (5.0f);
-
-
-        yield return DialogueManager.Main.FadeOutRoutine();
-		yield return new WaitForSeconds(3.0f);
-
-
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-		//DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds (1.0f);
-
-        switch (emotion)
+        
+        switch (DialogueManager.GetCurrentEmotion())
         {
             case DialogueManager.Emotion.Joy:
                 m_loverCharacter.sprite = m_smile;
@@ -80,83 +41,23 @@ public class RestaurantSceneScript2 : MonoBehaviour {
                 break;
         }
 
-        DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation3, true,emotion);
+        yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnFirstConversation3, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
-		yield return new WaitForSeconds(4.0f);
-		yield return DialogueManager.Main.FadeOutRoutine ();
-		yield return new WaitForSeconds (4.0f);
 
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSecondConversation1, true, emotion,DialogueManager.TextType.Dialog);
-		
-		yield return new WaitForSeconds(5.0f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(4f);
-
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-		//DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds (3.0f);
-
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSecondConversation2, true, emotion);
-
-        yield return new WaitForSeconds(5f);
+        yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSecondConversation1, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         
-		yield return DialogueManager.Main.FadeOutRoutine ();
-		yield return new WaitForSeconds (2.0f);
+		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSecondConversation2, true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
+
+        yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSecondConversation3,true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         
-        switch (emotion)
-        {
-            case DialogueManager.Emotion.Joy:
-                m_loverCharacter.sprite = m_smile;
-                break;
-            case DialogueManager.Emotion.Anger:
-                m_loverCharacter.sprite = m_neutral;
-                break;
-            case DialogueManager.Emotion.Surprise:
-                m_loverCharacter.sprite = m_neutral;
-                break;
-        }
-        SetInstructionSprite.StopWaitingForEmotion();
-        yield return new WaitForSeconds(3.0f);
-
-        DialogueManager.Main.DisplayScene2Text(Scene2Events.OnSecondConversation3,true,emotion);
-
-		yield return new WaitForSeconds(5.0f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds (3.0f);
-
-		DialogueManager.Main.DisplayScene2Text(Scene2Events.OnThirdConversation1,true,emotion,DialogueManager.TextType.Dialog);
-
-        yield return new WaitForSeconds(5.0f);
-        yield return DialogueManager.Main.FadeOutRoutine();
-        yield return new WaitForSeconds(3f);
+		yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnThirdConversation1,true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         
-		waiting = true;
-		emotion = DialogueManager.Emotion.Joy;
-		
-		while (waiting) {
-			if (DialogueManager.CanGetCurrentEmotion ()) {
-				emotion = DialogueManager.GetCurrentEmotion ();
-				waiting = false;
-				DialogueManager.DisableCurrentEmotion ();
-			}
-			yield return new WaitForEndOfFrame ();
-		}
-		SetInstructionSprite.StopWaitingForEmotion ();
-		//DialogueManager.Main.FadeOut ();
-		yield return new WaitForSeconds (2.0f);
-        
-        switch (emotion)
+        switch (DialogueManager.GetCurrentEmotion())
         {
             case DialogueManager.Emotion.Joy:
                 m_loverCharacter.sprite = m_smile;
@@ -169,21 +70,11 @@ public class RestaurantSceneScript2 : MonoBehaviour {
                 break;
         }
 
-        DialogueManager.Main.DisplayScene2Text(Scene2Events.OnThirdConversation2,true,emotion);
-		
-		yield return new WaitForSeconds (5.0f);
+        yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnThirdConversation2,true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 
-        yield return DialogueManager.Main.FadeOutRoutine();
-
-        yield return new WaitForSeconds(3.0f);
-
-        DialogueManager.Main.DisplayScene2Text(Scene2Events.OnThirdConversation3,true,emotion, DialogueManager.TextType.Dialog);
-		
-		yield return new WaitForSeconds (5.0f);
-
-        yield return DialogueManager.Main.FadeOutRoutine();
-
-        yield return new WaitForSeconds(2.0f);
+        yield return DialogueManager.Main.DisplayScene2Text(Scene2Events.OnThirdConversation3,true);
+        yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         
         FadeInFadeOut.FadeOut ();
 	}
