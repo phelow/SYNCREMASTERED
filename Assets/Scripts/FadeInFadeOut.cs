@@ -53,13 +53,15 @@ public class FadeInFadeOut : MonoBehaviour
 			yield return new WaitForEndOfFrame ();
 		}
 #endif
-        if(nextScene != -1)
+        if (nextScene != -1)
         {
             SceneManager.LoadScene(nextScene);
 
             yield break;
         }
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        else {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
         ms_fading = false;
 
     }

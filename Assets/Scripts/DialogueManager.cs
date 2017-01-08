@@ -848,6 +848,15 @@ public class DialogueManager : MonoBehaviour
     }
 
 
+    //public void Update()
+    //{
+    //    if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift) && Input.GetKey(KeyCode.Space))
+    //    {
+    //        Time.timeScale = 30.0f;
+    //    }
+        
+    //}
+
     //Public function accessed through DialogueManager.Main to display text for a specific event in the bad ending
     public IEnumerator DisplayBadEndingText(BadEndingEvents key, bool slowmo = false, Emotion emotion = Emotion.Joy, bool hold = false, float holdTime = 4.0f)
     {

@@ -13,6 +13,7 @@ public class BadEndingSceneDriver : MonoBehaviour {
 		yield return new WaitForSeconds (10.0f);
 		yield return DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnRewind2);
 		yield return new WaitForSeconds (20.0f);
+        FadeInFadeOut.FadeOut();
 	}
 
 	// Update is called once per frame

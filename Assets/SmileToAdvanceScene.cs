@@ -77,9 +77,6 @@ public class SmileToAdvanceScene : MonoBehaviour {
 	}
 
 	private IEnumerator AddForceAfterTime(){
-        Time.timeScale = 10.0f;
-
-
         yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
 		yield return DialogueManager.Main.DisplayScene5Text (Scene5Events.OnPlayerWaiting,false);
 		
@@ -127,7 +124,7 @@ public class SmileToAdvanceScene : MonoBehaviour {
             yield return DialogueManager.Main.DisplayBadEndingText (BadEndingEvents.OnLoverGone, false);
 
             yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
-            FadeInFadeOut.FadeOut (30);
+            FadeInFadeOut.FadeOut (28);
 
 		} else {
 			StartCoroutine (SpeedUpTime ());
