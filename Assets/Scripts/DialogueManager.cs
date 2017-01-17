@@ -208,9 +208,9 @@ public class DialogueManager : MonoBehaviour
 
         tutorialDictionary.Add(TutorialEvents.Calibration, "SYNC uses the camera on your device to capture your facial expressions.\n\nPlease move yourself or your camera until you are comfortable and the icons remains solid, indicating it can pick up your face.\n");
         tutorialDictionary.Add(TutorialEvents.OpenMouthToContinue, "A symbol will appear on your screen when you need to act.\n\nIf you aren’t sure what you’re supposed to do, look to the text for help.\r\n\r\n Please open your mouth to continue.");
-        tutorialDictionary.Add(TutorialEvents.PromptEmotions, "When you see the three face icons, you can move the main character to one of three different emotional states to direct the narrative: Happy, Angry, or Surprised.\n\nThe large face near the text shows the character's current emotional state, while the small faces show YOUR emotional state.\n\nPlease open your mouth to proceed.");
-        tutorialDictionary.Add(TutorialEvents.PromptTutorial, "Make each of these faces to continue.");
-        tutorialDictionary.Add(TutorialEvents.MakeAnyFaceToStart, "Your choices over time will affect your experience, so choose wisely.\n\nMake any face to start the game.\n");
+        tutorialDictionary.Add(TutorialEvents.PromptEmotions, "When you see the three face icons, you can move the main character to one of three different emotional states to direct the narrative: Happy, Angry, or Surprised.\n\nThe large face near the text shows the character's current emotional state, while the small faces below register YOUR emotional state while the main character's emotional state is being set.\n\nPlease open your mouth to continue.");
+        tutorialDictionary.Add(TutorialEvents.PromptTutorial, "Register each emotional state (Joy, Anger, and Surprise) to continue.");
+        tutorialDictionary.Add(TutorialEvents.MakeAnyFaceToStart, "Your choices over time will affect your experience, so choose wisely.\n\nRegister one of the three emotional states to start the game.\n");
 
     }
 
@@ -352,18 +352,18 @@ public class DialogueManager : MonoBehaviour
     void BuildScene4Dictionary()
     {
         scene4DictionaryJoy.Add(Scene4Events.OnFirstJournal, "I tried again to save her, hoping against hope that this time, I’d succeed.");
-        scene4DictionaryJoy.Add(Scene4Events.OnSecondJournal, "And again. I’ll cherish every moment spent with her, but there’s no escaping reality.");
-        scene4DictionaryJoy.Add(Scene4Events.OnThirdJournal, "And again. Maybe I just need to learn to accept it, but it’s so hard to let her go.");
+        scene4DictionaryJoy.Add(Scene4Events.OnSecondJournal, "So I tried again. I’ll cherish every moment spent with her, but there’s no escaping reality.");
+        scene4DictionaryJoy.Add(Scene4Events.OnThirdJournal, "So I tried again. Maybe I just need to learn to accept it, but it’s so hard to let her go.");
         scene4DictionaryJoy.Add(Scene4Events.OnSceneEnd, "Soon, there is only one memory left to save...");
 
         scene4DictionaryAnger.Add(Scene4Events.OnFirstJournal, "I tried again to save her, knowing she’d be stolen from me yet again.");
-        scene4DictionaryAnger.Add(Scene4Events.OnSecondJournal, "And again. I would do anything, sacrifice anything, if it meant bringing her back.");
-        scene4DictionaryAnger.Add(Scene4Events.OnThirdJournal, "And again. But it’s no use: I can’t fight back against Death itself.");
-        scene4DictionaryAnger.Add(Scene4Events.OnSceneEnd, "Soon, there is only one memory left to conquer...");
+        scene4DictionaryAnger.Add(Scene4Events.OnSecondJournal, "So I tried again. I would do anything, sacrifice anything, if it meant bringing her back.");
+        scene4DictionaryAnger.Add(Scene4Events.OnThirdJournal, "So I tried again. But it’s no use: I can’t fight back against Death itself.");
+        scene4DictionaryAnger.Add(Scene4Events.OnSceneEnd, "Soon, there is only one memory left to vanquish...");
 
         scene4DictionarySurprise.Add(Scene4Events.OnFirstJournal, "I tried again to save her, convincing myself that things could be different.");
-        scene4DictionarySurprise.Add(Scene4Events.OnSecondJournal, "And again. But my hopes are never realized and change never comes.");
-        scene4DictionarySurprise.Add(Scene4Events.OnThirdJournal, "And again. I just don’t know what to do or think anymore.");
+        scene4DictionarySurprise.Add(Scene4Events.OnSecondJournal, "So I tried again. But my hopes are never realized and change never comes.");
+        scene4DictionarySurprise.Add(Scene4Events.OnThirdJournal, "So I tried again. I just don’t know what to do or think anymore.");
         scene4DictionarySurprise.Add(Scene4Events.OnSceneEnd, "Soon, there is only one memory left to explore...");
     }
 
