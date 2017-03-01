@@ -12,7 +12,7 @@ public class JumpToCrash : MonoBehaviour {
 
 	float tSinceFadeOut = 0.0f;
 
-	private const float c_timeSwervingBeforeCrash = 10.0f;
+	private const float c_timeSwervingBeforeCrash = 7.0f;
 	// Use this for initialization
 	void Start () {
 		m_instance = this;
@@ -41,12 +41,7 @@ public class JumpToCrash : MonoBehaviour {
                     m_showingCommand = true;
 
                 }
-                else if (m_showingCommand && !VaryPositionByAttention.IsSwerving())
-                {
-                    tSinceFadeOut = 0.0f;
-                }
-
-                if (VaryPositionByAttention.IsSwerving())
+                else if (VaryPositionByAttention.IsSwerving())
                 {
                     tCrash += Time.deltaTime;
                 }
