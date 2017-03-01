@@ -46,7 +46,17 @@ public class JournalWordTracker : ImageResultsListener
 				}
 			}
 
-			m_lastEyes = faces [0].Expressions [Affdex.Expressions.EyeClosure];
+            bool m_mouthOpen = false;
+            m_mouthOpen = faces[0].Expressions[Expressions.MouthOpen] > TutorialListener.c_mouthOpenThreshold;
+            if (m_mouthOpen)
+            {
+                Debug.Log("Spawn");
+                TutorialEventSystem.playerOpenMouth();
+
+
+            }
+
+            m_lastEyes = faces [0].Expressions [Affdex.Expressions.EyeClosure];
 		}
 	}
 

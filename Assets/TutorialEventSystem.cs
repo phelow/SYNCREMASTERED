@@ -46,20 +46,6 @@ public class TutorialEventSystem : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
-    
-    public static IEnumerator WaitForOpenMouth()
-    {
-        SetInstructionSprite.StartWaitingForEmotion(SetInstructionSprite.FaceState.OPEN);
-
-        SetInstructionSprite.m_playerOpenedMouth = false;
-        while (SetInstructionSprite.m_playerOpenedMouth == false)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
-        SetInstructionSprite.StopWaitingForEmotion();
-        yield return DialogueManager.Main.FadeOutRoutine();
-    }
 
     private IEnumerator TutorialSequence()
     {
@@ -83,7 +69,7 @@ public class TutorialEventSystem : MonoBehaviour
         
 
         yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.OpenMouthToContinue, true);
-        yield return WaitForOpenMouth();
+        yield return SetInstructionSprite.ms_instance.WaitForOpenMouth();
 
 
 
@@ -94,8 +80,8 @@ public class TutorialEventSystem : MonoBehaviour
         GameObject.Find("PopInIndicator").gameObject.SetActive(false);
         //SetInstructionSprite.HideIcon();    //Hide the petal icon now so that the mouth command can be displayed instead
 
-        yield return WaitForOpenMouth();
-             
+        yield return SetInstructionSprite.ms_instance.WaitForOpenMouth();
+
         yield return DialogueManager.Main.TutorialCoroutine(TutorialEvents.PromptTutorial, true);
         
         yield return CalibrationCoroutine();

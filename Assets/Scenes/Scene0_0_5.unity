@@ -870,7 +870,8 @@ MonoBehaviour:
     m_LineSpacing: 0.81
   m_Text: "I don\u2019t know what to write here anymore. Flipping back through these
     pages, it\u2019s hard to reconcile the person I used to be with the person I\u2019ve
-    become. If I could simply blink it all away, I would."
+    become. I wish I could have opened my mouth and show her how I felt. If I could
+    simply blink it all away, I would."
 --- !u!222 &405713593
 CanvasRenderer:
   m_ObjectHideFlags: 0

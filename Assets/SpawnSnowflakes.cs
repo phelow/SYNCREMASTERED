@@ -47,7 +47,7 @@ public class SpawnSnowflakes : MonoBehaviour {
         //TODO: center all the snowflakes
         while (VaryPositionByAttention.GetSnowFlakesSpawned() < c_flakesNeededToProceed)
         {
-            yield return TutorialEventSystem.WaitForOpenMouth();
+            yield return SetInstructionSprite.ms_instance.WaitForOpenMouth();
             SpawnASnowflake();
         }
         yield return DialogueManager.Main.FadeOutRoutine();

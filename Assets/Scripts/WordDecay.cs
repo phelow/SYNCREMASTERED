@@ -117,7 +117,7 @@ public class WordDecay : MonoBehaviour
     {
         
         yield return new WaitForSeconds(5.0f);
-
+        yield return SetInstructionSprite.ms_instance.WaitForOpenMouth();
         yield return SetInstructionSprite.ms_instance.WaitForAnEmotionToBeSet();
         yield return SetInstructionSprite.ms_instance.FadeOutTutorialIcons();
 

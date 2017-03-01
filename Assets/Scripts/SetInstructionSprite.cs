@@ -120,6 +120,20 @@ public class SetInstructionSprite : MonoBehaviour
     [SerializeField]
     private AnimationCurve m_checkMarkAnimationCurve;
     
+    public IEnumerator WaitForOpenMouth()
+    {
+        SetInstructionSprite.StartWaitingForEmotion(SetInstructionSprite.FaceState.OPEN);
+
+        SetInstructionSprite.m_playerOpenedMouth = false;
+        while (SetInstructionSprite.m_playerOpenedMouth == false)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        SetInstructionSprite.StopWaitingForEmotion();
+        yield return DialogueManager.Main.FadeOutRoutine();
+    }
+
     public IEnumerator FadeOutTutorialIcons()
     {
         float t = 0.0f;
