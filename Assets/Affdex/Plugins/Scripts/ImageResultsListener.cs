@@ -15,7 +15,7 @@ namespace Affdex
         private const float c_sadnessModifier = 10.0f;
 
         private float m_joyThreshold = 50.0f;
-        private float m_angerThreshold = 1.0f;
+        private float m_angerThreshold = 10.0f;
         private float m_surpriseThreshold = 50.0f;
 
         private static int m_samples = 0;

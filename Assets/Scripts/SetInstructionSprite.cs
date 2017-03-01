@@ -101,7 +101,7 @@ public class SetInstructionSprite : MonoBehaviour
     private float m_fadeInTime = 3.0f;
 
     private float emotionTimeSlice = .01f;
-    private float emotionHoldTime = 1.0f;
+    private float emotionHoldTime = 3.0f;
     public static bool m_playerOpenedMouth = false;
 
     [SerializeField]
@@ -192,8 +192,6 @@ public class SetInstructionSprite : MonoBehaviour
         float emotionHeldTime = 0.0f;
 
         float f = 0.0f;
-
-
 
         while (f < m_minOpacity)
         {
