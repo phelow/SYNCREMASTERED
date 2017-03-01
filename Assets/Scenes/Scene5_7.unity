@@ -791,6 +791,10 @@ Prefab:
       propertyPath: m_nextScene
       value: 29
       objectReference: {fileID: 0}
+    - target: {fileID: 11499614, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
+      propertyPath: nextSceneOverride
+      value: 32
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2c9a2ab170a6192418f9cd2e4bab6537, type: 2}
   m_IsPrefabParent: 0

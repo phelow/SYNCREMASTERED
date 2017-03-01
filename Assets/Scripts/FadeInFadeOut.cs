@@ -21,8 +21,11 @@ public class FadeInFadeOut : MonoBehaviour
     private IEnumerator m_fadeInFadeOut;
 
     private static bool ms_fadeAuthorized = false;
-
+     
     private static bool ms_fading = false;
+
+    [SerializeField]
+    private int nextSceneOverride = -1;
 
     private IEnumerator FadeOutCoroutine(int nextScene = -1)
     {
@@ -53,7 +56,16 @@ public class FadeInFadeOut : MonoBehaviour
 			yield return new WaitForEndOfFrame ();
 		}
 #endif
-        if (nextScene != -1)
+
+        if (nextSceneOverride != -1)
+        {
+
+            SceneManager.LoadScene(nextSceneOverride);
+
+            yield break;
+        }
+
+        else if (nextScene != -1)
         {
             SceneManager.LoadScene(nextScene);
 
