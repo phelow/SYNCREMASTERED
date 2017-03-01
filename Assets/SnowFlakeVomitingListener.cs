@@ -5,7 +5,7 @@ using Affdex;
 
 
 public class SnowFlakeVomitingListener : ImageResultsListener {
-	private const float c_mouthOpenThreshold = 50.0f;
+	private const float c_mouthOpenThreshold = 10.0f;
 
 	private int m_flakesGenerated = 0;
 	private const int c_flakesNeededToProceed = 6;
@@ -24,22 +24,25 @@ public class SnowFlakeVomitingListener : ImageResultsListener {
 		SetInstructionSprite.FaceDetected ();
 	}
 
-
+    float tPassed = 0.0f;
 	public override void onImageResults(Dictionary<int, Face> faces)
 	{
 		ReportSample (faces);
 		if(faces.Count > 0)
 		{
-			DebugFeatureViewer dfv = GameObject.FindObjectOfType<DebugFeatureViewer>();
+			m_mouthOpen = faces [0].Expressions [Expressions.MouthOpen] > c_mouthOpenThreshold;
 
-			if (dfv != null)
-				dfv.ShowFace(faces[0]);
-			if (lastEyes - c_faceBuffer > faces [0].Expressions [Affdex.Expressions.EyeClosure]) {
-				FadeInFadeOut.AuthorizeFade ();
-			}
-			m_mouthOpen = faces [0].Expressions [Expressions.MouthOpen] < c_mouthOpenThreshold;
-			if (m_mouthOpen && m_lastMouthOpen == false) {
+            if (m_mouthOpen)
+            {
+                tPassed += Time.deltaTime;
+            }
+
+            Debug.Log("tPassed:" + tPassed + " m_mouthOpen:" + m_mouthOpen);
+
+            if (tPassed > .1f) {
 				Debug.Log ("Spawn");
+
+                tPassed = 0.0f;
 
 				SpawnSnowflakes.SpawnASnowflake ();
                 TutorialEventSystem.playerOpenMouth();
